@@ -12,6 +12,12 @@ license = {text = "MIT"}
 dependencies = [
     "mcp>=0.9.0",
     "pyyaml>=6.0",
+    "smolagents",
+    "numpy>=1.20.0",
+    "matplotlib>=3.3.0",
+    "scipy",
+    "pandas",
+    "classy>=3.0.0",
 ]
 
 [project.optional-dependencies]
@@ -25,7 +31,7 @@ dev = [
 mcp-ke = "ke_mcp.src.server:main"
 
 [tool.setuptools]
-packages = ["ke_mcp", "ke_mcp.src"]
+packages = ["ke_mcp", "ke_mcp.src", "tools", "codes"]
 
 [tool.black]
 line-length = 100
