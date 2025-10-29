@@ -1,0 +1,58 @@
+tools:
+  drmacs:
+    repository: https://github.com/StarNetLaboratory/drmacs
+    version: main  # Git branch, tag, or commit hash
+    contact: starnet-lab@example.com
+    purpose: SDSS astronomical data analysis
+    tool_name: analyze_sdss_data
+    entry_point: drmacs.run
+
+    description: >
+      Query SDSS astronomical database. Filters by spectroscopic properties,
+      computes statistics, answers natural language questions.
+
+    examples:
+      - "What is the mean redshift of quasars in RA 150-180?"
+      - "Find galaxies with velocity dispersion > 200 km/s"
+
+    parameters:
+      question:
+        type: string
+        required: true
+        description: Natural language question about SDSS data
+      model:
+        type: string
+        required: false
+        default: gemini-flash25
+        enum: [gemini-flash25, gpt-4, gpt-4o, claude-3-5-sonnet]
+
+  drhacc:
+    repository: https://github.com/StarNetLaboratory/DrHACC
+    version: main  # Git branch, tag, or commit hash
+    contact: starnet-lab@example.com
+    purpose: HACC simulation data analysis
+    tool_name: analyze_hacc_data
+    entry_point: drhacc.run
+
+    description: >
+      Analyze HACC cosmology simulation data. Query dark matter halos,
+      cosmological statistics, and simulation outputs.
+
+    examples:
+      - "What is the mass function of dark matter halos?"
+      - "Find halos with mass > 10^14 solar masses"
+
+    parameters:
+      question:
+        type: string
+        required: true
+        description: Natural language question about HACC data
+      model:
+        type: string
+        required: false
+        default: gemini-flash25
+        enum: [gemini-flash25, gpt-4, gpt-4o, claude-3-5-sonnet]
+
+server:
+  name: ke-mcp
+  version: 0.1.0

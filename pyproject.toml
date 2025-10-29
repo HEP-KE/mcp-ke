@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=64", "wheel", "pyyaml>=6.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-ke"
+version = "0.1.0"
+description = "MCP server that wraps domain-specific tools"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+dependencies = [
+    "mcp>=0.9.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=23.0",
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+mcp-ke = "ke_mcp.src.server:main"
+
+[tool.setuptools]
+packages = ["ke_mcp", "ke_mcp.src"]
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I"]
