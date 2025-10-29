@@ -3,7 +3,7 @@ Load observational data
 """
 
 import numpy as np
-from .path_utils import get_input_path
+from mcp_utils import get_input_path
 
 def load_observational_data(filepath):
     """

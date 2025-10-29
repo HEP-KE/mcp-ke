@@ -1,3 +1,5 @@
+from smolagents import tool
+
 @tool
 def compute_power_spectrum(params: dict, k_values: object) -> object:
     """

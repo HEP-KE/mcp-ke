@@ -35,7 +35,7 @@ def plot_power_spectra(k_theory: object, model_results: dict, k_obs: object, Pk_
     Returns:
         str: Absolute path to saved plot PNG file
     """
-    from .path_utils import get_output_path
+    from mcp_utils import get_output_path
 
     if save_path is not None:
         # Ensure .png extension
@@ -83,7 +83,7 @@ def plot_suppression_ratios(k_values: object, suppression_ratios: dict, referenc
     Returns:
         str: Absolute path to saved plot PNG file
     """
-    from .path_utils import get_output_path
+    from mcp_utils import get_output_path
 
     if save_path is not None:
         # Ensure .png extension

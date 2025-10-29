@@ -1,78 +1,37 @@
 # Contributing
 
-MCP-KE is a registry. Tool code lives in your repository.
+## Adding a New Tool
 
-## Registration
+1. Create a new file in `tools/` (e.g., `tools/my_tool.py`)
+2. Decorate your function with `@tool` from smolagents
+3. Done - the server auto-discovers it on startup
 
-1. Fork this repo
-2. Add entry to `config.yaml`
-3. Submit PR
+## Example
 
-## Config Format
+```python
+from smolagents import tool
 
-```yaml
-tools:
-  your_tool:
-    type: python_callable
-    entry_point: your_module.run  # Must accept **kwargs
-    repository: https://github.com/YourOrg/tool
-    contact: team@example.com
+@tool
+def my_analysis_tool(parameter: str, threshold: float = 0.5) -> dict:
+    """
+    Brief description of what your tool does.
 
-    tool_name: tool_name
-    description: What it does
-    parameters:
-      param:
-        type: string
-        required: true
-        description: Parameter description
+    Args:
+        parameter: Description of parameter
+        threshold: Optional threshold value
+
+    Returns:
+        dict: Results dictionary
+    """
+    result = your_logic(parameter, threshold)
+    return result
 ```
 
 ## Requirements
 
-- Provide Python package with callable entry point
-- Entry point accepts `**kwargs` and returns result
-- Repository is publicly accessible
-- Contact email provided
-
-## Entry Point Function
-
-```python
-# your_module.py in your repository
-def run(**kwargs) -> str:
-    """
-    Your tool logic here.
-
-    If your tool has internal dependencies (databases, MCP servers, etc.),
-    start them inside this function.
-    """
-    # Handle your internal complexity here
-    # Start services, connect to databases, etc.
-
-    result = your_logic(**kwargs)
-    return result
-```
-
-**Complex tools:** If your tool has multiple components, handle startup in your entry point:
-
-```python
-import subprocess
-import time
-
-def run(question: str) -> str:
-    # Start internal services if needed
-    server = subprocess.Popen(["python", "-m", "internal.server"])
-    time.sleep(2)  # Wait for startup
-
-    # Your tool logic
-    result = process(question)
-
-    # Cleanup
-    server.terminate()
-    return result
-```
-
-## Maintenance
-
-Each team maintains their own code in their own repository.
+- **Decorator**: Use `@tool` from smolagents (or any callable with `name` or `__wrapped__` attributes)
+- **Docstring**: Required - used as tool description in MCP
+- **Type hints**: Recommended for parameter schema generation (supports: str, int, float, bool, dict, list, object)
+- **Return value**: Any type (automatically converted to string by MCP server)
 
 MIT License

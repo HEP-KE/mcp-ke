@@ -1,44 +1,26 @@
 # MCP-KE
 
-MCP server that wraps domain-specific tools.
+MCP server that serves cosmology analysis tools.
 
 ## Quick Start
 
 ```bash
-git clone <repo-url>
-cd MCP-KE
 pip install -e .
-python ke_mcp/src/server.py
-```
-
-## How It Works
-
-```
-┌─────────────────────────────────────────┐
-│ Your Multi-Agent System (MAS)          │
-└─────────────────────────────────────────┘
-                    ↓ MCP Protocol
-┌─────────────────────────────────────────┐
-│ MCP-KE Server                           │
-│  - Reads config.yaml                    │
-│  - Validates parameters                 │
-│  - Routes to team tools                 │
-└─────────────────────────────────────────┘
-          ↓                    ↓
-┌──────────────────┐  ┌──────────────────┐
-│ Team A's Repo    │  │ Team B's Repo    │
-│ (They Maintain)  │  │ (They Maintain)  │
-│                  │  │                  │
-│ drmacs.run()     │  │ drhacc.run()     │
-└──────────────────┘  └──────────────────┘
+python mcp_server.py
 ```
 
 ## Available Tools
 
-| Tool | Repository | Purpose | Contact |
-|------|------------|---------|---------|
-| drmacs | https://github.com/StarNetLaboratory/drmacs | SDSS astronomical data analysis | starnet-lab@example.com |
-| drhacc | https://github.com/StarNetLaboratory/DrHACC | HACC simulation data analysis | starnet-lab@example.com |
+### Data & Models
+- `load_observational_data`: Load BOSS galaxy power spectrum data
+- `LCDM`, `nu_mass`, `wCDM`: Cosmology models
+
+### Analysis & Visualization
+- `compute_power_spectrum`, `compute_all_models`, `compute_suppression_ratios`
+- `plot_power_spectra`, `plot_suppression_ratios`
+
+### Agent Helpers
+- `list_agent_files`, `save_array`, `load_array`, `save_dict`, `load_dict`
 
 ## Add Your Tool
 

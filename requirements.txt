@@ -1,8 +1,0 @@
-# MCP-KE Core Dependencies
-mcp>=0.9.0
-pyyaml>=6.0
-
-# Team Tools (pinned to specific versions)
-# To update a tool, change the version in config.yaml and regenerate
-git+https://github.com/StarNetLaboratory/drmacs.git@main
-git+https://github.com/StarNetLaboratory/DrHACC.git@main

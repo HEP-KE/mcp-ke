@@ -10,7 +10,7 @@ import json
 import glob
 import numpy as np
 from smolagents import tool
-from .path_utils import get_output_path
+from mcp_utils import get_output_path
 
 
 def get_out_dir():

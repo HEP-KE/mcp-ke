@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools>=64", "wheel", "pyyaml>=6.0"]
+requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcp-ke"
 version = "0.1.0"
-description = "MCP server that wraps domain-specific tools"
+description = "MCP server that serves cosmology analysis tools"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
@@ -28,10 +28,11 @@ dev = [
 ]
 
 [project.scripts]
-mcp-ke = "ke_mcp.src.server:main"
+mcp-ke = "mcp_server:main"
 
 [tool.setuptools]
-packages = ["ke_mcp", "ke_mcp.src", "tools", "codes"]
+packages = ["mcp_utils", "codes", "tools"]
+py-modules = ["mcp_server"]
 
 [tool.black]
 line-length = 100
