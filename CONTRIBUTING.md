@@ -4,7 +4,9 @@
 
 1. Create a new file in `tools/` (e.g., `tools/my_tool.py`)
 2. Decorate your function with `@tool` from smolagents
-3. Done - the server auto-discovers it on startup
+3. Add a docstring to your function with a brief description of the tool, Args, and Returns details
+4. Add type hints for function parameters and return (supports: str, int, float, bool, dict, list, object)
+5. Done - the server auto-discovers the new tool on startup
 
 ## Example
 
@@ -26,12 +28,5 @@ def my_analysis_tool(parameter: str, threshold: float = 0.5) -> dict:
     result = your_logic(parameter, threshold)
     return result
 ```
-
-## Requirements
-
-- **Decorator**: Use `@tool` from smolagents (or any callable with `name` or `__wrapped__` attributes)
-- **Docstring**: Required - used as tool description in MCP
-- **Type hints**: Recommended for parameter schema generation (supports: str, int, float, bool, dict, list, object)
-- **Return value**: Any type (automatically converted to string by MCP server)
 
 MIT License
