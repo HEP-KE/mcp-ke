@@ -39,5 +39,5 @@ def load_observational_data(filepath: str) -> tuple:
             [2]: σP(k) - error/uncertainty values in (Mpc/h)^3
         Returns (None, None, None) if loading fails
     """
-    from .data import load_observational_data as load_obs_data
+    from codes.data import load_observational_data as load_obs_data
     return load_obs_data(filepath)

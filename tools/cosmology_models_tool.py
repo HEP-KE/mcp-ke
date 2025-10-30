@@ -24,7 +24,7 @@ def LCDM() -> dict:
             'A_s' (float)
             'n_s' (float)
     """
-    from .cosmology_models import LCDM as LCDM_model
+    from codes.cosmology_models import LCDM as LCDM_model
     return LCDM_model()
 
 @tool
@@ -60,7 +60,7 @@ def nu_mass(sum_mnu_eV: float = 0.10, N_species: int = 1) -> dict:
             'T_ncdm' (str or float) - neutrino temperature ratio
 
     """
-    from .cosmology_models import nu_mass as nu_mass_model
+    from codes.cosmology_models import nu_mass as nu_mass_model
     return nu_mass_model(sum_mnu_eV, N_species)
 
 @tool
@@ -94,5 +94,5 @@ def wCDM(w0: float = -0.9) -> dict:
             '_w0_approx' (float) - the w0 value for approximate scaling
 
     """
-    from .cosmology_models import wCDM as wCDM_model
+    from codes.cosmology_models import wCDM as wCDM_model
     return wCDM_model(w0)

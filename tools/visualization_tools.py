@@ -47,7 +47,7 @@ def plot_power_spectra(k_theory: object, model_results: dict, k_obs: object, Pk_
         # Default filename
         final_path = get_output_path('power_spectra_comparison.png')
 
-    from .viz import plot_power_spectra as plot_pk
+    from codes.viz import plot_power_spectra as plot_pk
     return plot_pk(k_theory, model_results, k_obs, Pk_obs, σPk_obs, final_path)
 
 @tool
@@ -95,5 +95,5 @@ def plot_suppression_ratios(k_values: object, suppression_ratios: dict, referenc
         # Default filename
         final_path = get_output_path('suppression_ratios.png')
 
-    from .viz import plot_suppression_ratios as plot_suppression
+    from codes.viz import plot_suppression_ratios as plot_suppression
     return plot_suppression(k_values, suppression_ratios, reference_model, final_path)

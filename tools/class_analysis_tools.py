@@ -28,7 +28,7 @@ def compute_power_spectrum(params: dict, k_values: object) -> object:
     Returns:
         numpy array of P(k) values in (Mpc/h)^3, same length as k_values input, or None if computation fails
     """
-    from .analysis import compute_power_spectrum as compute_pk
+    from codes.analysis import compute_power_spectrum as compute_pk
     return compute_pk(params, k_values)
 
 @tool
@@ -57,7 +57,7 @@ def compute_all_models(k_values: object, models: dict = None) -> dict:
     IMPORTANT: For visualization, model name keys MUST be EXACT:
         'ΛCDM', 'ΛCDM + Σmν=0.10 eV', 'wCDM (w0=-0.9)'
     """
-    from .analysis import compute_all_models as compute_all
+    from codes.analysis import compute_all_models as compute_all
     return compute_all(k_values, models)
 
 @tool
@@ -85,5 +85,5 @@ def compute_suppression_ratios(model_results: dict, k_values: object, reference_
                 Values < 1.0 indicate suppression relative to reference model
                 Values > 1.0 indicate enhancement relative to reference model
     """
-    from .analysis import compute_suppression_ratios as compute_suppression
+    from codes.analysis import compute_suppression_ratios as compute_suppression
     return compute_suppression(model_results, k_values, reference_model)
