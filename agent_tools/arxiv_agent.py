@@ -308,7 +308,7 @@ YOUR ROLE IS SIMPLE:
 """
 
 @tool
-def run_arxiv_agent(
+def arxiv_agent(
     query: str,
     api_key: str,
     llm_url: str,

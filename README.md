@@ -43,12 +43,12 @@ python mcp_server.py
 
 Require OpenAI-compatible LLM API (Anthropic, Google Gemini, OpenAI, etc.)
 
-**`analyze_power_spectrum_multiagent`**
+**`power_spectrum_agent`**
 - End-to-end power spectrum analysis workflow
-- Orchestrates: data loading → model computation → visualization
+- Orchestrates: data agent → modeling agent → visualization agent
 - Example:
   ```python
-  result = analyze_power_spectrum_multiagent(
+  result = power_spectrum_agent(
       query="Compare ΛCDM and wCDM models with eBOSS data",
       api_key="your-key",
       llm_url="https://api.anthropic.com",
@@ -56,11 +56,11 @@ Require OpenAI-compatible LLM API (Anthropic, Google Gemini, OpenAI, etc.)
   )
   ```
 
-**`run_arxiv_agent`**
+**`arxiv_agent`**
 - Search arXiv, download papers, extract and analyze content
 - Example:
   ```python
-  result = run_arxiv_agent(
+  result = arxiv_agent(
       query="Find recent papers on galaxy mass estimation methods",
       api_key="your-key",
       llm_url="https://api.anthropic.com",

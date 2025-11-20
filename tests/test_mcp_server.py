@@ -30,8 +30,8 @@ def test_tool_discovery():
 
     # Check for expected agent tools
     expected_agent_tools = [
-        'analyze_power_spectrum_multiagent',
-        'run_arxiv_agent'
+        'power_spectrum_agent',
+        'arxiv_agent'
     ]
 
     for tool_name in expected_agent_tools:
@@ -70,12 +70,12 @@ def test_agent_tool_discovery():
     tools = discover_tools()
 
     # Check specific agent tools exist
-    assert 'analyze_power_spectrum_multiagent' in tools
-    assert 'run_arxiv_agent' in tools
+    assert 'power_spectrum_agent' in tools
+    assert 'arxiv_agent' in tools
 
     # Verify they're callable
-    assert callable(tools['analyze_power_spectrum_multiagent'])
-    assert callable(tools['run_arxiv_agent'])
+    assert callable(tools['power_spectrum_agent'])
+    assert callable(tools['arxiv_agent'])
 
 
 if __name__ == '__main__':

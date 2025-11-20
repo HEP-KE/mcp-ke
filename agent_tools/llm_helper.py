@@ -27,7 +27,7 @@ def create_openai_compatible_llm(api_key: str, llm_url: str, model_id: str):
 
     Raises:
         ValueError: If api_key is empty or None
-        ImportError: If multiagent_sys package is not installed
+        ImportError: If required packages are not installed
 
     Example:
         model = create_openai_compatible_llm(
@@ -51,14 +51,18 @@ def create_openai_compatible_llm(api_key: str, llm_url: str, model_id: str):
         raise ValueError("model_id is required for agent tools.")
 
     try:
-        from multiagent_sys.llms.remote_llms import create_model
+        from smolagents import LiteLLMModel
     except ImportError as e:
         raise ImportError(
-            "multiagent_sys package is required for agent tools.\n"
+            "smolagents package is required for agent tools.\n"
             "Install it with:\n"
-            "  pip install git+https://github.com/HEP-KE/multiagent_sys.git\n"
+            "  pip install smolagents\n"
             f"\nDetails: {e}"
         )
 
-    # Create and return the model
-    return create_model(api_key, llm_url, model_id)
+    # Create and return the model using smolagents LiteLLMModel
+    return LiteLLMModel(
+        model_id=model_id,
+        api_key=api_key,
+        api_base=llm_url
+    )

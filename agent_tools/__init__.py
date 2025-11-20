@@ -1,11 +1,11 @@
 """Agent tools - Multiagent orchestrators for complex analysis workflows."""
 
-from .analyze_power_spectrum_multiagent import analyze_power_spectrum_multiagent
-from .arxiv_agent import run_arxiv_agent
+from .power_spectrum_agent import power_spectrum_agent
+from .arxiv_agent import arxiv_agent
 from .llm_helper import create_openai_compatible_llm
 
 __all__ = [
-    "analyze_power_spectrum_multiagent",
-    "run_arxiv_agent",
+    "power_spectrum_agent",
+    "arxiv_agent",
     "create_openai_compatible_llm",
 ]

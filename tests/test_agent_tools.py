@@ -14,8 +14,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from agent_tools import (
     create_openai_compatible_llm,
-    analyze_power_spectrum_multiagent,
-    run_arxiv_agent
+    power_spectrum_agent,
+    arxiv_agent
 )
 
 # Gemini configuration for integration tests
@@ -45,22 +45,22 @@ def test_create_openai_compatible_llm_validation():
 
 def test_agent_tools_are_callable():
     """Test that agent tools are callable."""
-    assert callable(analyze_power_spectrum_multiagent)
-    assert callable(run_arxiv_agent)
+    assert callable(power_spectrum_agent)
+    assert callable(arxiv_agent)
 
 
 def test_agent_tools_have_names():
     """Test that agent tools have name attributes."""
-    assert hasattr(analyze_power_spectrum_multiagent, 'name')
-    assert hasattr(run_arxiv_agent, 'name')
+    assert hasattr(power_spectrum_agent, 'name')
+    assert hasattr(arxiv_agent, 'name')
 
-    assert analyze_power_spectrum_multiagent.name == 'analyze_power_spectrum_multiagent'
-    assert run_arxiv_agent.name == 'run_arxiv_agent'
+    assert power_spectrum_agent.name == 'power_spectrum_agent'
+    assert arxiv_agent.name == 'arxiv_agent'
 
 
 def test_analyze_power_spectrum_invalid_llm():
     """Test power spectrum agent handles invalid LLM configuration."""
-    result = analyze_power_spectrum_multiagent(
+    result = power_spectrum_agent(
         query="test query",
         api_key="",  # Invalid
         llm_url="https://api.anthropic.com",
@@ -74,7 +74,7 @@ def test_analyze_power_spectrum_invalid_llm():
 
 def test_run_arxiv_agent_invalid_llm():
     """Test arxiv agent handles invalid LLM configuration."""
-    result = run_arxiv_agent(
+    result = arxiv_agent(
         query="test query",
         api_key="",  # Invalid
         llm_url="https://api.anthropic.com",
@@ -100,7 +100,7 @@ def test_analyze_power_spectrum_creates_directories():
         assert not os.path.exists(input_dir)
 
         # Run with invalid API key (won't actually run agent, but should create dirs)
-        result = analyze_power_spectrum_multiagent(
+        result = power_spectrum_agent(
             query="test",
             api_key="",
             llm_url="https://api.anthropic.com",
@@ -126,7 +126,7 @@ def test_run_arxiv_agent_creates_directory():
         assert not os.path.exists(output_dir)
 
         # Run with invalid API key (won't actually run agent, but should create dir)
-        result = run_arxiv_agent(
+        result = arxiv_agent(
             query="test",
             api_key="",
             llm_url="https://api.anthropic.com",
@@ -144,7 +144,7 @@ def test_arxiv_agent_integration():
     import tempfile
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        result = run_arxiv_agent(
+        result = arxiv_agent(
             query="Search for one recent paper on cosmology. Return the title and arxiv ID only.",
             api_key=GOOGLE_API_KEY,
             llm_url=GEMINI_URL,
@@ -176,7 +176,7 @@ def test_analyze_power_spectrum_integration():
         output_dir = os.path.join(tmpdir, "out")
         input_dir = os.path.join(tmpdir, "input")
 
-        result = analyze_power_spectrum_multiagent(
+        result = power_spectrum_agent(
             query="Create a theory k-grid and compute power spectrum for LCDM model.",
             api_key=GOOGLE_API_KEY,
             llm_url=GEMINI_URL,
