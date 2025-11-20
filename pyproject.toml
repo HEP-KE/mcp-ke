@@ -18,6 +18,10 @@ dependencies = [
     "scipy",
     "pandas",
     "classy>=3.0.0",
+    "arxiv>=2.0.0",
+    "requests>=2.28.0",
+    "pypdf>=3.0.0",
+    "multiagent_sys @ git+https://github.com/HEP-KE/multiagent_sys.git",
 ]
 
 [project.optional-dependencies]
@@ -31,7 +35,7 @@ dev = [
 mcp-ke = "mcp_server:main"
 
 [tool.setuptools]
-packages = ["mcp_utils", "codes", "tools"]
+packages = ["mcp_utils", "codes", "tools", "agent_tools"]
 py-modules = ["mcp_server"]
 
 [tool.black]
@@ -40,3 +44,10 @@ line-length = 100
 [tool.ruff]
 line-length = 100
 select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"

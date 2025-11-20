@@ -8,41 +8,44 @@ from mcp.server import Server
 from mcp.types import Tool, TextContent
 import mcp.server.stdio
 
-# Import tools package to discover all tools
+# Import tools packages to discover all tools
 import tools
+import agent_tools
 
 app = Server("mcp-ke")
 
 
 def discover_tools() -> dict[str, callable]:
     """
-    Auto-discover all @tool decorated functions from the tools package.
+    Auto-discover all @tool decorated functions from the tools and agent_tools packages.
 
     Returns:
         dict mapping tool names to their callable functions
     """
     discovered_tools = {}
 
-    # Walk through all modules in the tools package
-    for importer, modname, ispkg in pkgutil.walk_packages(
-        path=tools.__path__,
-        prefix='tools.',
-        onerror=lambda x: None
-    ):
-        try:
-            module = importlib.import_module(modname)
+    # Walk through all modules in both tools and agent_tools packages
+    for package in [tools, agent_tools]:
+        package_name = package.__name__
+        for importer, modname, ispkg in pkgutil.walk_packages(
+            path=package.__path__,
+            prefix=f'{package_name}.',
+            onerror=lambda x: None
+        ):
+            try:
+                module = importlib.import_module(modname)
 
-            # Find all callable objects in the module
-            for name, obj in inspect.getmembers(module, callable):
-                # Check if it has the smolagents @tool decorator attributes
-                if hasattr(obj, '__wrapped__') or hasattr(obj, 'name'):
-                    # Use the tool's name if available, otherwise use function name
-                    tool_name = getattr(obj, 'name', name)
-                    discovered_tools[tool_name] = obj
+                # Find all callable objects in the module
+                for name, obj in inspect.getmembers(module, callable):
+                    # Check if it has the smolagents @tool decorator attributes
+                    if hasattr(obj, '__wrapped__') or hasattr(obj, 'name'):
+                        # Use the tool's name if available, otherwise use function name
+                        tool_name = getattr(obj, 'name', name)
+                        discovered_tools[tool_name] = obj
 
-        except Exception as e:
-            print(f"Warning: Could not import {modname}: {e}")
-            continue
+            except Exception as e:
+                print(f"Warning: Could not import {modname}: {e}")
+                continue
 
     return discovered_tools
 
@@ -149,7 +152,7 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
 async def main():
     """Start the MCP server."""
     print("Starting MCP-KE server...")
-    print(f"Auto-discovering tools from tools/ directory...")
+    print(f"Auto-discovering tools from tools/ and agent_tools/ directories...")
 
     # Trigger tool discovery
     get_tools()
