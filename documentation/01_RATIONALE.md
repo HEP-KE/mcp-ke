@@ -2,7 +2,7 @@
 
 ## Overview
 
-**MCP-KE** (Model Context Protocol - Knowledge Engineering) is an MCP server that provides AI-powered tools for cosmological data analysis. It implements the **"tools-as-agents"** pattern, exposing both simple computational tools and complex multi-agent workflows through a uniform MCP interface.
+**MCP-KE** is an MCP server that provides AI-powered tools. It implements the **"tools-as-agents"** pattern, exposing both simple computational tools and complex multi-agent workflows through a uniform MCP interface.
 
 ![Abstract Architecture](abstract_architecture.png)
 
@@ -12,10 +12,9 @@ The abstract architecture diagram shows the high-level tool server pattern that 
 
 ### The Problem
 
-Modern cosmology analysis requires:
-1. **Domain expertise**: Understanding CLASS (Cosmic Linear Anisotropy Solving System), power spectrum analysis, observational data formats
-2. **Multi-step workflows**: Load data → compute models → analyze results → create visualizations
-3. **Integration complexity**: Connecting scientific computing libraries with AI agents
+Modern physics analysis requires:
+1. **Domain expertise**
+2. **Multi-step workflows**
 
 Traditional approaches require either:
 - Writing extensive custom code for each analysis task
@@ -25,7 +24,7 @@ Traditional approaches require either:
 ### The Solution
 
 MCP-KE provides a **tool server** that:
-- Exposes 23 specialized tools via MCP protocol
+- Exposes 20+ specialized tools via MCP protocol
 - Allows any MCP client (Claude Desktop, custom agents) to perform cosmology analysis
 - Encapsulates domain expertise in reusable tool functions
 - Provides both **atomic tools** (simple functions) and **agent tools** (multi-agent workflows)
@@ -46,11 +45,6 @@ MCP-KE provides a **tool server** that:
 - Limited to stdio communication (no streaming large data)
 - Requires client support
 
-**Alternative Considered**: REST API
-- Would require managing server lifecycle, ports, authentication
-- More complex deployment
-- MCP is simpler for local development and Claude Desktop integration
-
 ### Why Smolagents?
 
 **smolagents** is Hugging Face's lightweight agent framework:
@@ -59,10 +53,6 @@ MCP-KE provides a **tool server** that:
 - Support for managed sub-agents (hierarchical orchestration)
 - LLM-agnostic (works with any OpenAI-compatible API)
 
-**Alternative Considered**: LangChain
-- More features but heavier dependencies
-- smolagents is more focused and easier to understand
-- Better fit for tool-centric design
 
 ### Why Two-Tier Tool System?
 
@@ -114,5 +104,3 @@ MCP-KE provides a **tool server** that:
 
 - **MCP Specification**: https://modelcontextprotocol.io/
 - **Smolagents**: https://github.com/huggingface/smolagents
-- **CLASS**: https://github.com/lesgourg/class_public
-- **eBOSS DR14**: https://data.sdss.org/sas/dr14/eboss/lss/
