@@ -25,7 +25,7 @@ Traditional approaches require either:
 
 MCP-KE provides a **tool server** that:
 - Exposes 20+ specialized tools via MCP protocol
-- Allows any MCP client (Claude Desktop, custom agents) to perform cosmology analysis
+- Allows any MCP client (Custom agents like NorthStar or commercial ones like Claude Desktop) to perform cosmology analysis
 - Encapsulates domain expertise in reusable tool functions
 - Provides both **atomic tools** (simple functions) and **agent tools** (multi-agent workflows)
 
