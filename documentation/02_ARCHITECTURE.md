@@ -4,20 +4,6 @@
 
 MCP-KE follows a tool server pattern where domain-specific cosmology analysis capabilities are exposed through the Model Context Protocol (MCP).
 
-### Abstract Architecture
-
-![Abstract Architecture](abstract_architecture.png)
-
-The abstract architecture diagram above shows the high-level tool server pattern with MCP client layer, server core, domain tools, agent tools, core implementations, and external services.
-
-### Complete System Architecture
-
-![MCP-KE Overview](mcp_ke_overview.png)
-
-The detailed architecture diagram shows all components, tools, and external dependencies.
-
-### Architecture Summary
-
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                      MCP Client Layer                        │
@@ -31,20 +17,23 @@ The detailed architecture diagram shows all components, tools, and external depe
 │  • Handles tool execution and error handling                │
 └────────────┬───────────────────────────────┬────────────────┘
              │                               │
-    ┌────────▼────────┐           ┌─────────▼──────────┐
+    ┌────────▼────────┐           ┌──────────▼─────────┐
     │  Domain Tools   │           │   Agent Tools      │
     │   (tools/)      │           │  (agent_tools/)    │
     │                 │           │                    │
-    │  16 tools for:  │           │  2 orchestrators:  │
-    │  • Data loading │           │  • power_spectrum  │
-    │  • Cosmology    │           │  • arxiv_agent     │
-    │    models       │           │                    │
-    │  • Power        │           │  Each runs its own │
-    │    spectrum     │           │  multi-agent system│
-    │    computation  │           │  internally        │
-    │  • Plotting     │           │                    │
+    │  Tools for:     │           │  2 orchestrators:  │
+    │  • Data loading │           │  • arXiv agent     │
+    │  • Plotting     │           │  • domain agent    │
     └─────────────────┘           └────────────────────┘
 ```
+
+
+### Complete System Architecture
+
+![MCP-KE Overview](mcp_ke_overview.png)
+
+The detailed architecture diagram shows all components, tools, and external dependencies.
+
 
 ## Component Architecture
 
