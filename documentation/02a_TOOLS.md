@@ -4,7 +4,7 @@ This document provides detailed information about all tools available in MCP-KE,
 
 ## Domain Tools (`tools/`)
 
-**Purpose**: Atomic operations for cosmology analysis
+**Purpose**: Atomic operations for physics analysis
 
 Domain tools are thin wrappers around `codes/` implementations that provide simple, composable operations. They follow this design pattern:
 
