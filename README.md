@@ -4,9 +4,14 @@ Model Context Protocol (MCP) server providing cosmology analysis tools for LLM a
 
 ## What is MCP-KE?
 
-An MCP server that exposes 23 tools for cosmological analysis:
+An MCP server that exposes 20+ tools for cosmological analysis:
 - **Domain Tools**: Load data, compute power spectra, create visualizations
 - **Agent Tools**: AI-powered workflows for complex multi-step analysis
+
+## Documentation
+
+- **[DESIGN.md](DESIGN.md)**: Architecture, design rationale, and technical details
+- **[CONTRIBUTING.md](documentation/CONTRIBUTING.md)**: Guide for adding new tools
 
 ## Quick Start
 
@@ -14,7 +19,7 @@ An MCP server that exposes 23 tools for cosmological analysis:
 # Install
 pip install -e .
 
-# Run server
+# Run server (for testing)
 python mcp_server.py
 ```
 
@@ -68,6 +73,8 @@ Require OpenAI-compatible LLM API (Anthropic, Google Gemini, OpenAI, etc.)
   )
   ```
 
+
+
 ## Testing
 
 ```bash
@@ -81,6 +88,6 @@ pytest tests/test_agent_tools.py -v
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+See [CONTRIBUTING.md](documentation/CONTRIBUTING.md)
 
 MIT License
