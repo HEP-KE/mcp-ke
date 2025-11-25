@@ -2,12 +2,6 @@
 
 This document provides detailed information about all tools available in MCP-KE, including both domain tools and agent tools.
 
-## Overview
-
-![MCP-KE Overview](mcp_ke_overview.png)
-
-The figure above shows the complete architecture with all domain tools and agent tools, their organization, and external dependencies.
-
 ## Domain Tools (`tools/`)
 
 **Purpose**: Atomic operations for cosmology analysis
