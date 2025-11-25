@@ -135,7 +135,7 @@ process = subprocess.Popen(
 
 ## Tool Categories Available
 
-### Domain Tools (16 total)
+### Domain Tools (10+ total)
 
 **Data Loading**:
 - `load_observational_data`: Load eBOSS DR14 data
@@ -160,7 +160,7 @@ process = subprocess.Popen(
 - `save_dict`, `load_dict`: JSON persistence
 - `list_agent_files`: List output files
 
-### Agent Tools (2 total)
+### Agent Tools (Currently 2)
 
 **power_spectrum_agent**: Full cosmology analysis workflow
 - 4-agent orchestration system
@@ -172,31 +172,6 @@ process = subprocess.Popen(
 - Downloads and extracts papers
 - Provides summaries and citations
 
-## Troubleshooting
-
-### Server Not Starting
-
-- Check that Python path is correct
-- Verify all dependencies installed (`pip install -e .`)
-- Check Claude Desktop logs for error messages
-
-### Tools Not Available
-
-- Restart Claude Desktop after config changes
-- Verify JSON syntax in config file
-- Check that `@tool` decorators are present in code
-
-### Agent Tools Failing
-
-- Ensure GOOGLE_API_KEY environment variable is set
-- Check API key is valid and has quota
-- Verify LLM endpoint URL is correct
-
-### File Not Found Errors
-
-- Ensure working directory has `input/` folder
-- Check that data files are in `input/`
-- Verify file paths are relative to working directory
 
 ## Best Practices
 

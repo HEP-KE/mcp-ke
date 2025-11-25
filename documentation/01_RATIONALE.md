@@ -4,6 +4,10 @@
 
 **MCP-KE** (Model Context Protocol - Knowledge Engineering) is an MCP server that provides AI-powered tools for cosmological data analysis. It implements the **"tools-as-agents"** pattern, exposing both simple computational tools and complex multi-agent workflows through a uniform MCP interface.
 
+![Abstract Architecture](abstract_architecture.png)
+
+The abstract architecture diagram shows the high-level tool server pattern that MCP-KE implements.
+
 ## Motivation
 
 ### The Problem
