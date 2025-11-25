@@ -1,34 +1,17 @@
-# MCP-KE Design Document
+# MCP-KE Architecture
 
-## Overview
+## High-Level Design
 
-**MCP-KE** (Model Context Protocol - Knowledge Engineering) is an MCP server that provides AI-powered tools for cosmological data analysis. It implements the **"tools-as-agents"** pattern, exposing both simple computational tools and complex multi-agent workflows through a uniform MCP interface.
+MCP-KE follows a tool server pattern where domain-specific cosmology analysis capabilities are exposed through the Model Context Protocol (MCP). The system has three main architectural layers:
 
-## Motivation
+### Architecture Overview
 
-### The Problem
+See the generated diagrams for visual representations:
+- **abstract_architecture.png**: High-level abstract architecture showing the tool server pattern
+- **mcp_ke_overview.png**: Detailed architecture with all components and tools
+- **power_spectrum_agent.png**: Internal workflow of the power_spectrum_agent
 
-Modern cosmology analysis requires:
-1. **Domain expertise**: Understanding CLASS (Cosmic Linear Anisotropy Solving System), power spectrum analysis, observational data formats
-2. **Multi-step workflows**: Load data → compute models → analyze results → create visualizations
-3. **Integration complexity**: Connecting scientific computing libraries with AI agents
-
-Traditional approaches require either:
-- Writing extensive custom code for each analysis task
-- Deep knowledge of cosmology software and Python scientific stack
-- Manual orchestration of multi-step analysis pipelines
-
-### The Solution
-
-MCP-KE provides a **tool server** that:
-- Exposes 23 specialized tools via MCP protocol
-- Allows any MCP client (Claude Desktop, custom agents) to perform cosmology analysis
-- Encapsulates domain expertise in reusable tool functions
-- Provides both **atomic tools** (simple functions) and **agent tools** (multi-agent workflows)
-
-## Architecture
-
-### High-Level Design
+The architecture can be summarized as:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -57,14 +40,6 @@ MCP-KE provides a **tool server** that:
     │  • Plotting     │           │                    │
     └─────────────────┘           └────────────────────┘
 ```
-
-### Core Design Principles
-
-1. **Uniform Tool Interface**: Everything exposed as MCP tools, whether simple function or complex multi-agent workflow
-2. **Auto-Discovery**: Tools are automatically discovered via `@tool` decorator - no manual registration
-3. **Composability**: Simple tools can be composed by agents; agent tools handle complex workflows
-4. **Separation of Concerns**: Domain logic (`codes/`) separate from tool wrappers (`tools/`, `agent_tools/`)
-5. **Stateless Execution**: Each tool call is independent; state managed through file I/O
 
 ## Component Architecture
 
@@ -163,6 +138,8 @@ def tool_name(param: type) -> return_type:
 #### `power_spectrum_agent`
 
 **Architecture**: 4-agent hierarchical system
+
+See **power_spectrum_agent.png** for a detailed visual workflow.
 
 ```
 power_spectrum_agent(query, api_key, llm_url, model_id)
@@ -373,295 +350,6 @@ MCP Client receives result
 - Persistent intermediate results (debugging, inspection)
 - Clear data lineage
 
-## Integration with Claude Desktop
-
-### Setup Process
-
-**1. Install MCP-KE**
-
-```bash
-cd /path/to/hep-ke/mcp
-pip install -e .
-```
-
-This installs:
-- Package `mcp-ke` with all dependencies
-- Command `mcp-ke` (entry point to mcp_server:main)
-
-**2. Configure Claude Desktop**
-
-Create or edit: `~/Library/Application Support/Claude/claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "mcp-ke": {
-      "command": "python",
-      "args": [
-        "/absolute/path/to/hep-ke/mcp/mcp_server.py"
-      ],
-      "env": {
-        "GOOGLE_API_KEY": "your-key-here"
-      }
-    }
-  }
-}
-```
-
-**Note**: `env` section is optional but required if you want to use agent tools (power_spectrum_agent, arxiv_agent)
-
-**3. Restart Claude Desktop**
-
-Claude Desktop will:
-1. Read config on startup
-2. Launch `python mcp_server.py` as subprocess
-3. Attach stdin/stdout pipes
-4. Call `list_tools()` to discover available tools
-5. Make tools available in conversation
-
-**4. Verify Connection**
-
-In Claude Desktop, ask: "Can you list the available tools from mcp-ke?"
-
-You should see all 23 tools listed.
-
-### Usage Patterns
-
-**Pattern 1: Direct Tool Usage**
-
-User: "Load the eBOSS data from input/DR14_pm3d_19kbins.txt"
-
-Claude calls: `load_observational_data("DR14_pm3d_19kbins.txt")`
-
-**Pattern 2: Multi-Tool Workflow**
-
-User: "Compare ΛCDM with massive neutrino model (0.1 eV) using eBOSS data"
-
-Claude orchestrates:
-1. `load_observational_data(...)`
-2. `create_theory_k_grid()`
-3. `LCDM()`
-4. `nu_mass(0.1)`
-5. `compute_power_spectrum(...)` for each model
-6. `plot_power_spectra(...)`
-
-**Pattern 3: Agent Tool Usage**
-
-User: "Using the observational data from eBOSS, compare ΛCDM, massive neutrinos, and wCDM models"
-
-Claude calls: `power_spectrum_agent(query="Compare ΛCDM, nu_mass, wCDM models with eBOSS data", api_key=os.getenv("GOOGLE_API_KEY"), ...)`
-
-The agent tool handles the entire workflow internally and returns final analysis.
-
-### Directory Structure Requirements
-
-MCP-KE expects this working directory layout:
-
-```
-/your/working/directory/
-├── input/              # Input data files (required)
-│   └── DR14_pm3d_19kbins.txt
-└── out/                # Output files (created automatically)
-    ├── *.npy           # Saved arrays
-    ├── *.json          # Saved dicts
-    └── *.png           # Plot files
-```
-
-Tools automatically create `out/` if missing. You must provide `input/` with data files.
-
-## Extension Points
-
-### Adding a New Domain Tool
-
-**Example**: Add a tool for computing distance modulus
-
-```python
-# In tools/distance_tools.py
-
-from smolagents import tool
-
-@tool
-def compute_distance_modulus(z: float, model_params: dict) -> float:
-    """
-    Compute distance modulus at redshift z for given cosmology.
-
-    Args:
-        z: Redshift
-        model_params: Cosmology parameter dict (from LCDM, wCDM, etc.)
-
-    Returns:
-        Distance modulus in magnitudes
-    """
-    from codes.distances import compute_distance_modulus as compute_dm
-    return compute_dm(z, model_params)
-```
-
-**That's it!** Server auto-discovers on next startup.
-
-**Add to `tools/__init__.py`** (optional, for documentation):
-
-```python
-from .distance_tools import compute_distance_modulus
-
-__all__ = [
-    ...,
-    "compute_distance_modulus",
-]
-```
-
-### Adding a New Agent Tool
-
-**Example**: Create a model fitting agent
-
-```python
-# In agent_tools/fitting_agent.py
-
-from smolagents import CodeAgent, tool
-from .llm_helper import create_openai_compatible_llm
-
-@tool
-def model_fitting_agent(
-    query: str,
-    api_key: str,
-    llm_url: str,
-    model_id: str
-) -> str:
-    """
-    Fit cosmological models to observational data using MCMC.
-
-    Args:
-        query: Fitting task description
-        api_key: API key for LLM
-        llm_url: LLM API endpoint
-        model_id: Model identifier
-
-    Returns:
-        Fitting results and parameter constraints
-    """
-    model = create_openai_compatible_llm(api_key, llm_url, model_id)
-
-    # Import relevant tools for this agent
-    from tools import (
-        load_observational_data,
-        LCDM,
-        compute_power_spectrum,
-    )
-
-    # Create custom MCMC tools
-    @tool
-    def run_mcmc_chain(params, data, n_steps):
-        # Implementation here
-        pass
-
-    agent = CodeAgent(
-        model=model,
-        tools=[
-            load_observational_data,
-            LCDM,
-            compute_power_spectrum,
-            run_mcmc_chain,
-        ],
-        max_steps=50,
-        name="fitting_agent",
-        instructions="Your fitting workflow instructions here..."
-    )
-
-    return str(agent.run(query))
-```
-
-**Auto-discovered!** No registration needed.
-
-### Modifying Tool Discovery
-
-To customize which tools are exposed, edit `mcp_server.py:discover_tools()`:
-
-```python
-# Example: Filter out agent tools
-discovered_tools = {}
-for package in [tools]:  # Remove agent_tools from list
-    # ... discovery logic
-```
-
-Or filter by name:
-
-```python
-# Example: Only expose tools starting with "plot_"
-if not tool_name.startswith("plot_"):
-    continue
-```
-
-## Design Rationale
-
-### Why MCP?
-
-**Pros**:
-- Standard protocol for LLM-tool communication
-- Supported by major AI platforms (Anthropic, etc.)
-- Language-agnostic (JSON-RPC over stdio)
-- Secure subprocess isolation
-- Simple deployment (no servers, ports, or networking)
-
-**Cons**:
-- Still evolving standard
-- Limited to stdio communication (no streaming large data)
-- Requires client support
-
-**Alternative Considered**: REST API
-- Would require managing server lifecycle, ports, authentication
-- More complex deployment
-- MCP is simpler for local development and Claude Desktop integration
-
-### Why Smolagents?
-
-**smolagents** is Hugging Face's lightweight agent framework:
-- Simple `@tool` decorator
-- Built-in `CodeAgent` for multi-step reasoning
-- Support for managed sub-agents (hierarchical orchestration)
-- LLM-agnostic (works with any OpenAI-compatible API)
-
-**Alternative Considered**: LangChain
-- More features but heavier dependencies
-- smolagents is more focused and easier to understand
-- Better fit for tool-centric design
-
-### Why Two-Tier Tool System?
-
-**Domain Tools**:
-- Composable primitives
-- Testable in isolation
-- Reusable across workflows
-- Low latency
-
-**Agent Tools**:
-- Handle complex, multi-step workflows
-- Reduce client orchestration burden
-- Encapsulate domain expertise
-- Higher latency but much more capable
-
-**Benefit**: Clients can choose appropriate abstraction level
-
-### Why File-Based Agent Communication?
-
-**Problem**: Passing large NumPy arrays between agents overflows context
-
-**Solution**: Agents pass file paths, not data
-- File: `/path/to/out/k_theory.npy`
-- Next agent loads with `load_array`
-
-**Pros**:
-- Bounded context usage
-- Persistent intermediate results (debugging, inspection)
-- Clear data lineage
-
-**Cons**:
-- Requires shared filesystem
-- Manual cleanup needed
-
-**Alternative Considered**: Structured message passing
-- Would require serialization/deserialization
-- Still faces size limits
-- File system is simpler
-
 ## Testing Strategy
 
 ### Unit Tests
@@ -704,99 +392,18 @@ export GOOGLE_API_KEY="your-key"
 pytest tests/ -v
 ```
 
-## Performance Considerations
+## Directory Structure Requirements
 
-### Domain Tools
-- **Latency**: ~10-100ms per tool call (depends on CLASS computation)
-- **Bottleneck**: CLASS computations (CPU-bound)
-- **Scaling**: Stateless, can parallelize across calls
+MCP-KE expects this working directory layout:
 
-### Agent Tools
-- **Latency**: ~30-120 seconds per workflow
-- **Bottleneck**: LLM API calls (network + inference)
-- **Scaling**: Limited by LLM API rate limits
-
-### MCP Server
-- **Startup**: ~1-2 seconds (tool discovery + imports)
-- **Memory**: ~200MB base + CLASS memory (~50-100MB per computation)
-- **Concurrent calls**: Not parallelized (stdio is serial)
-
-## Security Considerations
-
-### Code Execution
-
-**Agent tools use `CodeAgent`** which can execute arbitrary Python code:
-- Only executes code generated by LLM
-- Constrained to `additional_authorized_imports`
-- Runs in same process (no sandboxing)
-
-**Mitigation**:
-- Use trusted LLMs only
-- Review agent instructions carefully
-- Monitor output directories for unexpected files
-
-### API Key Handling
-
-Agent tools require API keys:
-- Passed as function arguments (not ideal for secrets)
-- Visible in MCP traffic (stdio is local-only)
-- Better: Read from environment in agent tool implementation
-
-**Recommended pattern**:
-```python
-@tool
-def power_spectrum_agent(query: str) -> str:
-    """Don't require api_key as parameter"""
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        return "Error: GOOGLE_API_KEY not set"
-    # ... rest of implementation
+```
+/your/working/directory/
+├── input/              # Input data files (required)
+│   └── DR14_pm3d_19kbins.txt
+└── out/                # Output files (created automatically)
+    ├── *.npy           # Saved arrays
+    ├── *.json          # Saved dicts
+    └── *.png           # Plot files
 ```
 
-### File System Access
-
-Tools read/write to `input/` and `out/` directories:
-- No path traversal protection currently
-- Tools can write anywhere if given absolute paths
-
-**Future improvement**: Add path validation in `mcp_utils.path_utils`
-
-## Future Enhancements
-
-### 1. Streaming Results
-- MCP supports streaming but not used currently
-- Would benefit long-running agent tools
-- Show progress as agents work
-
-### 2. Tool Caching
-- Cache CLASS computations (expensive)
-- Key by parameter hash
-- Significant speedup for repeated queries
-
-### 3. More Agent Tools
-- `mcmc_fitting_agent`: Bayesian parameter fitting
-- `literature_review_agent`: Systematic paper analysis
-- `data_pipeline_agent`: End-to-end analysis workflows
-
-### 4. Better Error Handling
-- Structured error responses (not just strings)
-- Retry logic for transient failures
-- Detailed diagnostic information
-
-### 5. Observability
-- Logging framework for debugging
-- Metrics collection (tool usage, latency)
-- Agent trace visualization
-
-## Conclusion
-
-MCP-KE demonstrates a practical pattern for exposing domain expertise through AI-accessible tools. By combining simple atomic tools with complex agent-based workflows, it provides flexibility for both basic automation and sophisticated analysis tasks.
-
-The **tools-as-agents** pattern allows clients to choose the appropriate level of abstraction: call individual tools for fine-grained control, or use agent tools for end-to-end workflows. This design scales from simple data queries to complex multi-step analyses while maintaining a uniform interface through the MCP protocol.
-
-## References
-
-- **MCP Specification**: https://modelcontextprotocol.io/
-- **Smolagents**: https://github.com/huggingface/smolagents
-- **CLASS**: https://github.com/lesgourg/class_public
-- **eBOSS DR14**: https://data.sdss.org/sas/dr14/eboss/lss/
+Tools automatically create `out/` if missing. You must provide `input/` with data files.
