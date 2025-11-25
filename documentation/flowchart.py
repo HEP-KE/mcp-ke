@@ -89,7 +89,7 @@ def mcp_overview():
     # MCP Client Layer
     with dot.subgraph(name='cluster_client') as c:
         c.attr(label='MCP Client Layer', style='rounded', color='blue')
-        c.node('claude', 'Claude Desktop\nor Custom Agent', shape='box', style='filled', fillcolor='lightblue')
+        c.node('claude', 'Custom Agent \nor Claude Desktop', shape='box', style='filled', fillcolor='lightblue')
 
     # MCP Server Core
     with dot.subgraph(name='cluster_server') as s:
@@ -161,83 +161,51 @@ def mcp_overview():
 
 def power_spectrum_agent_internals():
     """
-    Detailed view of power_spectrum_agent's internal 4-agent orchestration,
-    showing file-based communication and tool usage.
+    Simplified generic view of multi-agent orchestration showing dataflow.
     """
     dot = Digraph('Power_Spectrum_Agent')
-    dot.attr(rankdir='TB', fontsize='9', labelloc='t',
-             label='power_spectrum_agent: Multi-Agent Workflow with File-Based Communication')
+    dot.attr(rankdir='TB', fontsize='10', labelloc='t',
+             label='Multi-Agent Orchestration: Generic Dataflow Pattern')
 
-    # MCP Client view
-    with dot.subgraph(name='cluster_outer') as c:
-        c.attr(label='MCP Client (Claude Desktop)', style='rounded', color='blue')
-        c.node('claude', 'Claude Desktop', shape='box', style='filled', fillcolor='lightblue')
-        c.node('toolcall', 'call_tool:\npower_spectrum_agent(\n  query="Compare ΛCDM...",\n  api_key="...",\n  llm_url="...",\n  model_id="..."\n)',
-               shape='box', style='filled', fillcolor='lightblue', fontsize='8')
+    # MCP Client
+    dot.node('client', 'MCP Client', shape='box', style='filled', fillcolor='lightblue', fontsize='10')
+
+    # Agent tool entry point
+    dot.node('agent_tool', 'Agent Tool\n(e.g., power_spectrum_agent)',
+             shape='box', style='filled,rounded', fillcolor='lavender', fontsize='10')
 
     # Orchestrator
-    dot.node('orch_agent', 'Orchestrator Agent\n\nCoordinates workflow\nPasses file paths between agents',
-             shape='box', style='filled', fillcolor='wheat')
+    dot.node('orchestrator', 'Orchestrator Agent\n\nCoordinates sub-agents\nManages dataflow',
+             shape='box', style='filled', fillcolor='wheat', fontsize='10')
 
-    # Data Agent
-    with dot.subgraph(name='cluster_data') as data_c:
-        data_c.attr(label='Data Agent', style='rounded', color='green', fontsize='8')
-        data_c.node('data_agent', 'data_agent', shape='box', style='filled', fillcolor='lightgreen', fontsize='8')
-        data_c.node('data_tools', 'Tools:\n• load_observational_data\n• save_array, save_dict',
-                    shape='box', style='dashed', fillcolor='lightgreen', fontsize='7')
-        data_c.node('data_output', 'Saves:\nk_obs.npy\nPk_obs.npy\nerrors_obs.npy',
-                    shape='note', fillcolor='lightyellow', fontsize='7')
+    # Sub-agents in a row
+    dot.node('agent1', 'Sub-Agent 1\n\nData Loading',
+             shape='box', style='filled', fillcolor='lightgreen', fontsize='9')
+    dot.node('agent2', 'Sub-Agent 2\n\nProcessing',
+             shape='box', style='filled', fillcolor='lightcyan', fontsize='9')
+    dot.node('agent3', 'Sub-Agent 3\n\nVisualization',
+             shape='box', style='filled', fillcolor='lightpink', fontsize='9')
 
-    # Modeling Agent
-    with dot.subgraph(name='cluster_model') as model_c:
-        model_c.attr(label='Modeling Agent', style='rounded', color='cyan', fontsize='8')
-        model_c.node('model_agent', 'modeling_agent', shape='box', style='filled', fillcolor='lightcyan', fontsize='8')
-        model_c.node('model_tools', 'Tools:\n• LCDM, nu_mass, wCDM\n• create_theory_k_grid\n• compute_all_models\n• load/save_array',
-                     shape='box', style='dashed', fillcolor='lightcyan', fontsize='7')
-        model_c.node('model_output', 'Saves:\nk_theory.npy\nmodel_results.npy',
-                     shape='note', fillcolor='lightyellow', fontsize='7')
+    # Results
+    dot.node('results', 'Results', shape='box', style='filled', fillcolor='gold', fontsize='10')
 
-    # Viz Agent
-    with dot.subgraph(name='cluster_viz') as viz_c:
-        viz_c.attr(label='Viz Agent', style='rounded', color='pink', fontsize='8')
-        viz_c.node('viz_agent', 'viz_agent', shape='box', style='filled', fillcolor='lightpink', fontsize='8')
-        viz_c.node('viz_tools', 'Tools:\n• plot_power_spectra\n• load_array, load_dict',
-                   shape='box', style='dashed', fillcolor='lightpink', fontsize='7')
-        viz_c.node('viz_output', 'Saves:\nplot.png',
-                   shape='note', fillcolor='lightyellow', fontsize='7')
+    # Main flow
+    dot.edge('client', 'agent_tool', label='1. Query', fontsize='9', penwidth='2', color='blue')
+    dot.edge('agent_tool', 'orchestrator', label='2. Initialize', fontsize='9', color='purple')
 
-    # Final output
-    dot.node('final_report', 'Final Report:\n\n• Analysis summary\n• All file paths',
-             shape='box', style='filled', fillcolor='gold', fontsize='8')
+    # Orchestrator to sub-agents
+    dot.edge('orchestrator', 'agent1', label='3. Task 1', fontsize='8', color='green')
+    dot.edge('agent1', 'orchestrator', label='Data', fontsize='8', color='green', style='dashed')
 
-    # Flow edges
-    dot.edge('claude', 'toolcall', label='User query', fontsize='7')
-    dot.edge('toolcall', 'orch_agent', label='1. Forwarded', fontsize='7', color='purple')
+    dot.edge('orchestrator', 'agent2', label='4. Task 2', fontsize='8', color='cyan')
+    dot.edge('agent2', 'orchestrator', label='Results', fontsize='8', color='cyan', style='dashed')
 
-    # Data agent flow
-    dot.edge('orch_agent', 'data_agent', label='2. "Load eBOSS"', fontsize='7', color='green')
-    dot.edge('data_agent', 'data_tools', style='dashed', fontsize='7')
-    dot.edge('data_tools', 'data_output', fontsize='7')
-    dot.edge('data_agent', 'orch_agent', label='3. File paths:\n/out/k_obs.npy\n...',
-             fontsize='7', color='green')
+    dot.edge('orchestrator', 'agent3', label='5. Task 3', fontsize='8', color='pink')
+    dot.edge('agent3', 'orchestrator', label='Outputs', fontsize='8', color='pink', style='dashed')
 
-    # Modeling agent flow
-    dot.edge('orch_agent', 'model_agent', label='4. "Compute models"', fontsize='7', color='cyan')
-    dot.edge('model_agent', 'model_tools', style='dashed', fontsize='7')
-    dot.edge('model_tools', 'model_output', fontsize='7')
-    dot.edge('model_agent', 'orch_agent', label='5. File paths:\n/out/k_theory.npy\n...',
-             fontsize='7', color='cyan')
-
-    # Viz agent flow
-    dot.edge('orch_agent', 'viz_agent', label='6. "Plot" + paths', fontsize='7', color='pink')
-    dot.edge('viz_agent', 'viz_tools', style='dashed', fontsize='7')
-    dot.edge('viz_tools', 'viz_output', fontsize='7')
-    dot.edge('viz_agent', 'orch_agent', label='7. File paths:\n/out/plot.png',
-             fontsize='7', color='pink')
-
-    # Final assembly
-    dot.edge('orch_agent', 'final_report', label='8. Assemble', fontsize='7', color='orange')
-    dot.edge('final_report', 'claude', label='9. Return', fontsize='7', color='purple', penwidth='2')
+    # Final results
+    dot.edge('orchestrator', 'results', label='6. Assemble', fontsize='9', color='orange')
+    dot.edge('results', 'client', label='7. Return', fontsize='9', penwidth='2', color='blue')
 
     return dot
 
