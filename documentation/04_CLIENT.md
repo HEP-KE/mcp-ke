@@ -2,7 +2,7 @@
 
 ## Integration with Claude Desktop
 
-We show how to set up the MCP server with Claude Desktop to give Claude access to all cosmology analysis tools.
+We show how to set up the MCP server with a client (like Claude Desktop in this example to give Claude access to all cosmology analysis tools). 
 
 ### Setup Process
 
