@@ -7,7 +7,7 @@ def abstract_architecture():
     """
     dot = Digraph('Abstract_Architecture')
     dot.attr(rankdir='LR', fontsize='11', labelloc='t',
-             label='MCP-KE: Tool Server Pattern')
+             label='MCP-KE: Tool Server Pattern', dpi='300')
 
     # MCP Client Layer
     with dot.subgraph(name='cluster_client') as c:
@@ -84,7 +84,7 @@ def mcp_overview():
     """
     dot = Digraph('MCP_KE_Overview')
     dot.attr(rankdir='LR', fontsize='10', labelloc='t',
-             label='MCP-KE Architecture: Tool Server with Domain & Agent Tools')
+             label='MCP-KE Architecture: Tool Server with Domain & Agent Tools', dpi='300')
 
     # MCP Client Layer
     with dot.subgraph(name='cluster_client') as c:
@@ -165,7 +165,7 @@ def power_spectrum_agent_internals():
     """
     dot = Digraph('Power_Spectrum_Agent')
     dot.attr(rankdir='TB', fontsize='10', labelloc='t',
-             label='Multi-Agent Orchestration: Generic Dataflow Pattern')
+             label='Multi-Agent Orchestration: Generic Dataflow Pattern', dpi='300')
 
     # MCP Client
     dot.node('client', 'MCP Client', shape='box', style='filled', fillcolor='lightblue', fontsize='10')
