@@ -2,7 +2,7 @@
 
 ## High-Level Design
 
-MCP-KE follows a tool server pattern where domain-specific cosmology analysis capabilities are exposed through the Model Context Protocol (MCP).
+MCP-KE follows a tool server pattern where domain-specific analysis capabilities are exposed through the Model Context Protocol (MCP).
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -80,10 +80,10 @@ def build_mcp_tool(name: str, func: callable) -> Tool:
 **Purpose**: Atomic operations for cosmology analysis
 
 Domain tools are thin wrappers around `codes/` implementations. They provide:
-- Data loading (eBOSS DR14, k-grids)
-- Model parameters (ΛCDM, massive neutrinos, dark energy)
-- Analysis (power spectrum computation, suppression ratios)
-- Visualization (comparison plots)
+- Data loading 
+- Model parameters 
+- Analysis 
+- Visualization 
 - Utilities (file I/O, persistence)
 
 See **[02a_TOOLS.md](02a_TOOLS.md)** for complete tool reference.
