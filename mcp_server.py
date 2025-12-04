@@ -1,12 +1,18 @@
 import asyncio
 import importlib
 import inspect
+import os
 import pkgutil
 from typing import Any
 
 from mcp.server import Server
 from mcp.types import Tool, TextContent
 import mcp.server.stdio
+from mcp.server.sse import SseServerTransport
+from starlette.applications import Starlette
+from starlette.routing import Route
+from starlette.responses import Response
+import uvicorn
 
 # Import tools packages to discover all tools
 import tools
@@ -149,9 +155,21 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
         return [TextContent(type="text", text=error_msg)]
 
 
-async def main():
-    """Start the MCP server."""
-    print("Starting MCP-KE server...")
+async def handle_sse(request):
+    """Handle SSE connection requests."""
+    async with SseServerTransport("/messages") as (read_stream, write_stream):
+        await app.run(read_stream, write_stream, app.create_initialization_options())
+
+
+async def handle_messages(request):
+    """Handle POST requests to /messages endpoint."""
+    async with SseServerTransport("/messages") as (read_stream, write_stream):
+        await app.run(read_stream, write_stream, app.create_initialization_options())
+
+
+async def main_stdio():
+    """Start the MCP server with stdio transport (legacy mode)."""
+    print("Starting MCP-KE server in STDIO mode...")
     print(f"Auto-discovering tools from tools/ and agent_tools/ directories...")
 
     # Trigger tool discovery
@@ -161,5 +179,39 @@ async def main():
         await app.run(read_stream, write_stream, app.create_initialization_options())
 
 
+def main_sse():
+    """Start the MCP server with SSE transport (HTTP mode)."""
+    print("Starting MCP-KE server in SSE mode...")
+    print(f"Auto-discovering tools from tools/ and agent_tools/ directories...")
+
+    # Trigger tool discovery
+    get_tools()
+
+    # Get configuration from environment variables
+    host = os.getenv("MCP_HOST", "0.0.0.0")
+    port = int(os.getenv("MCP_PORT", "8000"))
+
+    # Create Starlette app with SSE transport
+    sse_app = Starlette(
+        routes=[
+            Route("/sse", endpoint=handle_sse),
+            Route("/messages", endpoint=handle_messages, methods=["POST"]),
+        ]
+    )
+
+    print(f"Server listening on http://{host}:{port}")
+    print(f"SSE endpoint: http://{host}:{port}/sse")
+    print(f"Messages endpoint: http://{host}:{port}/messages")
+
+    # Run the server
+    uvicorn.run(sse_app, host=host, port=port)
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    # Check if SSE mode is requested via environment variable
+    mode = os.getenv("MCP_TRANSPORT", "stdio").lower()
+
+    if mode == "sse":
+        main_sse()
+    else:
+        asyncio.run(main_stdio())

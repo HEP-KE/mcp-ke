@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: mcp-ke-server
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: MCP_TRANSPORT
+        value: sse
+      - key: MCP_HOST
+        value: 0.0.0.0
+      - key: MCP_PORT
+        value: 8000
+      - key: PYTHONUNBUFFERED
+        value: 1
+    healthCheckPath: /sse
+    autoDeploy: true

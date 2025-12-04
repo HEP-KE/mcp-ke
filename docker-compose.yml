@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  mcp-ke:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcp-ke-server
+    ports:
+      - "8000:8000"
+    environment:
+      - MCP_TRANSPORT=sse
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8000
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Mount input data directory (optional - comment out if bundling data in image)
+      - ./input:/app/input:ro
+      # Mount output directory to persist results
+      - ./out:/app/out
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/sse').read()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - mcp-network
+
+networks:
+  mcp-network:
+    driver: bridge
