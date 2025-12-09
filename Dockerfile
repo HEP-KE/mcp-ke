@@ -1,7 +1,7 @@
-# Multi-stage build for MCP-KE server with CLASS support
-FROM python:3.11-slim as builder
+# Single-stage build for MCP-KE server with CLASS support
+FROM python:3.11-slim
 
-# Install build dependencies for CLASS
+# Install build dependencies for CLASS (includes runtime libraries)
 RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
@@ -15,28 +15,12 @@ RUN apt-get update && apt-get install -y \
 # Create app directory
 WORKDIR /app
 
-# Copy dependency files
+# Copy dependency files first for better layer caching
 COPY pyproject.toml ./
 
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -e .
-
-# Final stage
-FROM python:3.11-slim
-
-# Install runtime dependencies
-RUN apt-get update && apt-get install -y \
-    libgsl27 \
-    libfftw3-3 \
-    && rm -rf /var/lib/apt/lists/*
-
-# Create app directory
-WORKDIR /app
-
-# Copy Python packages from builder
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy application code
 COPY mcp_server.py ./
