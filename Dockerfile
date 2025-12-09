@@ -15,19 +15,17 @@ RUN apt-get update && apt-get install -y \
 # Create app directory
 WORKDIR /app
 
-# Copy dependency files first for better layer caching
+# Copy all application code (needed for editable install)
 COPY pyproject.toml ./
-
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -e .
-
-# Copy application code
 COPY mcp_server.py ./
 COPY mcp_utils/ ./mcp_utils/
 COPY codes/ ./codes/
 COPY tools/ ./tools/
 COPY agent_tools/ ./agent_tools/
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -e .
 
 # Create directories for data
 RUN mkdir -p /app/input /app/out

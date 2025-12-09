@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for mcp-ke-server on 2025-12-09T12:43:32-06:00
+# fly.toml app configuration file generated for mcp-ke-server-holy-tree-8438 on 2025-12-09T12:47:35-06:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'mcp-ke-server'
+app = 'mcp-ke-server-holy-tree-8438'
 primary_region = 'iad'
 
 [build]
@@ -48,6 +48,6 @@ primary_region = 'iad'
     grace_period = '10s'
 
 [[vm]]
+  memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
-  memory_mb = 1024
