@@ -67,8 +67,13 @@ def build_mcp_tool(name: str, func: callable) -> Tool:
     Returns:
         MCP Tool object
     """
+    # For smolagents tools, inspect the actual 'forward' method instead of the wrapper
+    actual_func = func
+    if hasattr(func, 'forward'):
+        actual_func = func.forward
+
     # Get function signature and docstring
-    sig = inspect.signature(func)
+    sig = inspect.signature(actual_func)
     doc = inspect.getdoc(func) or f"Tool: {name}"
 
     # Build JSON Schema for parameters
@@ -79,8 +84,14 @@ def build_mcp_tool(name: str, func: callable) -> Tool:
         if param_name in ('self', 'cls'):
             continue
 
+        # Skip *args and **kwargs
+        if param.kind in (inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD):
+            continue
+
         # Basic type inference from annotations
         param_type = "string"  # default
+        param_description = None
+
         if param.annotation != inspect.Parameter.empty:
             annotation = param.annotation
             if annotation in (int, 'int'):
@@ -91,8 +102,22 @@ def build_mcp_tool(name: str, func: callable) -> Tool:
                 param_type = "boolean"
             elif annotation in (dict, 'dict'):
                 param_type = "object"
+            elif annotation == object or annotation == 'object':
+                # For numpy arrays or other objects, use array type
+                param_type = "array"
+            # Check for type hints
+            elif hasattr(annotation, '__origin__'):
+                origin = getattr(annotation, '__origin__', None)
+                if origin == dict:
+                    param_type = "object"
+                elif origin in (list, tuple):
+                    param_type = "array"
 
-        properties[param_name] = {"type": param_type}
+        param_schema = {"type": param_type}
+        if param_description:
+            param_schema["description"] = param_description
+
+        properties[param_name] = param_schema
 
         # Mark as required if no default value
         if param.default == inspect.Parameter.empty:
@@ -141,13 +166,85 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
         )]
 
     try:
+        import json
+
         func = tools_dict[name]
+
+        # Debug logging
+        print(f"[DEBUG] Tool: {name}")
+        print(f"[DEBUG] Raw arguments: {arguments}")
+        print(f"[DEBUG] Arguments type: {type(arguments)}")
+
+        # Unwrap args/kwargs if the MCP client wrapped them
+        # Some MCP clients send {"args": [...], "kwargs": {...}}
+        if isinstance(arguments, dict) and set(arguments.keys()) <= {"args", "kwargs"}:
+            args = arguments.get("args", [])
+            kwargs = arguments.get("kwargs", {})
+
+            # Parse JSON strings if provided
+            if isinstance(kwargs, str):
+                try:
+                    kwargs = json.loads(kwargs)
+                except json.JSONDecodeError:
+                    pass
+
+            if isinstance(args, str):
+                try:
+                    args = json.loads(args)
+                except json.JSONDecodeError:
+                    pass
+
+            # Convert positional args to keyword args using the function signature
+            if args and not kwargs:
+                # Get the actual function to inspect
+                actual_func = func.forward if hasattr(func, 'forward') else func
+                sig = inspect.signature(actual_func)
+                param_names = [
+                    pname for pname, param in sig.parameters.items()
+                    if pname not in ('self', 'cls')
+                    and param.kind not in (inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD)
+                ]
+
+                # Map positional args to parameter names
+                if isinstance(args, list) and param_names:
+                    kwargs = dict(zip(param_names, args))
+                elif not isinstance(args, list) and param_names:
+                    # Single argument
+                    kwargs = {param_names[0]: args}
+
+            arguments = kwargs if kwargs else {}
+
+        # Ensure arguments is a dict
+        if not isinstance(arguments, dict):
+            arguments = {}
+
+        # Debug final arguments
+        print(f"[DEBUG] Final arguments to pass: {arguments}")
+
         result = func(**arguments)
 
         # Convert result to string for MCP response
         result_str = str(result)
 
         return [TextContent(type="text", text=result_str)]
+
+    except TypeError as e:
+        import traceback
+        # Check if this is a missing argument error
+        if "missing" in str(e) and "required" in str(e):
+            sig = inspect.signature(func)
+            param_info = []
+            for param_name, param in sig.parameters.items():
+                if param_name not in ('self', 'cls'):
+                    required = param.default == inspect.Parameter.empty
+                    param_info.append(f"  - {param_name}: {param.annotation} {'(required)' if required else f'(optional, default={param.default})'}")
+
+            param_list = "\n".join(param_info)
+            error_msg = f"Error: Tool '{name}' is missing required arguments.\n\nExpected parameters:\n{param_list}\n\nReceived arguments: {arguments}\n\nOriginal error: {str(e)}"
+            return [TextContent(type="text", text=error_msg)]
+        else:
+            error_msg = f"Error executing tool '{name}': {str(e)}\n{traceback.format_exc()}"
+            return [TextContent(type="text", text=error_msg)]
 
     except Exception as e:
         import traceback
