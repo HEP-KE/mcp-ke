@@ -45,7 +45,7 @@ EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/sse').read()" || exit 1
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/tools').read()" || exit 1
 
 # Run the hybrid server (supports both MCP and REST)
 CMD ["python", "hybrid_server.py"]

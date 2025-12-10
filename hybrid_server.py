@@ -279,7 +279,7 @@ async def rest_list_tools(request):
 
     return JSONResponse({"tools": tool_list})
 
-
+'''
 async def rest_execute_tool(request):
     """REST: Execute a tool."""
     try:
@@ -308,6 +308,111 @@ async def rest_execute_tool(request):
             "error": f"{str(e)}\n{traceback.format_exc()}"
         }, status_code=500)
 
+
+'''
+async def rest_execute_tool(request):
+    """REST: Execute a tool (ChatGPT Actions-friendly).
+
+    Accepts any of these shapes and normalizes them to (*args, **kwargs):
+
+    1) {
+         "tool_name": "X",
+         "arguments": { "args": [...], "kwargs": {...} }
+       }
+
+    2) {
+         "tool_name": "X",
+         "arguments": { "foo": 1, "bar": 2 }
+       }
+
+    3) {
+         "tool_name": "X",
+         "args": [...],
+         "kwargs": {...}
+       }
+
+    4) {
+         "tool_name": "X",
+         "model_results": {...},
+         "k_values": [...]
+       }
+    """
+    try:
+        body = await request.json()
+        tool_name = body.get("tool_name")
+
+        if not tool_name:
+            return JSONResponse({
+                "success": False,
+                "error": "Missing 'tool_name' in request body"
+            }, status_code=400)
+
+        tools_dict = get_tools()
+        if tool_name not in tools_dict:
+            return JSONResponse({
+                "success": False,
+                "error": f"Tool '{tool_name}' not found. Available tools: {list(tools_dict.keys())}"
+            }, status_code=404)
+
+        func = tools_dict[tool_name]
+
+        # Everything except tool_name is potential argument material
+        raw_without_name = {k: v for k, v in body.items() if k != "tool_name"}
+
+        if "arguments" in body:
+            arguments = body["arguments"]
+        else:
+            arguments = raw_without_name
+
+        args = []
+        kwargs = {}
+
+        if isinstance(arguments, dict) and set(arguments.keys()) <= {"args", "kwargs"}:
+            # {"arguments": {"args": [...], "kwargs": {...}}}
+            args = arguments.get("args", []) or []
+            kwargs = arguments.get("kwargs", {}) or {}
+        elif isinstance(arguments, dict):
+            # {"arguments": {"model_results": ..., "k_values": ...}}
+            kwargs = arguments
+        elif arguments is None:
+            args = []
+        else:
+            args = [arguments]
+
+        # Backup: no "arguments" key but top-level has args/kwargs or other fields
+        if not args and not kwargs and isinstance(raw_without_name, dict):
+            if set(raw_without_name.keys()) <= {"args", "kwargs"}:
+                args = raw_without_name.get("args", []) or []
+                kwargs = raw_without_name.get("kwargs", {}) or {}
+            else:
+                kwargs = raw_without_name
+
+        # FINAL SAFETY: never pass 'arguments', 'args', 'kwargs' down to tools as kwargs
+        for bad in ("arguments", "args", "kwargs"):
+            if bad in kwargs:
+                kwargs.pop(bad)
+
+        log(f"[REST] Executing {tool_name} with args={args}, kwargs={kwargs}")
+
+        actual_func = getattr(func, "forward", func)
+        if asyncio.iscoroutinefunction(actual_func):
+            result = await actual_func(*args, **kwargs)
+        else:
+            result = actual_func(*args, **kwargs)
+
+        return JSONResponse({
+            "success": True,
+            "result": str(result)
+        })
+
+    except Exception as e:
+        import traceback
+        log(f"Error in rest_execute_tool: {e}")
+        return JSONResponse({
+            "success": False,
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }, status_code=500)
 
 async def rest_openapi(request):
     """REST: OpenAPI schema for ChatGPT."""
