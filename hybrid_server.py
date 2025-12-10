@@ -11,6 +11,7 @@ import importlib
 import inspect
 import os
 import pkgutil
+import sys
 from typing import Any, Dict
 
 from mcp.server import Server
@@ -25,6 +26,12 @@ import uvicorn
 # Import tools packages
 import tools
 import agent_tools
+
+
+def log(msg: str):
+    """Log to stderr to avoid breaking JSON-RPC on stdout."""
+    print(msg, file=sys.stderr)
+
 
 # Create MCP server
 mcp_app = Server("mcp-ke")
@@ -48,7 +55,7 @@ def discover_tools() -> dict[str, callable]:
                         tool_name = getattr(obj, 'name', name)
                         discovered_tools[tool_name] = obj
             except Exception as e:
-                print(f"Warning: Could not import {modname}: {e}")
+                log(f"Warning: Could not import {modname}: {e}")
                 continue
 
     return discovered_tools
@@ -103,7 +110,7 @@ def get_tools() -> dict[str, callable]:
     global _TOOLS_CACHE
     if _TOOLS_CACHE is None:
         _TOOLS_CACHE = discover_tools()
-        print(f"Discovered {len(_TOOLS_CACHE)} tools: {list(_TOOLS_CACHE.keys())}")
+        log(f"Discovered {len(_TOOLS_CACHE)} tools: {list(_TOOLS_CACHE.keys())}")
     return _TOOLS_CACHE
 
 
@@ -130,11 +137,6 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
         import json
 
         func = tools_dict[name]
-
-        # Debug logging
-        print(f"[DEBUG] Tool: {name}")
-        print(f"[DEBUG] Raw arguments: {arguments}")
-        print(f"[DEBUG] Arguments type: {type(arguments)}")
 
         # Unwrap args/kwargs if the MCP client wrapped them
         # Some MCP clients send {"args": [...], "kwargs": {...}}
@@ -195,10 +197,6 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
                 pass
 
             arguments = kwargs if kwargs else {}
-
-        # Debug final arguments
-        print(f"[DEBUG] Final arguments to pass: {arguments}")
-        print(f"[DEBUG] Function signature: {inspect.signature(func)}")
 
         result = func(**arguments)
         result_str = str(result)
@@ -376,8 +374,8 @@ async def handle_messages(request):
 
 def main():
     """Start the hybrid server."""
-    print("Starting MCP-KE Hybrid Server...")
-    print("Auto-discovering tools...")
+    log("Starting MCP-KE Hybrid Server...")
+    log("Auto-discovering tools...")
     get_tools()
 
     host = os.getenv("MCP_HOST", "0.0.0.0")
@@ -409,16 +407,16 @@ def main():
         allow_headers=["*"],
     )
 
-    print(f"\n{'='*60}")
-    print(f"Server listening on http://{host}:{port}")
-    print(f"{'='*60}")
-    print(f"\n📡 MCP Protocol (Claude Desktop/Code):")
-    print(f"   SSE endpoint: http://{host}:{port}/sse")
-    print(f"\n🌐 REST API (ChatGPT Custom GPTs):")
-    print(f"   Tools list:   http://{host}:{port}/api/tools")
-    print(f"   Execute tool: http://{host}:{port}/api/execute")
-    print(f"   OpenAPI spec: http://{host}:{port}/api/openapi.json")
-    print(f"\n{'='*60}\n")
+    log(f"\n{'='*60}")
+    log(f"Server listening on http://{host}:{port}")
+    log(f"{'='*60}")
+    log(f"\n📡 MCP Protocol (Claude Desktop/Code):")
+    log(f"   SSE endpoint: http://{host}:{port}/sse")
+    log(f"\n🌐 REST API (ChatGPT Custom GPTs):")
+    log(f"   Tools list:   http://{host}:{port}/api/tools")
+    log(f"   Execute tool: http://{host}:{port}/api/execute")
+    log(f"   OpenAPI spec: http://{host}:{port}/api/openapi.json")
+    log(f"\n{'='*60}\n")
 
     uvicorn.run(app, host=host, port=port)
 

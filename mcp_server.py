@@ -3,6 +3,7 @@ import importlib
 import inspect
 import os
 import pkgutil
+import sys
 from typing import Any
 
 from mcp.server import Server
@@ -17,6 +18,11 @@ import uvicorn
 # Import tools packages to discover all tools
 import tools
 import agent_tools
+
+
+def log(msg: str):
+    """Log to stderr to avoid breaking JSON-RPC on stdout."""
+    print(msg, file=sys.stderr)
 
 app = Server("mcp-ke")
 
@@ -50,7 +56,7 @@ def discover_tools() -> dict[str, callable]:
                         discovered_tools[tool_name] = obj
 
             except Exception as e:
-                print(f"Warning: Could not import {modname}: {e}")
+                log(f"Warning: Could not import {modname}: {e}")
                 continue
 
     return discovered_tools
@@ -143,7 +149,7 @@ def get_tools() -> dict[str, callable]:
     global _TOOLS_CACHE
     if _TOOLS_CACHE is None:
         _TOOLS_CACHE = discover_tools()
-        print(f"Discovered {len(_TOOLS_CACHE)} tools: {list(_TOOLS_CACHE.keys())}")
+        log(f"Discovered {len(_TOOLS_CACHE)} tools: {list(_TOOLS_CACHE.keys())}")
     return _TOOLS_CACHE
 
 
@@ -169,11 +175,6 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
         import json
 
         func = tools_dict[name]
-
-        # Debug logging
-        print(f"[DEBUG] Tool: {name}")
-        print(f"[DEBUG] Raw arguments: {arguments}")
-        print(f"[DEBUG] Arguments type: {type(arguments)}")
 
         # Unwrap args/kwargs if the MCP client wrapped them
         # Some MCP clients send {"args": [...], "kwargs": {...}}
@@ -217,9 +218,6 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
         # Ensure arguments is a dict
         if not isinstance(arguments, dict):
             arguments = {}
-
-        # Debug final arguments
-        print(f"[DEBUG] Final arguments to pass: {arguments}")
 
         result = func(**arguments)
 
@@ -266,8 +264,8 @@ async def handle_messages(request):
 
 async def main_stdio():
     """Start the MCP server with stdio transport (legacy mode)."""
-    print("Starting MCP-KE server in STDIO mode...")
-    print(f"Auto-discovering tools from tools/ and agent_tools/ directories...")
+    log("Starting MCP-KE server in STDIO mode...")
+    log("Auto-discovering tools from tools/ and agent_tools/ directories...")
 
     # Trigger tool discovery
     get_tools()
@@ -278,8 +276,8 @@ async def main_stdio():
 
 def main_sse():
     """Start the MCP server with SSE transport (HTTP mode)."""
-    print("Starting MCP-KE server in SSE mode...")
-    print(f"Auto-discovering tools from tools/ and agent_tools/ directories...")
+    log("Starting MCP-KE server in SSE mode...")
+    log("Auto-discovering tools from tools/ and agent_tools/ directories...")
 
     # Trigger tool discovery
     get_tools()
@@ -296,9 +294,9 @@ def main_sse():
         ]
     )
 
-    print(f"Server listening on http://{host}:{port}")
-    print(f"SSE endpoint: http://{host}:{port}/sse")
-    print(f"Messages endpoint: http://{host}:{port}/messages")
+    log(f"Server listening on http://{host}:{port}")
+    log(f"SSE endpoint: http://{host}:{port}/sse")
+    log(f"Messages endpoint: http://{host}:{port}/messages")
 
     # Run the server
     uvicorn.run(sse_app, host=host, port=port)
