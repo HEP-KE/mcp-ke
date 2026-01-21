@@ -587,6 +587,8 @@ def power_spectrum_agent_internals():
 
 from graphviz import Digraph
 
+from graphviz import Digraph
+
 def lya_flowchart():
     dot = Digraph('Lya_Workflow')
     dot.attr(rankdir='TB',
@@ -735,9 +737,10 @@ def lya_flowchart():
     dot.edge('l1b', 'l1t', style='invis', minlen='1')
 
     # stack rows tightly
-    dot.edge('l0t', 'l1t', style='invis', weight='1', minlen='1')
+    # dot.edge('l0t', 'l1t', style='invis', weight='1', minlen='1')
 
     return dot
+
 
 if __name__ == '__main__':
     print("Generating professional flowcharts with improved text size and spacing...")
