@@ -585,187 +585,159 @@ def power_spectrum_agent_internals():
 
     return dot
 
+from graphviz import Digraph
 
 def lya_flowchart():
-    """
-    Lyman-alpha forest analysis workflow showing forward model and inference pipeline.
-    Shows the flow from cosmological parameters through simulation to parameter inference,
-    with both ideal-space and observation-like paths.
-    
-    Layout matches the original reference with horizontal flow and two-branch structure.
-    """
     dot = Digraph('Lya_Workflow')
-    dot.attr(rankdir='LR',
-             fontsize='18',
+    dot.attr(rankdir='TB',
+             fontsize='20',
              fontname='Helvetica-Bold',
              labelloc='t',
              label='Lyman-α Forest Analysis Pipeline',
              bgcolor='#FAFAFA',
-             pad='0.5',
-             nodesep='0.25',
-             ranksep='0.45',
+             pad='0.1',
+             nodesep='0.12',
+             ranksep='0.25',
              dpi='300')
-    
-    # Set default node attributes  
-    dot.node_attr.update(fontname='Helvetica', fontsize='11')
-    dot.edge_attr.update(fontname='Helvetica', fontsize='10')
+    dot.node_attr.update(fontname='Helvetica', fontsize='14')
+    dot.edge_attr.update(fontname='Helvetica', fontsize='12')
 
-    # ========== Forward Model Cluster ==========
+    # ---------- Forward Model ----------
     with dot.subgraph(name='cluster_forward') as fm:
         fm.attr(label='Forward Model',
                 style='dashed,rounded',
-                color='#546E7A',
-                penwidth='2',
-                fontsize='14',
+                color='#616161',
+                penwidth='1.5',
+                fontsize='16',
                 fontname='Helvetica-Bold',
-                labeljust='l',
-                margin='15')
-        
-        # Main simulation chain
-        fm.node('cosmo', 'Cosmology\nT(k; θDM)',
-                shape='box',
-                style='rounded,filled',
-                fillcolor='#5E92F3',
-                fontcolor='white',
-                penwidth='0')
-        
-        fm.node('ics', 'Initial\nConditions',
-                shape='box',
-                style='rounded,filled',
-                fillcolor='#81C784',
-                fontcolor='#1B5E20',
-                penwidth='0')
-        
-        fm.node('hydro', 'Hydro\nSimulation',
-                shape='box',
-                style='rounded,filled',
-                fillcolor='#81C784',
-                fontcolor='#1B5E20',
-                penwidth='0')
-        
-        # Observation operator (top branch - dashed path)
-        fm.node('obs_op', 'Observation\nOperator\nnoise/masks/etc',
-                shape='box',
-                style='rounded,filled',
-                fillcolor='#AB47BC',
-                fontcolor='white',
-                penwidth='0')
-        
-        # Obs-like statistics (top branch end)
-        fm.node('obslike', 'Obs-like\nP̂₁D, PDF, WST',
-                shape='box',
-                style='rounded,filled',
-                fillcolor='#F06292',
-                fontcolor='white',
-                penwidth='0')
-        
-        # Spectra extraction (bottom branch - solid path)
-        fm.node('spectra', 'Spectra\nExtraction\nτHI, F(v)',
-                shape='box',
-                style='rounded,filled',
-                fillcolor='#FFB74D',
-                fontcolor='#424242',
-                penwidth='0')
-        
-        # Ideal-space path (bottom branch)
-        fm.node('ideal', 'Ideal-space\nP₁D, PDF, WST',
-                shape='box',
-                style='rounded,filled',
-                fillcolor='#4DB6AC',
-                fontcolor='white',
-                penwidth='0')
+                ranksep='0.18',
+                nodesep='0.10',
+                margin='12')
 
-    # ========== Inference Cluster ==========
+        fm.node('cosmo',
+                label=r'<<B>Cosmology</B><BR/><FONT POINT-SIZE="12">T(k; &#952;<SUB>DM</SUB>)</FONT>>',
+                shape='box', style='rounded,filled',
+                fillcolor='#5E92F3', fontcolor='white', penwidth='0')
+        fm.node('ics', 'Initial\nConditions',
+                shape='box', style='rounded,filled',
+                fillcolor='#81C784', fontcolor='#1B5E20', penwidth='0')
+        fm.node('hydro', 'Hydro\nSimulation',
+                shape='box', style='rounded,filled',
+                fillcolor='#81C784', fontcolor='#1B5E20', penwidth='0')
+        fm.node('obs_op', 'Observation\nOperator\nnoise / masks / continuum',
+                shape='box', style='rounded,filled',
+                fillcolor='#AB47BC', fontcolor='white', penwidth='0')
+        fm.node('obslike', 'Obs-like\nSummary Statistics\nPower spectra\nHigher-order statistics',
+                shape='box', style='rounded,filled',
+                fillcolor='#ECEFF1', fontcolor='#37474F', penwidth='0')
+        fm.node('spectra', 'Spectra\nExtraction',
+                shape='box', style='rounded,filled',
+                fillcolor='#FFB74D', fontcolor='#424242', penwidth='0')
+        fm.node('ideal', 'Ideal-space\nSummary Statistics\nPower spectra\nHigher-order statistics',
+                shape='box', style='rounded,filled',
+                fillcolor='#ECEFF1', fontcolor='#37474F', penwidth='0')
+
+        with fm.subgraph(name='cluster_fm_row1') as r1:
+            r1.attr(rank='same')
+            r1.node('cosmo'); r1.node('ics'); r1.node('hydro'); r1.node('obs_op'); r1.node('obslike')
+        with fm.subgraph(name='cluster_fm_row2') as r2:
+            r2.attr(rank='same')
+            r2.node('spectra'); r2.node('ideal')
+
+        fm.edge('cosmo', 'ics', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+        fm.edge('ics', 'hydro', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+        fm.edge('hydro', 'obs_op', style='dashed', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+        fm.edge('obs_op', 'obslike', style='dashed', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+        fm.edge('hydro', 'spectra', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+        fm.edge('spectra', 'ideal', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+        fm.edge('obs_op', 'spectra', style='invis', minlen='1')
+
+    # ---------- Inference ----------
     with dot.subgraph(name='cluster_inference') as inf:
         inf.attr(label='Inference',
                  style='dashed,rounded',
-                 color='#E53935',
-                 penwidth='2',
-                 fontsize='14',
+                 color='#616161',
+                 penwidth='1.5',
+                 fontsize='16',
                  fontname='Helvetica-Bold',
-                 labeljust='l',
-                 margin='15')
-        
-        inf.node('emulator', 'Emulator\nθ ↦ m(θ)',
-                 shape='box',
-                 style='rounded,filled',
-                 fillcolor='#FF8A65',
-                 fontcolor='white',
-                 penwidth='0')
-        
-        inf.node('likelihood', 'Likelihood\nd vs m(θ)',
-                 shape='box',
-                 style='rounded,filled',
-                 fillcolor='#FF8A65',
-                 fontcolor='white',
-                 penwidth='0')
-        
-        inf.node('posterior', 'Posterior\np(θ | d)',
-                 shape='box',
-                 style='rounded,filled',
-                 fillcolor='#FDD835',
-                 fontcolor='#424242',
-                 penwidth='0')
-        
+                 ranksep='0.18',
+                 nodesep='0.10',
+                 margin='12')
+
         inf.node('data', 'Data\nDESI, high-res, ...',
-                 shape='box',
-                 style='rounded,filled',
-                 fillcolor='#ECEFF1',
-                 fontcolor='#37474F',
-                 penwidth='1',
-                 color='#546E7A')
+                 shape='box', style='rounded,filled',
+                 fillcolor='#5E92F3', fontcolor='white', penwidth='0')
+        inf.node('emulator',
+                 label=r'<<B>Emulator</B><BR/><FONT POINT-SIZE="12">&#952; &#x2192; m(&#952;)</FONT>>',
+                 shape='box', style='rounded,filled',
+                 fillcolor='#81C784', fontcolor='#1B5E20', penwidth='0')
+        inf.node('likelihood',
+                 label=r'<<B>Likelihood</B><BR/><FONT POINT-SIZE="12">d vs m(&#952;)</FONT>>',
+                 shape='box', style='rounded,filled',
+                 fillcolor='#81C784', fontcolor='#1B5E20', penwidth='0')
+        inf.node('posterior',
+                 label=r'<<B>Posterior</B><BR/><FONT POINT-SIZE="12">p(&#952; | d)</FONT>>',
+                 shape='box', style='rounded,filled',
+                 fillcolor='#FDD835', fontcolor='#424242', penwidth='0')
 
-    # ========== Layout control ==========
-    # Use invisible edges to control vertical positioning
-    # Top row: obs_op, obslike (dashed path)
-    # Bottom row: spectra, ideal (solid path)
-    
-    # Push spectra and ideal below obs_op and obslike
-    dot.edge('spectra', 'obs_op', style='invis')
-    dot.edge('ideal', 'obslike', style='invis')
-    dot.edge('likelihood', 'data', style='invis')
+        # anchor to park the legend in the right-side gap
+        inf.node('leg_anchor', '', shape='point', width='0.01', style='invis')
 
-    # ========== Main flow edges ==========
-    # Forward model chain
-    dot.edge('cosmo', 'ics', color='#424242', penwidth='1.5', arrowhead='vee')
-    dot.edge('ics', 'hydro', color='#424242', penwidth='1.5', arrowhead='vee')
-    
-    # Branch to obs_op -> obslike (dashed - top path)  
-    dot.edge('hydro', 'obs_op', style='dashed', color='#424242', penwidth='1.5', arrowhead='vee')
-    dot.edge('obs_op', 'obslike', style='dashed', color='#424242', penwidth='1.5', arrowhead='vee')
-    
-    # Branch to spectra -> ideal (solid - bottom path)
-    dot.edge('hydro', 'spectra', color='#424242', penwidth='1.5', arrowhead='vee')
-    dot.edge('spectra', 'ideal', color='#424242', penwidth='1.5', arrowhead='vee')
-    
-    # Both paths to emulator
-    dot.edge('obslike', 'emulator', style='dashed', color='#424242', penwidth='1.5', arrowhead='vee')
-    dot.edge('ideal', 'emulator', color='#424242', penwidth='1.5', arrowhead='vee')
-    
-    # Inference chain
-    dot.edge('emulator', 'likelihood', color='#424242', penwidth='1.5', arrowhead='vee')
-    dot.edge('likelihood', 'posterior', color='#424242', penwidth='1.5', arrowhead='vee')
-    dot.edge('data', 'likelihood', color='#424242', penwidth='1.5', arrowhead='vee')
+        with inf.subgraph(name='cluster_inf_row1') as ir1:
+            ir1.attr(rank='same')
+            ir1.node('data')
+        with inf.subgraph(name='cluster_inf_row2') as ir2:
+            ir2.attr(rank='same')
+            ir2.node('emulator'); ir2.node('likelihood'); ir2.node('posterior'); ir2.node('leg_anchor')
 
-    # ========== Legend ==========
+        inf.edge('emulator', 'likelihood', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+        inf.edge('likelihood', 'posterior', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+        inf.edge('data', 'likelihood', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+
+        # pull anchor immediately to the right of posterior without widening the whole graph
+        inf.edge('posterior', 'leg_anchor', style='invis', weight='20', minlen='1')
+
+    # Cross-block connections (match reference figure)
+    dot.edge('ideal', 'emulator', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+    dot.edge('obslike', 'likelihood', style='dashed', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+
+    # ---------- Compact legend in the right-side gap ----------
+    # Two short arrows stacked, with labels immediately adjacent (min width).
     with dot.subgraph(name='cluster_legend') as leg:
-        leg.attr(rank='sink', label='', style='invis', margin='0')
-        leg.node('l1', '', shape='point', width='0.01')
-        leg.node('l2', '', shape='point', width='0.01')
-        leg.node('l3', '', shape='point', width='0.01')
-        leg.node('l4', '', shape='point', width='0.01')
-    
-    dot.edge('l1', 'l2', 
-             label='  Stage 0 (ideal-space)',
-             color='#424242', penwidth='1.5', arrowhead='vee',
-             fontsize='10', fontcolor='#424242')
-    dot.edge('l3', 'l4',
-             label='  Stage 0B+ (obs-like)', 
-             style='dashed', color='#424242', penwidth='1.5', arrowhead='vee',
-             fontsize='10', fontcolor='#424242')
+        leg.attr(label='', style='invis', margin='0', nodesep='0.03', ranksep='0.02')
+
+        # Row 1: Stage 0
+        leg.node('l0a', '', shape='point', width='0.01')
+        leg.node('l0b', '', shape='point', width='0.01')
+        leg.node('l0t', 'Stage 0 (ideal-space)', shape='plaintext', fontsize='12', fontname='Helvetica')
+
+        # Row 2: Stage 0B+
+        leg.node('l1a', '', shape='point', width='0.01')
+        leg.node('l1b', '', shape='point', width='0.01')
+        leg.node('l1t', 'Stage 0B+ (obs-like)', shape='plaintext', fontsize='12', fontname='Helvetica')
+
+        with leg.subgraph(name='cluster_leg_row0') as lr0:
+            lr0.attr(rank='same')
+            lr0.node('leg_anchor'); lr0.node('l0a'); lr0.node('l0b'); lr0.node('l0t')
+
+        with leg.subgraph(name='cluster_leg_row1') as lr1:
+            lr1.attr(rank='same')
+            lr1.node('l1a'); lr1.node('l1b'); lr1.node('l1t')
+
+    # keep legend glued to the anchor (no extra canvas width)
+    dot.edge('leg_anchor', 'l0a', style='invis', weight='50', minlen='1')
+
+    # arrows + tight labels
+    dot.edge('l0a', 'l0b', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+    dot.edge('l0b', 'l0t', style='invis', minlen='1')
+
+    dot.edge('l1a', 'l1b', style='dashed', color='#424242', penwidth='1.5', arrowhead='vee', minlen='1')
+    dot.edge('l1b', 'l1t', style='invis', minlen='1')
+
+    # stack rows tightly
+    dot.edge('l0t', 'l1t', style='invis', weight='1', minlen='1')
 
     return dot
-
 
 if __name__ == '__main__':
     print("Generating professional flowcharts with improved text size and spacing...")
