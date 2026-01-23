@@ -149,8 +149,8 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
         return [TextContent(type="text", text=error_msg)]
 
 
-async def main():
-    """Start the MCP server."""
+async def _async_main():
+    """Start the MCP server (async implementation)."""
     print("Starting MCP-KE server...")
     print(f"Auto-discovering tools from tools/ and agent_tools/ directories...")
 
@@ -161,5 +161,10 @@ async def main():
         await app.run(read_stream, write_stream, app.create_initialization_options())
 
 
+def main():
+    """Entry point for the MCP server."""
+    asyncio.run(_async_main())
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
