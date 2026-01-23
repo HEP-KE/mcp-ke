@@ -2,6 +2,7 @@ import asyncio
 import importlib
 import inspect
 import pkgutil
+import sys
 from typing import Any
 
 from mcp.server import Server
@@ -44,7 +45,7 @@ def discover_tools() -> dict[str, callable]:
                         discovered_tools[tool_name] = obj
 
             except Exception as e:
-                print(f"Warning: Could not import {modname}: {e}")
+                print(f"Warning: Could not import {modname}: {e}", file=sys.stderr)
                 continue
 
     return discovered_tools
@@ -112,7 +113,7 @@ def get_tools() -> dict[str, callable]:
     global _TOOLS_CACHE
     if _TOOLS_CACHE is None:
         _TOOLS_CACHE = discover_tools()
-        print(f"Discovered {len(_TOOLS_CACHE)} tools: {list(_TOOLS_CACHE.keys())}")
+        print(f"Discovered {len(_TOOLS_CACHE)} tools: {list(_TOOLS_CACHE.keys())}", file=sys.stderr)
     return _TOOLS_CACHE
 
 
@@ -151,8 +152,8 @@ async def call_tool(name: str, arguments: Any) -> list[TextContent]:
 
 async def _async_main():
     """Start the MCP server (async implementation)."""
-    print("Starting MCP-KE server...")
-    print(f"Auto-discovering tools from tools/ and agent_tools/ directories...")
+    print("Starting MCP-KE server...", file=sys.stderr)
+    print("Auto-discovering tools from tools/ and agent_tools/ directories...", file=sys.stderr)
 
     # Trigger tool discovery
     get_tools()
