@@ -42,7 +42,8 @@ def discover_tools() -> dict[str, callable]:
                     if hasattr(obj, '__wrapped__') or hasattr(obj, 'name'):
                         # Use the tool's name if available, otherwise use function name
                         tool_name = getattr(obj, 'name', name)
-                        discovered_tools[tool_name] = obj
+                        if tool_name != "final_answer":
+                            discovered_tools[tool_name] = obj
 
             except Exception as e:
                 print(f"Warning: Could not import {modname}: {e}", file=sys.stderr)
