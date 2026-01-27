@@ -9,7 +9,7 @@ from .llm_helper import create_openai_compatible_llm
 from tools import (
     load_observational_data,
     create_theory_k_grid,
-    LCDM, nu_mass, wCDM,
+    get_lcdm_params, get_nu_mass_params, get_wcdm_params,
     compute_power_spectrum,
     compute_all_models,
     compute_suppression_ratios,
@@ -42,7 +42,7 @@ def create_modeling_agent(model):
     """Create the modeling agent for computing power spectra."""
     return CodeAgent(
         tools=[
-            create_theory_k_grid, LCDM, nu_mass, wCDM,
+            create_theory_k_grid, get_lcdm_params, get_nu_mass_params, get_wcdm_params,
             compute_power_spectrum, compute_all_models, compute_suppression_ratios,
             load_array, save_array, load_dict, save_dict, list_agent_files
         ],

@@ -29,7 +29,7 @@ python mcp_server.py
 
 **Data & Models**
 - `load_observational_data` - Load eBOSS observational data
-- `LCDM`, `nu_mass`, `wCDM` - Cosmology model parameter sets
+- `get_lcdm_params`, `get_nu_mass_params`, `get_wcdm_params` - Cosmology model parameter sets
 - `create_theory_k_grid` - Generate k-value grid for theory predictions
 
 **Analysis**

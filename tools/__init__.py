@@ -2,7 +2,7 @@
 
 # Import all the tool decorators to make them available
 from .load_observational_data_tool import load_observational_data, create_theory_k_grid
-from .cosmology_models_tool import LCDM, nu_mass, wCDM
+from .cosmology_models_tool import get_lcdm_params, get_nu_mass_params, get_wcdm_params
 from .class_analysis_tools import compute_power_spectrum, compute_all_models, compute_suppression_ratios
 from .visualization_tools import plot_power_spectra, plot_suppression_ratios
 from .agent_helper_tools import list_agent_files, save_array, load_array, save_dict, load_dict
@@ -10,9 +10,9 @@ from .agent_helper_tools import list_agent_files, save_array, load_array, save_d
 __all__ = [
     "load_observational_data",
     "create_theory_k_grid",
-    "LCDM",
-    "nu_mass",
-    "wCDM",
+    "get_lcdm_params",
+    "get_nu_mass_params",
+    "get_wcdm_params",
     "compute_power_spectrum",
     "compute_all_models",
     "compute_suppression_ratios",

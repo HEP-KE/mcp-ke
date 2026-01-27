@@ -20,7 +20,7 @@ def test_tool_discovery():
     # Check for expected domain tools
     expected_domain_tools = [
         'load_observational_data',
-        'LCDM',
+        'get_lcdm_params',
         'compute_power_spectrum',
         'plot_power_spectra'
     ]
@@ -55,10 +55,10 @@ def test_mcp_tool_conversion():
     tools = discover_tools()
 
     # Test with a simple domain tool
-    if 'LCDM' in tools:
-        mcp_tool = build_mcp_tool('LCDM', tools['LCDM'])
+    if 'get_lcdm_params' in tools:
+        mcp_tool = build_mcp_tool('get_lcdm_params', tools['get_lcdm_params'])
 
-        assert mcp_tool.name == 'LCDM'
+        assert mcp_tool.name == 'get_lcdm_params'
         assert mcp_tool.description is not None
         assert mcp_tool.inputSchema is not None
         assert 'type' in mcp_tool.inputSchema

@@ -1,7 +1,7 @@
 from smolagents import tool
 
 @tool
-def LCDM() -> dict:
+def get_lcdm_params() -> dict:
     """
     Flat ΛCDM baseline (cold dark matter + cosmological constant).
 
@@ -28,7 +28,7 @@ def LCDM() -> dict:
     return LCDM_model()
 
 @tool
-def nu_mass(sum_mnu_eV: float = 0.10, N_species: int = 1) -> dict:
+def get_nu_mass_params(sum_mnu_eV: float = 0.10, N_species: int = 1) -> dict:
     """
     ΛCDM + massive neutrinos.
 
@@ -64,7 +64,7 @@ def nu_mass(sum_mnu_eV: float = 0.10, N_species: int = 1) -> dict:
     return nu_mass_model(sum_mnu_eV, N_species)
 
 @tool
-def wCDM(w0: float = -0.9) -> dict:
+def get_wcdm_params(w0: float = -0.9) -> dict:
     """
     Dark energy with constant equation of state parameter w0.
 

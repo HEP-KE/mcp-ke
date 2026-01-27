@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from tools import (
-    LCDM,
+    get_lcdm_params,
     create_theory_k_grid,
     compute_power_spectrum,
     load_observational_data
@@ -17,16 +17,16 @@ from tools import (
 
 
 def test_lcdm_model():
-    """Test LCDM model returns expected parameter structure."""
-    params = LCDM()
+    """Test get_lcdm_params returns expected parameter structure."""
+    params = get_lcdm_params()
 
     # Check it's a dictionary
-    assert isinstance(params, dict), "LCDM should return a dictionary"
+    assert isinstance(params, dict), "get_lcdm_params should return a dictionary"
 
     # Check for required cosmological parameters
     required_keys = ['output', 'h', 'Omega_b', 'Omega_cdm', 'A_s', 'n_s']
     for key in required_keys:
-        assert key in params, f"LCDM missing required parameter '{key}'"
+        assert key in params, f"get_lcdm_params missing required parameter '{key}'"
 
 
 def test_create_theory_k_grid():
@@ -45,7 +45,7 @@ def test_create_theory_k_grid():
 def test_compute_power_spectrum():
     """Test power spectrum computation with LCDM model."""
     # Get LCDM parameters
-    params = LCDM()
+    params = get_lcdm_params()
 
     # Create k-grid
     k_values = create_theory_k_grid()
