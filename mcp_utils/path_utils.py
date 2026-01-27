@@ -79,8 +79,7 @@ def get_output_path(filename=None):
     if os.path.isabs(filename) or os.sep in filename or (os.altsep and os.altsep in filename):
         return filename
 
-    # Otherwise, save to out/ directory in cwd
-    output_dir = os.path.join(os.getcwd(), 'out')
+    output_dir = os.environ.get('MCP_OUTPUT_DIR') or os.path.join(os.getcwd(), 'mcp_ke_output')
 
     if not os.path.isdir(output_dir):
         raise FileNotFoundError(

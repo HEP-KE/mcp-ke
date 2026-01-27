@@ -15,7 +15,7 @@ from mcp_utils import get_output_path
 
 def get_out_dir():
     """Get the out/ directory path and verify it exists."""
-    out_dir = os.path.join(os.getcwd(), 'out')
+    out_dir = os.environ.get('MCP_OUTPUT_DIR') or os.path.join(os.getcwd(), 'mcp_ke_output')
     if not os.path.isdir(out_dir):
         raise FileNotFoundError(
             f"Output directory not found: {out_dir}\n"
