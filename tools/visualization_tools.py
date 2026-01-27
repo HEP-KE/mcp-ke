@@ -1,7 +1,7 @@
 from smolagents import tool
 
 @tool
-def plot_power_spectra(k_theory: object, model_results: dict, k_obs: object, Pk_obs: object, σPk_obs: object, save_path: str = None) -> str:
+def plot_power_spectra(k_theory: object, model_results: dict, k_obs: object, Pk_obs: object, Pk_obs_err: object, save_path: str = None) -> str:
     """
     Create TWO-PANEL plot: power spectra comparison + ratio to ΛCDM.
 
@@ -25,7 +25,7 @@ def plot_power_spectra(k_theory: object, model_results: dict, k_obs: object, Pk_
         k_obs: Numpy array with dtype float64 containing k values in h/Mpc for observations
             (typically 19 points from observational data)
         Pk_obs: Numpy array with dtype float64 containing observed P(k) values in (Mpc/h)^3, same length as k_obs
-        σPk_obs: Numpy array with dtype float64 containing error/uncertainty values in (Mpc/h)^3, same length as k_obs
+        Pk_obs_err: Numpy array with dtype float64 containing error/uncertainty values in (Mpc/h)^3, same length as k_obs
         save_path: Optional filename (e.g., 'my_plot.png'). If just a filename, saves to 'out/' directory
                   in your current working directory. If an absolute path or contains path separators, uses it as-is.
                   Default: 'power_spectra_comparison.png'
@@ -48,7 +48,7 @@ def plot_power_spectra(k_theory: object, model_results: dict, k_obs: object, Pk_
         final_path = get_output_path('power_spectra_comparison.png')
 
     from codes.viz import plot_power_spectra as plot_pk
-    return plot_pk(k_theory, model_results, k_obs, Pk_obs, σPk_obs, final_path)
+    return plot_pk(k_theory, model_results, k_obs, Pk_obs, Pk_obs_err, final_path)
 
 @tool
 def plot_suppression_ratios(k_values: object, suppression_ratios: dict, reference_model: str = 'ΛCDM', save_path: str = None) -> str:
