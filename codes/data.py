@@ -22,10 +22,6 @@ def load_observational_data(filepath):
         full_path = get_input_path(filepath)
 
         k, Pk, σPk = np.loadtxt(full_path).T
-        print(f"Loaded observational data from: {full_path}")
-        print(f"  {len(k)} points")
-        print(f"  k range: [{k.min():.2e}, {k.max():.2e}] h/Mpc")
         return k, Pk, σPk
-    except Exception as e:
-        print(f"Error loading data: {e}")
+    except Exception:
         return None, None, None

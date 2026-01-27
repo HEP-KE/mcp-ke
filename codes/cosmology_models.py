@@ -204,8 +204,7 @@ def IDM_baryon(cross_cm2=1e-41, n_index=-4):
     """
     p = base_params()
     # Note: IDM-baryon scattering requires special CLASS version
-    # For now, return base model with a note
-    print(f"Note: IDM-baryon model requires CLASS with IDM support")
+    # For now, return base model
     return p
 
 

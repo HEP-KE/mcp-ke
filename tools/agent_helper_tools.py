@@ -38,9 +38,6 @@ def list_agent_files() -> list:
     out_dir = get_out_dir()
     files = glob.glob(os.path.join(out_dir, '*'))
     abs_paths = [os.path.abspath(f) for f in files]
-    print(f"Files in {out_dir}/:")
-    for path in abs_paths:
-        print(f"  - {os.path.basename(path)}")
     return abs_paths
 
 
@@ -69,7 +66,6 @@ def save_array(array: object, filename: str) -> str:
 
     filepath = get_output_path(base_filename)
     np.save(filepath, array)
-    print(f"Saved array to {os.path.basename(filepath)}, shape: {array.shape}")
     return filepath
 
 
@@ -101,7 +97,6 @@ def load_array(filename: str) -> object:
         )
 
     array = np.load(final_path)
-    print(f"Loaded array from {base_filename}, shape: {array.shape}")
     return array
 
 
@@ -144,7 +139,6 @@ def save_dict(data: dict, filename: str) -> str:
     with open(metadata_path, 'w') as f:
         json.dump(metadata, f, indent=2)
 
-    print(f"Saved dict metadata to {os.path.basename(metadata_path)}")
     return metadata_path
 
 
@@ -187,5 +181,4 @@ def load_dict(filename: str) -> dict:
         else:
             result[key] = info['value']
 
-    print(f"Loaded dict from {base_filename}, keys: {list(result.keys())}")
     return result

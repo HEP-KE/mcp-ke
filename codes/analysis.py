@@ -50,8 +50,7 @@ def compute_power_spectrum(params, k_values):
             Pk *= growth_factor**2
 
         return Pk
-    except Exception as e:
-        print(f"  Error: {e}")
+    except Exception:
         return None
 
 
@@ -71,7 +70,6 @@ def compute_all_models(k_values, models=None):
     
     results = {}
     for model_name, params in models.items():
-        print(f"Computing {model_name}...")
         Pk = compute_power_spectrum(params, k_values)
         if Pk is not None:
             results[model_name] = Pk
@@ -92,7 +90,6 @@ def compute_suppression_ratios(model_results, k_values, reference_model='ΛCDM')
         Dictionary with model names as keys and suppression ratios as values
     """
     if reference_model not in model_results:
-        print(f"Warning: Reference model '{reference_model}' not found")
         return {}
     
     P_ref = model_results[reference_model]
@@ -144,7 +141,6 @@ def analyze_model_differences(model_results, k_values, k_points=[0.1, 1.0, 10.0]
     analysis = {}
     
     if 'ΛCDM' not in model_results:
-        print("Warning: ΛCDM reference model not found")
         return analysis
     
     P_ref = model_results['ΛCDM']

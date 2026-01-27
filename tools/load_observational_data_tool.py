@@ -16,7 +16,6 @@ def create_theory_k_grid() -> object:
         numpy array of k values in h/Mpc (300 points, logarithmically spaced)
     """
     k_theory = np.logspace(-4, np.log10(10), 300)
-    print(f"Created theory k-grid: {len(k_theory)} points, range [{k_theory.min():.2e}, {k_theory.max():.2e}] h/Mpc")
     return k_theory
 
 @tool

@@ -205,7 +205,6 @@ def plot_model_comparison_grid(k_values, model_results, reference_model='ΛCDM',
     n_models = len(models_to_plot)
     
     if n_models == 0:
-        print("No models to compare")
         return None
     
     # Create subplot grid
