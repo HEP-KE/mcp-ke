@@ -4,6 +4,7 @@ import os
 from smolagents import CodeAgent, AgentLogger, LogLevel, tool
 from smolagents.default_tools import FinalAnswerTool
 from .llm_helper import create_openai_compatible_llm
+from mcp_utils import get_output_dir
 
 
 # ============================================================================
@@ -81,7 +82,7 @@ def download_arxiv_paper(paper_id: str, output_dir: str = None) -> str:
         import requests
 
         if output_dir is None:
-            output_dir = "./arxiv_papers"
+            output_dir = get_output_dir()
 
         os.makedirs(output_dir, exist_ok=True)
 
@@ -133,7 +134,7 @@ def download_full_arxiv_paper(paper_id: str, output_dir: str = None) -> str:
         import requests
 
         if output_dir is None:
-            output_dir = "./arxiv_papers"
+            output_dir = get_output_dir()
 
         os.makedirs(output_dir, exist_ok=True)
 
@@ -313,7 +314,7 @@ def arxiv_agent(
     api_key: str,
     llm_url: str,
     model_id: str,
-    output_dir: str = "./arxiv_papers",
+    output_dir: str = None,
     max_steps: int = 15
 ) -> str:
     """
@@ -338,7 +339,7 @@ def arxiv_agent(
         model_id: Model identifier to use (required)
             Example:
             - Google: "gemini-2.0-flash-exp"
-        output_dir: Directory to save downloaded papers (default: "./arxiv_papers")
+        output_dir: Directory to save downloaded papers (default: MCP_OUTPUT_DIR or mcp_ke_output)
         max_steps: Maximum agent steps (default: 15)
 
     Returns:
@@ -356,7 +357,8 @@ def arxiv_agent(
         )
     """
     try:
-        # Create output directory
+        if output_dir is None:
+            output_dir = get_output_dir()
         os.makedirs(output_dir, exist_ok=True)
         original_dir = os.getcwd()
         os.chdir(output_dir)

@@ -53,6 +53,10 @@ def get_input_path(filename):
     return input_path
 
 
+def get_output_dir():
+    return os.environ.get('MCP_OUTPUT_DIR') or os.path.join(os.getcwd(), 'mcp_ke_output')
+
+
 def get_output_path(filename=None):
     """
     Get the full path for an output file.
@@ -79,7 +83,7 @@ def get_output_path(filename=None):
     if os.path.isabs(filename) or os.sep in filename or (os.altsep and os.altsep in filename):
         return filename
 
-    output_dir = os.environ.get('MCP_OUTPUT_DIR') or os.path.join(os.getcwd(), 'mcp_ke_output')
+    output_dir = get_output_dir()
 
     if not os.path.isdir(output_dir):
         raise FileNotFoundError(

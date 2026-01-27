@@ -10,17 +10,13 @@ import json
 import glob
 import numpy as np
 from smolagents import tool
-from mcp_utils import get_output_path
+from mcp_utils import get_output_dir, get_output_path
 
 
 def get_out_dir():
-    """Get the out/ directory path and verify it exists."""
-    out_dir = os.environ.get('MCP_OUTPUT_DIR') or os.path.join(os.getcwd(), 'mcp_ke_output')
+    out_dir = get_output_dir()
     if not os.path.isdir(out_dir):
-        raise FileNotFoundError(
-            f"Output directory not found: {out_dir}\n"
-            f"Please create an 'out/' directory in your working directory."
-        )
+        raise FileNotFoundError(f"Output directory not found: {out_dir}")
     return out_dir
 
 
