@@ -63,7 +63,8 @@ async def list_tools() -> list[Tool]:
     return [build_mcp_tool(name, func) for name, func in get_tools().items()]
 
 
-@app.call_tool()
+# Skip MCP schema validation - smolagents uses 'type: object' for arrays, which strict JSON schema rejects
+@app.call_tool(validate_input=False)
 async def call_tool(name: str, arguments: Any) -> list[TextContent]:
     tools_dict = get_tools()
     if name not in tools_dict:
