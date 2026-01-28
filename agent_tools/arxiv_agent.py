@@ -1,5 +1,3 @@
-"""Agent tool for arXiv paper search, download, and analysis."""
-
 import os
 from smolagents import CodeAgent, AgentLogger, LogLevel, tool
 from smolagents.default_tools import FinalAnswerTool
@@ -7,17 +5,20 @@ from .llm_helper import create_openai_compatible_llm
 from mcp_utils import get_output_dir
 
 
-# ============================================================================
-# ARXIV TOOLS
-# ============================================================================
-
 @tool
 def search_arxiv(query: str, max_results: int = 5, sort_by: str = "relevance") -> str:
     """
     Search arXiv for papers matching the query and return their metadata.
 
     Args:
-        query: Search query string
+        query: Search query. Use "cat:CATEGORY" prefix to filter by domain.
+            Example: "cat:astro-ph dark matter detection"
+            Main categories:
+            - astro-ph (astrophysics/cosmology), hep-ph/hep-th/hep-ex/hep-lat (particle physics)
+            - gr-qc (gravity/relativity), quant-ph (quantum physics), nucl-th/nucl-ex (nuclear)
+            - cond-mat (condensed matter), physics.* (applied/interdisciplinary physics)
+            - math.* (mathematics), stat.* (statistics), cs.* (computer science)
+            - q-bio.* (biology), q-fin.* (finance), econ.* (economics), eess.* (engineering)
         max_results: Maximum number of results to return (default: 5)
         sort_by: Sort criterion - "relevance" (default), "lastUpdatedDate", or "submittedDate"
 
@@ -151,7 +152,6 @@ def download_full_arxiv_paper(paper_id: str, output_dir: str = None) -> str:
         pdf_filename = f"{paper_id}.pdf"
         pdf_filepath = os.path.join(output_dir, pdf_filename)
 
-        # Workaround for arxiv package v2.3.0 bug where pdf_url is None
         pdf_url = f"https://arxiv.org/pdf/{paper_id}.pdf"
         response = requests.get(pdf_url)
         response.raise_for_status()
@@ -308,72 +308,45 @@ YOUR ROLE IS SIMPLE:
     4. Return summaries, file paths, and extracted methods
 """
 
+ARXIV_AGENT_MAX_STEPS = 15
+
 @tool
-def arxiv_agent(
-    query: str,
-    api_key: str,
-    llm_url: str,
-    model_id: str,
-    output_dir: str = None,
-    max_steps: int = 15
-) -> str:
+def arxiv_agent(query: str) -> str:
     """
-    Search, download, and analyze arXiv papers using an AI agent.
+    Autonomous arXiv research agent that searches, downloads, reads, and synthesizes papers.
 
-    This agent can search arXiv for papers, download PDFs, extract full text,
-    and analyze papers to answer specific research questions.
-
-    REQUIREMENTS:
-    - Packages: arxiv, requests, pypdf or pdfplumber
-      Install with: pip install arxiv requests pypdf
+    Use this instead of individual arxiv tools when you need:
+    - Multi-step research: search → filter by relevance → download → read full text → synthesize findings
+    - Autonomous paper selection based on abstracts
+    - Extracted equations, methods, or specific information from paper content
+    - A synthesized answer rather than raw search results
 
     Args:
-        query: Research question or search task for the agent. Examples:
-            - "What are the latest methods for galaxy mass estimation?"
-            - "Find papers on dark matter detection and summarize the key techniques"
-            - "Search for cosmological parameter estimation methods"
-        api_key: API key for LLM service (required)
-        llm_url: Base URL for LLM API endpoint (required)
-            Example:
-            - Google Gemini: "https://generativelanguage.googleapis.com/v1beta/openai/"
-        model_id: Model identifier to use (required)
-            Example:
-            - Google: "gemini-2.0-flash-exp"
-        output_dir: Directory to save downloaded papers (default: MCP_OUTPUT_DIR or mcp_ke_output)
-        max_steps: Maximum agent steps (default: 15)
+        query: Research question (e.g., "What methods are used for galaxy mass estimation?")
 
     Returns:
-        str: Agent's analysis including:
-            - Paper summaries
-            - File paths to downloaded PDFs and TXT files
-            - Extracted information answering the query
-
-    Example:
-        result = run_arxiv_agent(
-            query="What are the latest methods for galaxy mass estimation?",
-            api_key="your-api-key",
-            llm_url="https://api.anthropic.com",
-            model_id="claude-3-5-sonnet-20241022"
-        )
+        str: Synthesized analysis with citations, file paths, and extracted information.
     """
+    api_key = os.environ.get("LLM_API_KEY")
+    llm_url = os.environ.get("LLM_URL")
+    model_id = os.environ.get("LLM_MODEL")
+
+    missing = [k for k, v in [("LLM_API_KEY", api_key), ("LLM_URL", llm_url), ("LLM_MODEL", model_id)] if not v]
+    if missing:
+        return f"Error: Missing environment variables: {', '.join(missing)}. Set these when configuring the MCP server."
+
     try:
-        if output_dir is None:
-            output_dir = get_output_dir()
+        output_dir = get_output_dir()
         os.makedirs(output_dir, exist_ok=True)
         original_dir = os.getcwd()
         os.chdir(output_dir)
 
-        # Create the LLM model
         try:
             model = create_openai_compatible_llm(api_key, llm_url, model_id)
-        except ValueError as e:
+        except (ValueError, ImportError) as e:
             os.chdir(original_dir)
-            return f"LLM Configuration Error: {str(e)}"
-        except ImportError as e:
-            os.chdir(original_dir)
-            return f"Installation Error: {str(e)}"
+            return f"LLM Setup Error: {str(e)}"
 
-        # Create agent with arXiv tools
         tools = [
             search_arxiv,
             download_arxiv_paper,
@@ -386,7 +359,7 @@ def arxiv_agent(
         agent = CodeAgent(
             model=model,
             tools=tools,
-            max_steps=max_steps,
+            max_steps=ARXIV_AGENT_MAX_STEPS,
             verbosity_level=1,
             logger=AgentLogger(level=LogLevel.INFO),
             name="arxiv_agent",
@@ -394,16 +367,12 @@ def arxiv_agent(
             additional_authorized_imports=["arxiv", "requests", "pypdf", "pdfplumber"]
         )
 
-        # Run the agent
         result = agent.run(ARXIV_AGENT_SYSTEM_PROMPT + "\n" + query)
-
-        # Return to original directory
         os.chdir(original_dir)
 
         return str(result)
 
     except Exception as e:
-        # Make sure we return to original directory even on error
         try:
             os.chdir(original_dir)
         except:
