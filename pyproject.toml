@@ -32,7 +32,7 @@ dev = [
 ]
 
 [project.scripts]
-mcp-ke = "mcp_server:main"
+mcp_ke = "mcp_server:main"
 
 [tool.setuptools]
 packages = ["mcp_ke", "mcp_utils", "codes", "tools", "agent_tools"]
