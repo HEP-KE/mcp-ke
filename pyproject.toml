@@ -35,7 +35,7 @@ dev = [
 mcp-ke = "mcp_server:main"
 
 [tool.setuptools]
-packages = ["mcp_utils", "codes", "tools", "agent_tools"]
+packages = ["mcp_ke", "mcp_utils", "codes", "tools", "agent_tools"]
 py-modules = ["mcp_server"]
 
 [tool.black]
