@@ -23,6 +23,13 @@ def compute_power_spectrum(params, k_values):
     Returns:
         Array of P(k) values or None if computation fails
     """
+    import json
+    if isinstance(params, str):
+        params = json.loads(params.replace("'", '"'))
+    if isinstance(k_values, str):
+        k_values = json.loads(k_values.replace("'", '"'))
+    k_values = np.array(k_values, dtype=float)
+
     try:
         # Check for w0 approximation
         params_clean = params.copy()
