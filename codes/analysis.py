@@ -50,8 +50,8 @@ def compute_power_spectrum(params, k_values):
             Pk *= growth_factor**2
 
         return Pk
-    except Exception:
-        return None
+    except Exception as e:
+        return f"Error: {type(e).__name__}: {e}. Ensure params is dict and k_values is list of floats."
 
 
 def compute_all_models(k_values, models=None):
