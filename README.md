@@ -44,14 +44,16 @@ python mcp_server.py
 **Helpers**
 - `save_array`, `load_array`, `save_dict`, `load_dict`, `list_agent_files`
 
-### Agent Tools (2 tools)
+### Agent Tools (1 tool)
 
 Require OpenAI-compatible LLM API (Anthropic, Google Gemini, OpenAI, etc.)
 
-**`power_spectrum_agent`**
-- End-to-end power spectrum analysis workflow
-- Orchestrates: data agent → modeling agent → visualization agent
-- Example:
+**`power_spectrum_agent`** *(DISABLED - requires litellm)*
+- Commented out in `agent_tools/__init__.py`
+- Use individual tools (`compute_power_spectrum`, `compute_all_models`) directly instead
+- ~~End-to-end power spectrum analysis workflow~~
+- ~~Orchestrates: data agent → modeling agent → visualization agent~~
+- Example (if re-enabled):
   ```python
   result = power_spectrum_agent(
       query="Compare ΛCDM and wCDM models with eBOSS data",
