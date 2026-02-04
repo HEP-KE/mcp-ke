@@ -395,11 +395,11 @@ def create_corner_plot(samples, param_names, param_labels=None, param_ranges=Non
         mc_samples,
         param_names,
         filled=True,
-        param_limits=ranges_dict if ranges_dict else None
+        param_limits=ranges_dict if ranges_dict else {}
     )
 
     if title:
-        g.fig.suptitle(title, fontsize=14, y=0.98)
+        g.fig.suptitle(title, fontsize=10, y=0.999)
 
     # Determine output path
     if output_path is None:
