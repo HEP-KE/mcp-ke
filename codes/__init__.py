@@ -5,6 +5,14 @@ from .data import load_observational_data
 from .cosmology_models import LCDM, nu_mass, wCDM
 from .analysis import compute_power_spectrum, compute_all_models, compute_suppression_ratios
 from .viz import plot_power_spectra, plot_suppression_ratios
+from .mcmc import (
+    run_mcmc,
+    extract_mcmc_results,
+    save_mcmc_samples,
+    load_mcmc_samples,
+    create_corner_plot,
+    create_trace_plot,
+)
 
 __all__ = [
     "load_observational_data",
@@ -16,4 +24,10 @@ __all__ = [
     "compute_suppression_ratios",
     "plot_power_spectra",
     "plot_suppression_ratios",
+    "run_mcmc",
+    "extract_mcmc_results",
+    "save_mcmc_samples",
+    "load_mcmc_samples",
+    "create_corner_plot",
+    "create_trace_plot",
 ]

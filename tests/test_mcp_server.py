@@ -37,6 +37,18 @@ def test_tool_discovery():
     for tool_name in expected_agent_tools:
         assert tool_name in tools, f"Expected agent tool '{tool_name}' not found"
 
+    # Check for expected MCMC tools
+    expected_mcmc_tools = [
+        'run_mcmc_cosmology',
+        'create_mcmc_corner_plot',
+        'create_mcmc_trace_plot',
+        'analyze_mcmc_samples',
+        'compute_best_fit_power_spectrum',
+    ]
+
+    for tool_name in expected_mcmc_tools:
+        assert tool_name in tools, f"Expected MCMC tool '{tool_name}' not found"
+
 
 def test_tool_attributes():
     """Test that discovered tools have required attributes."""
