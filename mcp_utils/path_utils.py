@@ -32,25 +32,26 @@ def get_input_path(filename):
             raise FileNotFoundError(f"File not found: {filename}")
         return filename
 
-    # Otherwise, look in input/ directory in cwd
+    # First, try input/ directory in cwd
     input_dir = os.path.join(os.getcwd(), 'input')
+    if os.path.isdir(input_dir):
+        input_path = os.path.join(input_dir, filename)
+        if os.path.exists(input_path):
+            return input_path
 
-    if not os.path.isdir(input_dir):
-        raise FileNotFoundError(
-            f"Input directory not found: {input_dir}\n"
-            f"Please create an 'input/' directory in your working directory "
-            f"and place your data files there."
-        )
+    # Fallback: check package's data/ directory
+    pkg_data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+    pkg_data_path = os.path.join(pkg_data_dir, filename)
+    if os.path.exists(pkg_data_path):
+        return pkg_data_path
 
-    input_path = os.path.join(input_dir, filename)
-
-    if not os.path.exists(input_path):
-        raise FileNotFoundError(
-            f"File '{filename}' not found in input directory: {input_dir}\n"
-            f"Available files: {', '.join(os.listdir(input_dir)) if os.listdir(input_dir) else '(none)'}"
-        )
-
-    return input_path
+    # File not found in either location
+    locations = [f"input/ directory ({input_dir})"]
+    if os.path.isdir(pkg_data_dir):
+        locations.append(f"package data/ directory ({pkg_data_dir})")
+    raise FileNotFoundError(
+        f"File '{filename}' not found in: {', '.join(locations)}"
+    )
 
 
 def get_output_dir():
