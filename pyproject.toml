@@ -40,6 +40,9 @@ mcp_ke = "mcp_server:main"
 packages = ["mcp_ke", "mcp_utils", "codes", "tools", "agent_tools"]
 py-modules = ["mcp_server"]
 
+[tool.setuptools.data-files]
+"mcp_ke_data" = ["data/*"]
+
 [tool.black]
 line-length = 100
 

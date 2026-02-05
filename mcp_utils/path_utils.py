@@ -39,16 +39,25 @@ def get_input_path(filename):
         if os.path.exists(input_path):
             return input_path
 
-    # Fallback: check package's data/ directory
+    # Fallback: check package's data/ directory (for editable/source installs)
     pkg_data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
     pkg_data_path = os.path.join(pkg_data_dir, filename)
     if os.path.exists(pkg_data_path):
         return pkg_data_path
 
-    # File not found in either location
-    locations = [f"input/ directory ({input_dir})"]
+    # Fallback: check installed data-files location (for pip installs)
+    import sys
+    installed_data_dir = os.path.join(sys.prefix, 'mcp_ke_data')
+    installed_data_path = os.path.join(installed_data_dir, filename)
+    if os.path.exists(installed_data_path):
+        return installed_data_path
+
+    # File not found in any location
+    locations = [f"input/ ({input_dir})"]
     if os.path.isdir(pkg_data_dir):
-        locations.append(f"package data/ directory ({pkg_data_dir})")
+        locations.append(f"package data/ ({pkg_data_dir})")
+    if os.path.isdir(installed_data_dir):
+        locations.append(f"installed data ({installed_data_dir})")
     raise FileNotFoundError(
         f"File '{filename}' not found in: {', '.join(locations)}"
     )
