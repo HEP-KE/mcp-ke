@@ -1,180 +1,180 @@
 {
-  "task_overview": "Compare observational eBOSS DR14 P(k) data with theoretical predictions from wCDM, LCDM+massive neutrinos, and LCDM models, then run MCMC for LCDM+massive neutrinos model parameters.",
-  "data_file": "/data/a/cpac/nramachandra/Projects/AmSC/mcp-ke/data/DR14_pm3d_19kbins.txt",
-  "key_references": {
-    "planck_2018_params": {
-      "arxiv_id": "1807.06209",
-      "title": "Planck 2018 results. VI. Cosmological parameters",
-      "year": 2018
-    },
-    "eboss_cosmological_implications": {
-      "arxiv_id": "2007.08991",
-      "title": "eBOSS Cosmological Implications from two Decades of Spectroscopic Surveys",
-      "year": 2020
-    },
-    "massive_neutrinos_pk": {
-      "arxiv_id": "1109.4416",
-      "title": "Massive Neutrinos and the Non-linear Matter Power Spectrum",
-      "year": 2011
-    },
-    "getdist": {
-      "arxiv_id": "1910.13970",
-      "title": "GetDist: a Python package for analysing Monte Carlo samples",
-      "year": 2019
-    },
-    "eboss_dr14_fourier": {
-      "arxiv_id": "1801.03077",
-      "title": "eBOSS DR14 quasar clustering: Anisotropic BAO in Fourier-space",
-      "year": 2018
-    }
-  },
+  "task_summary": "Literature review for eBOSS P(k) analysis with LCDM, wCDM, and LCDM+massive neutrinos models, including MCMC posterior analysis",
   "planck_2018_base_LCDM_parameters": {
-    "description": "Base LCDM best-fit parameters from Planck 2018 (TT,TE,EE+lowE+lensing), 68% CL",
-    "Omega_b_h2": {
-      "value": 0.0224,
-      "uncertainty": 0.0001
-    },
+    "arxiv_id": "1807.06209",
     "Omega_c_h2": {
       "value": 0.12,
-      "uncertainty": 0.001
+      "sigma": 0.001,
+      "confidence": "68%"
+    },
+    "Omega_b_h2": {
+      "value": 0.0224,
+      "sigma": 0.0001,
+      "confidence": "68%"
     },
     "n_s": {
       "value": 0.965,
-      "uncertainty": 0.004
+      "sigma": 0.004,
+      "confidence": "68%"
     },
     "tau": {
       "value": 0.054,
-      "uncertainty": 0.007
+      "sigma": 0.007,
+      "confidence": "68%"
     },
     "H0_km_s_Mpc": {
       "value": 67.4,
-      "uncertainty": 0.5
-    },
-    "sigma8": {
-      "value": 0.811,
-      "uncertainty": 0.006
+      "sigma": 0.5,
+      "confidence": "68%"
     },
     "Omega_m": {
       "value": 0.315,
-      "uncertainty": 0.007
+      "sigma": 0.007,
+      "confidence": "68%"
     },
-    "ln10_10_As": {
+    "sigma8": {
+      "value": 0.811,
+      "sigma": 0.006,
+      "confidence": "68%"
+    },
+    "100_theta_star": {
+      "value": 1.0411,
+      "sigma": 0.0003,
+      "confidence": "68%"
+    },
+    "ln_10_10_As": {
       "value": 3.044,
-      "uncertainty": 0.014
+      "sigma": 0.014,
+      "confidence": "68%"
     }
   },
   "planck_2018_neutrino_constraints": {
-    "description": "Planck 2018 + BAO constraints on neutrino sector",
-    "sum_m_nu_eV_95CL_upper": 0.12,
+    "arxiv_id": "1807.06209",
+    "sum_m_nu_upper_limit_eV": {
+      "TT_lowE": {
+        "value": 0.54,
+        "confidence": "95%"
+      },
+      "TT_TE_EE_lowE": {
+        "value": 0.26,
+        "confidence": "95%"
+      },
+      "TT_TE_EE_lowE_lensing": {
+        "value": 0.24,
+        "confidence": "95%"
+      },
+      "TT_TE_EE_lowE_lensing_BAO": {
+        "value": 0.12,
+        "confidence": "95%"
+      }
+    },
     "N_eff": {
-      "value": 2.99,
-      "uncertainty": 0.17,
-      "CL": "68%"
-    },
-    "standard_N_eff": 3.046,
-    "note": "Standard model predicts N_eff = 3.046 (three active neutrino species with QED corrections)"
-  },
-  "model_specifications": {
-    "LCDM": {
-      "description": "Standard flat LCDM with Planck 2018 best-fit parameters",
-      "parameters_to_use": {
-        "h": 0.674,
-        "Omega_b_h2": 0.0224,
-        "Omega_c_h2": 0.12,
-        "n_s": 0.965,
-        "sigma8": 0.811,
-        "tau": 0.054,
-        "m_nu_eV": 0.06,
-        "N_eff": 3.046
+      "TT_lowE": {
+        "value": 3.0,
+        "sigma_plus": 0.57,
+        "sigma_minus": 0.53,
+        "confidence": "95%"
+      },
+      "TT_TE_EE_lowE": {
+        "value": 2.92,
+        "sigma_plus": 0.36,
+        "sigma_minus": 0.37,
+        "confidence": "95%"
+      },
+      "TT_TE_EE_lowE_lensing_BAO": {
+        "value": 2.99,
+        "sigma": 0.17,
+        "confidence": "68%"
       }
     },
-    "LCDM_massive_neutrinos": {
-      "description": "LCDM with free neutrino mass sum and N_eff",
-      "parameters_to_vary_in_MCMC": [
-        "sigma8",
-        "sum_m_nu",
-        "N_eff"
+    "standard_model_N_eff": 3.046
+  },
+  "MCMC_prior_recommendations": {
+    "description": "Recommended Planck-informed priors for sigma8, sum_m_nu, N_eff MCMC",
+    "sigma8": {
+      "type": "Gaussian",
+      "mean": 0.811,
+      "std": 0.006,
+      "wide_prior_range": [
+        0.6,
+        1.0
       ],
-      "fiducial_values": {
-        "h": 0.674,
-        "Omega_b_h2": 0.0224,
-        "Omega_c_h2": 0.12,
-        "n_s": 0.965,
-        "sigma8": 0.811,
-        "tau": 0.054,
-        "sum_m_nu_eV": 0.06,
-        "N_eff": 3.046
-      }
+      "note": "Planck 2018 TT,TE,EE+lowE+lensing"
     },
-    "wCDM": {
-      "description": "Flat LCDM extended with constant dark energy equation of state w",
-      "parameters_to_use": {
-        "h": 0.674,
-        "Omega_b_h2": 0.0224,
-        "Omega_c_h2": 0.12,
-        "n_s": 0.965,
-        "sigma8": 0.811,
-        "tau": 0.054,
-        "w": -0.9,
-        "m_nu_eV": 0.06,
-        "N_eff": 3.046,
-        "note": "w=-1 recovers LCDM; typical wCDM analyses use w=-0.9 or w=-1.1 for illustration"
-      }
+    "sum_m_nu_eV": {
+      "type": "uniform with lower bound",
+      "min": 0.0,
+      "max": 1.0,
+      "planck_upper_limit_95pct": 0.12,
+      "normal_hierarchy_minimum": 0.06,
+      "inverted_hierarchy_minimum": 0.1,
+      "note": "Use flat prior [0, 1] eV or [0.06, 1] eV for NH"
+    },
+    "N_eff": {
+      "type": "Gaussian or uniform",
+      "mean": 3.046,
+      "std": 0.17,
+      "wide_prior_range": [
+        2.0,
+        5.0
+      ],
+      "note": "Standard Model prediction is 3.046"
     }
   },
-  "MCMC_configuration": {
-    "parameters_to_fit": {
-      "sigma8": {
-        "prior_type": "Gaussian",
-        "prior_center": 0.811,
-        "prior_width": 0.006,
-        "range": [
-          0.6,
-          1.0
-        ],
-        "description": "Planck 2018 constraint: sigma8 = 0.811 \u00b1 0.006"
-      },
-      "sum_m_nu_eV": {
-        "prior_type": "uniform",
-        "prior_min": 0.0,
-        "prior_max": 1.0,
-        "description": "Neutrino mass sum; Planck+BAO gives <0.12 eV at 95% CL. Uniform prior 0-1 eV is standard."
-      },
-      "N_eff": {
-        "prior_type": "Gaussian",
-        "prior_center": 3.046,
-        "prior_width": 0.17,
-        "range": [
-          1.0,
-          5.0
-        ],
-        "description": "Planck 2018+BAO: N_eff = 2.99 \u00b1 0.17. Standard value 3.046."
-      }
+  "wCDM_parameters": {
+    "arxiv_id": "1807.06209",
+    "w0": {
+      "value": -1.028,
+      "sigma": 0.031,
+      "note": "Planck+BAO+SNe, wa=0"
     },
-    "fixed_parameters": {
-      "h": 0.674,
-      "Omega_b_h2": 0.0224,
-      "Omega_c_h2": 0.12,
-      "n_s": 0.965,
-      "tau": 0.054
+    "note": "For wCDM comparison, use w = -0.9 or -1.1 to show deviation from LCDM"
+  },
+  "eBOSS_DR14_context": {
+    "arxiv_ids": [
+      "1707.00588",
+      "2210.17044",
+      "1801.03077"
+    ],
+    "effective_redshift": 1.48,
+    "quasar_sample_size": 147000,
+    "redshift_range": [
+      0.8,
+      2.2
+    ],
+    "data_file": "/data/a/cpac/nramachandra/Projects/AmSC/mcp-ke/data/DR14_pm3d_19kbins.txt",
+    "note": "DR14 quasar P(k) measurement from eBOSS"
+  },
+  "neutrino_mass_effect_on_Pk": {
+    "arxiv_ids": [
+      "1109.4416",
+      "1006.0689"
+    ],
+    "suppression_formula": "Delta P/P ~ -8 * f_nu where f_nu = Omega_nu/Omega_m",
+    "k_range_most_affected": "k > 0.01 h/Mpc (above free-streaming scale)",
+    "typical_suppression_at_k_1": "several percent for sum_m_nu ~ 0.1 eV",
+    "HALOFIT_note": "Use extended HALOFIT for nonlinear regime corrections with massive neutrinos"
+  },
+  "key_references": [
+    {
+      "arxiv_id": "1807.06209",
+      "title": "Planck 2018 results. VI. Cosmological parameters"
     },
-    "sampler_settings_small_run": {
-      "n_walkers": 16,
-      "n_steps": 2000,
-      "burn_in": 500,
-      "description": "Small exploratory run. For publication, typically need 50k+ steps."
+    {
+      "arxiv_id": "1707.00588",
+      "title": "Constraints on sum of neutrino masses using eBOSS DR14"
+    },
+    {
+      "arxiv_id": "2210.17044",
+      "title": "Cosmological constraints from power spectrum of eBOSS quasars"
+    },
+    {
+      "arxiv_id": "1109.4416",
+      "title": "Massive Neutrinos and the Non-linear Matter Power Spectrum"
+    },
+    {
+      "arxiv_id": "1006.0689",
+      "title": "The effect of massive neutrinos on the matter power spectrum"
     }
-  },
-  "physics_notes": {
-    "neutrino_suppression": "Massive neutrinos suppress the matter power spectrum on scales smaller than their free-streaming scale. The suppression is approximately Delta P/P ~ -8 * f_nu where f_nu = Omega_nu/Omega_m (Bird et al. 2012, 1109.4416). For sum_m_nu = 0.06 eV, f_nu ~ 0.004, giving ~3% suppression.",
-    "wCDM_effect": "A dark energy equation of state w != -1 modifies the expansion history and hence the growth of structure. w > -1 (less negative) leads to less suppression of structure growth at late times (slightly more power at large scales). w < -1 leads to more suppression.",
-    "N_eff_effect": "Increasing N_eff increases the radiation density, shifting matter-radiation equality to later times, which suppresses power on small scales and shifts the turnover of P(k)."
-  },
-  "actionable_steps": [
-    "Step 1: Load eBOSS DR14 P(k) data from the specified file. Expect columns: k [h/Mpc], P(k) [Mpc/h]^3, possibly error bars.",
-    "Step 2: Compute theoretical P(k) for three models using CLASS or CAMB: (a) LCDM with Planck 2018 best-fit, (b) LCDM+massive neutrinos with sum_m_nu=0.15 eV, N_eff=3.046, (c) wCDM with w=-0.9. Plot all together with data.",
-    "Step 3: Set up MCMC with 3 free parameters (sigma8, sum_m_nu, N_eff) fitting to eBOSS P(k) data. Use Planck priors as specified. Fix other cosmological parameters.",
-    "Step 4: Run MCMC (small run: 16 walkers, 2000 steps, 500 burn-in).",
-    "Step 5: Analyze chains with GetDist, produce triangle plot of posterior distributions, report best-fit values and uncertainties."
   ]
 }

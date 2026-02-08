@@ -1,0 +1,729 @@
+Title: Constraints on the sum of neutrino masses using cosmological data including the latest extended Baryon Oscillation Spectroscopic Survey DR14 quasar sample
+Authors: Sai Wang, Yi-Fan Wang, Dong-Mei Xia
+Year: 2017
+arXiv ID: 1707.00588
+
+============================================================
+
+--- Page 1 ---
+Constraints on the sum of neutrino masses using cosmological data including the
+latest extended Baryon Oscillation Spectroscopic Survey DR14 quasar sample
+Sai Wang, 1,∗ Yi-Fan Wang,1,† and Dong-Mei Xia 2,‡
+1Department of Physics, The Chinese University of Hong Kong, Shatin, N.T., Hong Kong SAR 999077, China
+2Key Laboratory of Low-grade Energy Utilization Technologies & Systems of Ministry of Education of China,
+College of Power Engineering, Chongqing University, Chongqing 400044, China
+We investigate the constraints on the sum of neutrino masses (Σ mν) using the most recent cos-
+mological data, which combines the distance measurement from baryonic acoustic oscillation in the
+extended Baryon Oscillation Spectroscopic Survey DR14 quasar sample with the power spectra of
+temperature and polarization anisotropies in the cosmic microwave background from the Planck
+2015 data release. We also use other low-redshift observations including the baryonic acoustic os-
+cillation at relatively low redshifts, the supernovae of type Ia and the local measurement of Hubble
+constant. In the standard cosmological constant Λ cold dark matter plus massive neutrino model,
+we obtain the 95% conﬁdence level upper limit to be Σ mν < 0.129 eV for the degenerate mass
+hierarchy, Σmν < 0.159 eV for the normal mass hierarchy, and Σ mν < 0.189 eV for the inverted
+mass hierarchy. Based on Bayesian evidence, we ﬁnd that the degenerate hierarchy is positively
+supported, and the current data combination can not distinguish normal and inverted hierarchies.
+Assuming the degenerate mass hierarchy, we extend our study to non-standard cosmological mod-
+els including the generic dark energy, the spatial curvature, and the extra relativistic degrees of
+freedom, respectively, but ﬁnd these models not favored by the data.
+I. INTRODUCTION
+The phenomena of neutrino oscillation have provided
+convincing evidence for the neutrino non-zero masses and
+the mass splittings (see Ref. [1] for a review). However,
+the current experimental results can not decisively tell if
+the third neutrino is heavier than the other two or not.
+There are thus two potential mass hierarchies for three
+active neutrinos, namely, the normal hierarchy (NH), in
+which the third neutrino is the heaviest, and the inverted
+hierarchy (IH), in which the third neutrino is the light-
+est. The sum of neutrino masses (Σ mν) is also remained
+unknown, and diﬀerent neutrino hierarchies would have
+diﬀerent total mass. Taking into account the experimen-
+tal results of the square mass diﬀerences [1], the lower
+bound on Σmν is estimated to be 0 .06eV for NH, while
+to be 0.10eV for IH. The upper limit on Σ mν is much
+loose based on the experimental particle physics. For in-
+stance, the most sensitive neutrino mass measurement to
+date, involving the kinematics of tritium beta decay, pro-
+vides a 95% conﬁdence level (CL) upper bound of 2.05eV
+on the electron anti-neutrino mass [2].
+Cosmology plays a signiﬁcant role in exploring the
+neutrino masses (see Ref. [3] for a review), since they
+can place stringent upper limits on Σ mν, which is a key
+to resolving the neutrino masses by combining with the
+square mass diﬀerences measured. Massive neutrinos are
+initially relativistic in the Universe, and become non-
+relativistic after a transition when their rest masses begin
+to dominate. Imprints have been left on the cosmic mi-
+∗Electronic address: wangsai@itp.ac.cn
+†Electronic address: yfwang@phy.cuhk.edu.hk
+‡Electronic address: xiadm@cqu.edu.cn
+crowave background (CMB) and the large scale structure
+(LSS). The CMB is aﬀected through the early-time inte-
+grated Sachs-Wolfe eﬀect [4], which shifts the amplitude
+and location of the CMB acoustic peaks due to a change
+of the redshift of matter-radiation equality. The LSS
+is modiﬁed through suppressing the clustering of mat-
+ter, due to the large free-streaming velocity of neutrinos.
+Therefore, the massive neutrinos can be weighed using
+the measurements of CMB and LSS [5–8].
+Assuming the Λ cold dark matter (ΛCDM) model and
+three active neutrinos are in degenerate hierarchy (DH) ,
+namely with equal mass, the Planck Collaboration re-
+cently reported the 95% CL upper limit on Σ mν to
+be 0.49eV using the CMB temperature and polarization
+anisotropies from the Planck 2015 data [5]. Adding the
+gravitational lensing of the CMB from Planck 2015 data
+relaxes the upper limit to be 0.59eV, a less stringent one.
+Given the accuracy of the Planck 2015 data, assuming
+the neutrinos in NH and IH would have negligible impact
+on the constraints on the sum of neutrino masses.
+Combining baryon acoustic oscillation (BAO) and
+other low redshift data such as local Hubble constant
+H0 and Type Ia supernovae can further tighten the con-
+straints [9–18]. There are also eﬀorts on the constraints
+by combining experimental data from particle physics
+[19–21]. Especially, since the BAO data can signiﬁcantly
+break the acoustic scale degeneracy, the sum of neutrino
+masses is tightly constrained to 0.15eV by Ref. [22] after
+adding the BAO data from LSS surveys [23–25]. This
+result is close to the lower bound of neutrino masses in
+the IH, namely 0.10eV. Current tightest constraints on
+the neutrino total mass [26, 27] from cosmological data,
+especially from Planck high-l polarization data of CMB,
+already reached∼ 0.10eV given certain combinations of
+data set, implying a favor of NH for neutrino. Never-
+theless, it is necessary to take the mass prior set by the
+arXiv:1707.00588v4  [astro-ph.CO]  5 Apr 2018
+
+--- Page 2 ---
+2
+neutrino mass hierarchy into account to get consistent
+constraints. After taking the square mass diﬀerences into
+account, we [22, 28] found that the upper limit of neu-
+trino total mass becomes 0.18eV for NH, and 0.20eV for
+IH. It was also shown by Ref. [28–36] that an extension
+of the standard cosmology model, e.g., dynamical dark
+energy and non-zero spatial curvature, would have sub-
+tle impacts on constraining the sum of neutrino masses.
+In this work we investigate the mass prior eﬀect on con-
+straining the neutrino total mass in the standard cosmo-
+logical model.
+Most recently, the SDSS-IV extended Baryon Oscilla-
+tion Spectroscopic Survey (eBOSS) [37] measured a BAO
+scale in redshift space in the redshift interval 1 < z <2
+for the ﬁrst time, using the clustering of 147,000 quasars
+with redshift 0.8<z < 2.2. A spherically averaged BAO
+distance toz = 1.52 is obtained, namely,DV (z = 1.52) =
+3843± 147(rd/rd,ﬁd) [Mpc], which is of 3 .8% precision.
+In this paper, this data point is denoted by eBOSS DR14
+for simplicity. The SDSS-IV eBOSS measurement of the
+BAO scale is expected to break the degeneracy between
+the NH and IH scenarios of three active neutrinos at 2 σ
+conﬁdence level [38].
+In this work, we constrain the sum of neutrino masses
+in the ΛCDM model by adding the recently released
+eBOSS DR14 data. Besides the maximal likelihood anal-
+ysis, we also employ the Bayesian statistics to infer the
+parameters, and especially to perform model selections.
+We expect to show that the current observations can im-
+prove the previous constraints on Σmν signiﬁcantly, and
+the neutrino mass hierarchies have to be considered to
+analyze the current observational data. Due to possi-
+ble degeneracy between the sum of neutrino masses and
+a few extended cosmological parameters, similar studies
+are proceeded under the framework of extended cosmo-
+logical models by introducing the generic dark energy
+(w), the non-zero spatial curvature (Ω k), and the extra
+relativistic degree of freedom (Neﬀ), respectively.
+The rest of this paper is arranged as follows. Sec. II
+introduces the adopted cosmological models, the cosmo-
+logical observations, and the method of statistical anal-
+ysis. Sec. III shows the result of the constraints on Σ mν
+in the ΛCDM model, while Sec. IV shows the eﬀect of a
+few extended cosmological parameters on the constraints
+on Σmν. In Sec. V, the conclusions are summarized.
+II. MODELS, DA T ASET & METHODOLOGY
+A. Cosmological models
+In the ΛCDM plus massive neutrino model (hereafter,
+νΛCDM for short), we put constraints on the sum of
+neutrino masses with and without taking into account
+the neutrino mass hierarchies. Speciﬁcally, we consider
+the DH, NH, and IH of the neutrinos. Based on the neu-
+trino oscillation phenomenon, the square mass diﬀerences
+between three active neutrinos have been measured to be
+∆m2
+21 = 7.5× 10−5eV2 and|∆m2
+31| = 2.5× 10−3eV2 [1].
+Therefore, there is a lower bound, i.e. Σ mν ≥ 0.06eV,
+for the NH, and Σmν≥ 0.10eV for the IH. There is not
+such a lower bound for the DH, but Σmν should deserve
+a positive value.
+In the νΛCDM model, there are six base parameters
+denoted by{ωb,ωc, 100θMC,τ,n s, ln(1010As)} plus a sev-
+enth independent parameter denoted by Σmν for the sum
+of neutrino masses. Here ωb and ωc are, respectively,
+physical densities of baryons and cold dark matter to-
+day.θMC is the ratio between sound horizon and angular
+diameter distance at the decoupling epoch. τ is Thom-
+son scatter optical depth due to reionization. ns and
+As are, respectively, spectral index and amplitude of the
+power spectrum of primordial curvature perturbations.
+The pivot scale is set to be kp = 0.05Mpc−1.
+When the generic dark energy is taken into account,
+an eighth independent parameter is introduced, which
+describes the equation of state (EoS) of the dark energy.
+This parameter is denoted by w, and the corresponding
+cosmological model is theνwCDM model. When the spa-
+tial curvature is considered, the eighth independent pa-
+rameter is denoted by Ω k, and the corresponding model
+is the νΩkΛCDM model. When the extra relativistic de-
+gree of freedom is considered, the eighth independent pa-
+rameter is denoted byNeﬀ, and the corresponding model
+is the νNeﬀΛCDM model. For the above three extended
+models, we only consider the upper limits on Σmν in the
+DH scenario of three massive neutrinos, because the neu-
+trino mass hierarchy would have negligible eﬀects on the
+constraints given the current cosmological observations.
+B. Cosmological data
+The cosmological observations adopted by this work
+include CMB, BAO, and other low-redshift surveys. To
+be speciﬁc, the CMB data are composed of tempera-
+ture anisotropies, polarizations, and gravitational lens-
+ing of the CMB reported by the Planck 2015 data re-
+lease [5]. The CMB lensing is used here since it is
+very sensitive to the neutrino masses [39]. Speciﬁcally,
+we utilize the angular power spectra of TT, TE, EE,
+lowTEB, and gravitational lensing of the CMB. The
+BAO data points come from the 6dF galaxy survey
+[23], SDSS DR7 main galaxy sample [24], SDSS-III BOSS
+DR12 LOWZ and CMASS galaxy samples [25], and the
+SDSS-IV eBOSS DR14 quasar sample [37]. The super-
+novae dataset is the “joint light-curve analysis” (JLA)
+compilation of the supernovae of type Ia (SNe Ia) [40].
+The local measurement of Hubble constant ( H0) comes
+from the Hubble Space Telescope [41]. The full data
+combination combines together all the cosmological ob-
+servational data mentioned above. In fact, one can fur-
+ther add other astrophysical data, such as the galaxy
+weak lensing [42, 43], the redshift space distortion [44],
+and the Planck cluster counts [45], to improve the con-
+straints on the neutrino masses. Though these datasets
+
+--- Page 3 ---
+3
+are directly related to the neutrino masses, however, the
+amplitudes of power spectra of the cosmological pertur-
+bations obtained from these observations are in tension
+with the one obtained from the Planck CMB data. It is
+believed that these observations deserve underlying un-
+controlled systematics, which may bias the global ﬁtting.
+Hence, we do not take them into account in this paper.
+C. Statistical method
+Given the observational dataset and the corresponding
+likelihood functions, we utilize the Markov-Chain Monte-
+Carlo (MCMC) sampler in the CosmoMC [46] to estimate
+across the parameter space, and the PolyChord [47, 48]
+plug-in of the CosmoMC to calculate the Bayesian evi-
+dence for model selection.
+The Bayesian evidence ( E) is deﬁned as an integral
+of posterior probability distribution function (PDF), i.e.
+P (θ), over the parameter space {θ}, i.e. E =
+∫
+dθP (θ)
+[49]. Given two diﬀerent models M1 and M2, the loga-
+rithmic Bayesian factor is evaluated as ∆ lnE = lnEM1−
+lnEM2. When 0 < ∆ lnE < 1, the given dataset in-
+dicates no signiﬁcant support for either model. When
+1 < ∆ lnE < 3, there is a positive support for M1.
+When 3 < ∆ lnE < 5, there is a strong support for
+M1. When ∆ ln E > 5, there is a very strong support
+for M1. Conversely, the negative values mean that the
+dataset supports M2, rather than M1.
+In this work,M2 usually denotesνDHΛCDM whileM1
+denotes one of other models. An exception is that M1
+denotes the NH while M2 denotes the IH, when we com-
+pare the NH and the IH inνΛCDM. The parameter space
+{θ} is consist of the six base parameters plus the sum of
+neutrino masses for νΛCDM, while an eighth parameter
+is further added when an extended model is considered.
+For each model, the independent parameters have been
+showed explicitly in section II A.
+We also evaluate the best-ﬁt χ2. For any scenario, a
+smaller value of the best-ﬁt χ2 implies that this scenario
+ﬁts the dataset better. For both Bayesian and maximal
+likelihood methods, the prior ranges for all the indepen-
+dent parameters are set to be suﬃciently wide to avoid
+aﬀecting the results of data analysis.
+III. RESUL TS FOR THE νΛCDM MODEL
+For the νΛCDM model, we present the results of pa-
+rameter inference and model comparison in Tab. I and
+in Fig. 1. To be speciﬁc, we show the 68% CL con-
+straints on the six base parameters of the ΛCDM, and
+the 95% CL upper limits on the sum of neutrino masses
+in Tab. I. For three mass hierarchies of massive neutrinos,
+we ﬁnd that the constraints on the six base parameters
+of the ΛCDM are compatible within 68% CL. We also
+list in Tab. I the best-ﬁt values ofχ2 and the logarithmic
+Bayesian evidences. In Fig. 1, we depict the posterior
+PDFs of the sum of neutrino masses. The red, green,
+and blue solid curves, respectively, denote the posterior
+PDFs of Σmν for DH, NH, and IH of massive neutrinos.
+In addition, we wonder if the diﬀerence in neutrino mass
+constraints are due to the diﬀerent priors in the parame-
+ter Σmν. Therefore, we also depict in Fig. 1 the neutrino
+mass constraints for theνDHΛCDM model with two non-
+vanishing lower bounds, i.e., 0 .06eV (red dashed curve)
+and 0.10eV (red dot-dashed curve).
+νDHΛCDM νNHΛCDM νIHΛCDM
+ωb 0.02238±0.000140.02240±0.000140.02242±0.00014
+ωc 0.1178±0.0010 0.1174±0.0010 0.1171±0.0010
+100θMC 1.04105±0.000301.04107±0.000291.04108±0.00030
+τ 0.0708±0.0133 0.0775±0.0131 0.0825±0.0128
+ns 0.9692±0.0040 0.9704±0.0041 0.9711±0.0040
+ln(1010As) 3.071±0.025 3.084±0.024 3.093±0.024
+Σmν [eV] < 0.129 < 0.159 < 0.189
+χ2
+min/2 6832.461 6833.353 6833.577
+lnE −6890.50±0.23 −6892.61±0.23 −6892.54±0.23
+TABLE I: The 68% CL constraints on six base parameters of
+the ΛCDM, the 95% CL upper limits on the sum of neutrino
+masses, as well as the best-ﬁt values ofχ2 and the logarithmic
+Bayesian evidence, i.e. ln E (68% CL).
+0.00 0.05 0.10 0.15 0.20 0.25 0.30
+Σmν
+νDHΛCDM
++0.06eV prior
++0.10eV prior
+νNHΛCDM
+νIHΛCDM
+FIG. 1: The posterior probability distribution functions of the
+sum of neutrino masses for three mass hierarchies of massive
+neutrinos. The red, green, and blue solid curves denote DH,
+NH, and IH, respectively. The red dashed (dot-dashed) curve
+denotes DH with a lower bound of 0 .06eV (0.10eV) on Σmν.
+From left to right, the vertical dashed lines denote Σ mν =
+0.06 eV, 0.10 eV, respectively.
+
+--- Page 4 ---
+4
+For three neutrinos with degenerate mass, the upper
+limit on the sum of neutrino masses is obtained to be
+Σmν < 0.129 eV (95% CL) . (1)
+This upper limit is close to the lower bound of 0 .10eV
+required by the IH scenario. In fact, the upper limit
+even becomes Σmν < 0.10 eV if the gravitational lensing
+of the CMB is discarded in the global ﬁtting. As ex-
+pected, the upper limit Σ mν < 0.129 eV is 3.7% tighter
+than the existing one, e.g. Σ mν < 0.134 eV in Wang
+et al. [28], which did not include the eBOSS DR14 data,
+and Σmν < 0.197 eV in Zhang [31], which used a dif-
+ferent BAO dataset. However, this constraint is slightly
+looser than that of Σmν < 0.12eV obtained by combining
+BOSS Lyman-α with Planck CMB [15].
+The above results reveal the necessity of taking into
+account the square mass diﬀerences between three mas-
+sive neutrinos when one constrains the neutrino masses
+with current cosmological observations. For three neu-
+trinos with NH, the upper limit on the sum of neutrino
+masses is given by
+Σmν < 0.159 eV (95% CL) , (2)
+while for IH, the result is given by
+Σmν < 0.189 eV (95% CL) . (3)
+Here we further consider the Bayesian model selection.
+The logarithmic Bayesian factor between the neutrino
+NH and IH scenarios is compatible with zero within one
+standard deviation, while the diﬀerence of the best-ﬁt χ2
+is given by χ2
+NH,min−χ2
+IH,min =−0.448. The adopted
+dataset is ﬁtted nearly equally well by both NH and IH,
+but it can not distinguish the two scenarios. Therefore,
+more experiments of higher precision in the future are
+needed to decisively distinguish the neutrino mass hier-
+archies [32, 50]. In addition, comparing the Bayesian ev-
+idences of the two scenarios with that of νDHΛCDM, we
+ﬁnd that the νDHΛCDM is positively supported by the
+adopted data combination. Based on the best-ﬁt χ2, we
+ﬁnd that theνDHΛCDM ﬁts the data combination better,
+since χ2
+min in this scenario is smaller by around 2 than
+those in the others. In addition, the constraints in (2)
+and (3) are well consistent with those in Ref. [28], which
+did not include the eBOSS DR14 data. Another exist-
+ing work [29] has showed that the 95% CL upper bound
+is Σmν < 0.118eV for the NH, and Σ mν < 0.135eV for
+the IH. These constraints appear to be tighter than those
+obtained by this work. However, the neutrino mass hi-
+erarchy was parameterized in a diﬀerent way from this
+work, and the data combination discarded the CMB lens-
+ing and the eBOSS DR14 BAO but included the redshift
+space distortion data.
+From Fig. 1, we can conﬁrm that the diﬀerence in neu-
+trino mass constraints are mainly due to the diﬀerent pri-
+ors in the parameter Σmν. Given the current data com-
+bination, the posterior PDF of Σ mν in the νNHΛCDM
+(νIHΛCDM) is approximately overlapped with that in
+the νDHΛCDM with a lower bound of 0 .06eV (0.10eV)
+on Σmν. In the νDHΛCDM model, the 95% CL con-
+straint on Σ mν is 0.164eV for a lower bound 0 .06eV,
+while it is 0 .186eV for a lower bound 0 .10eV. These
+constraints are consistent with those in (2) and (3), re-
+spectively. Therefore, the priors in Σ mν have signiﬁ-
+cant inﬂuence on the constraints on Σmν, given the cur-
+rent data. However, νNHΛCDM and νIHΛCDM can ﬁt
+the data slightly better than νDHΛCDM with non-zero
+priors in Σ mν, since the best-ﬁt χ2 in the former two
+scenarios are smaller by 3 − 4 than those in the latter
+two. Comparing νNHΛCDM with νDHΛCDM+0.06eV
+prior, we ﬁnd a negative support for the former sce-
+nario due to ∆ lnE =−1.29. Comparing νIHΛCDM with
+νDHΛCDM+0.10eV prior, we ﬁnd no signiﬁcant support
+for either scenario due to ∆ ln E =−0.11.
+IV. RESUL TS FOR THE EXTENDED
+COSMOLOGICAL MODELS
+Based on the precision of current cosmological observa-
+tions, the neutrino mass hierarchies have negligible eﬀects
+on the constraints on Σ mν in the extended cosmologi-
+cal models explored here. We thus explore the parame-
+ter space by assuming the degenerate mass hierarchy in
+the following. For the extended cosmological models, we
+present the results of our data analysis in Tab. II and in
+Fig. 2. Speciﬁcally, we show the 95% CL upper limits on
+the sum of neutrino masses, and the 68% CL constraints
+on the remaining seven parameters in Tab. II. For each
+extended model, we depict the 1σ and 2σ CL contours in
+the two-dimensional plane spanned by the sum of neu-
+trino masses and the extended parameter in Fig. 2.
+νwCDM νΩkΛCDM νNeﬀΛCDM
+ωb 0.02230±0.000150.02222±0.000160.02252±0.00018
+ωc 0.1186±0.0012 0.1198±0.0015 0.1212±0.0027
+100θMC 1.04093±0.000301.04074±0.000341.04067±0.00041
+τ 0.0659±0.0146 0.0736±0.0159 0.0734±0.0145
+ns 0.9670±0.0043 0.9643±0.0049 0.9765±0.0069
+ln(1010As) 3.063±0.027 3.082±0.031 3.084±0.029
+w −1.06+0.05
+−0.04 – –
+Ωk – 0.0043+0.0024
+−0.0028 –
+Neﬀ – – 3.264+0.160
+−0.161
+Σmν [eV] < 0.214 < 0.294 < 0.174
+χ2
+min/2 6829.089 6831.799 6832.353
+lnE −6892.81±0.24 −6892.47±0.24 −6893.50±0.24
+TABLE II: Assuming the degenerate mass hierarchy, the 68%
+CL constraints on the seven base parameters of the extended
+cosmological models, the 95% CL upper limits on the sum of
+neutrino masses, as well as the best-ﬁt values of χ2 and the
+logarithmic Bayesian evidence, i.e. ln E (68% CL).
+
+--- Page 5 ---
+5
+1.20
+ 1.14
+ 1.08
+ 1.02
+ 0.96
+w
+0.00
+0.08
+0.16
+0.24
+0.32
+0.40Σmν
+νwCDM
+0.005
+ 0.000 0.005 0.010 0.015
+ΩK
+0.00
+0.08
+0.16
+0.24
+0.32
+0.40Σmν
+νΩkΛCDM
+2.75 3.00 3.25 3.50 3.75
+Neff
+0.00
+0.08
+0.16
+0.24
+0.32
+0.40Σmν
+νNeffΛCDM
+FIG. 2: Assuming the degenerate mass hierarchy, the 1σ and 2σ CL contours in the two-dimensional plane spanned by the sum
+of neutrino masses and the extended cosmological parameters in νwCDM, νΩkΛCDM, and νNeﬀΛCDM, respectively. From
+bottom to up, the horizontal dashed lines denote Σ mν = 0.06 eV, 0.10 eV, respectively.
+For the νwCDM model, we obtain the upper limit on
+the sum of neutrino masses to be Σ mν < 0.214 eV at
+95% CL. This upper limit on Σ mν is indeed improved
+compared with the existing ones, e.g. Σ mν < 0.268 eV
+[28], Σmν < 0.304 eV [31], and Σ mν < 0.25 eV [34].
+The constraint on w is w = −1.06+0.05
+−0.04 at 68% CL,
+deviating from w = −1 with a signiﬁcance of 1.2 σ.
+From the left panel of Fig. 2, Σ mν is found to be
+anti-correlated with w. Compared with the νDHΛCDM
+model, we ﬁnd that the logarithmic Bayesian factor is
+lnEνwCDM− lnEDH =−2.31, and the diﬀerence of the
+best-ﬁt χ2 is χ2
+νwCDM,min−χ2
+DH,min =−6.744. There is
+thus a negative support for the νwCDM model, but this
+extended model ﬁts the adopted dataset better than the
+νDHΛCDM model.
+For the νΩkΛCDM model, we obtain the upper limit
+on the sum of neutrino masses to be Σ mν < 0.294 eV at
+95% CL, and the constraint on Ω k is Ωk = 0.0043+0.0024
+−0.0028
+at 68% CL. The signiﬁcance of a non-zero value of Ω k is
+found to be around 1 .5 standard deviations. From the
+middle panel of Fig. 2, Σ mν is found to be positively
+correlated with Ωk. Therefore, adding the parameter Ω k
+worsens the constraints on the neutrino masses. This
+constraint on Σmν is compatible with the existing one in
+Ref. [51], which studied two diﬀerent scenarios of neu-
+trino mass hierarchy. Compared with the νDHΛCDM
+model, we ﬁnd that the logarithmic Bayesian factor is
+lnEνΩkΛCDM−lnEDH =−1.97, and the diﬀerence of the
+best-ﬁtχ2 is given byχ2
+νΩkΛCDM,min−χ2
+DH,min =−1.324.
+There is thus a negative support for the νΩkΛCDM
+model, even though this extended model ﬁts the adopted
+dataset slightly better than the νDHΛCDM model.
+For theνNeﬀΛCDM model, we obtain the upper limit
+on the sum of neutrino masses to be Σ mν < 0.17 eV at
+95% CL, and the constraint on Neﬀ isNeﬀ = 3.265+0.159
+−0.157
+at 68% CL. SinceNeﬀ = 3.046 in standard ΛCDM model,
+the signiﬁcance of extra relativistic degree is 1.4σ . From
+the right panel of Fig. 2, Σ mν is found to be positively
+correlated with Neﬀ. This constraint on Σ mν is looser
+than the existing one Σ mν < 0.14eV in Ref. [14], which
+used the high-ℓ CMB data and the Lyman-α data. Com-
+pared with the νDHΛCDM model, we ﬁnd that the log-
+arithmic Bayesian factor is ln EνNeffΛCDM− lnEDH =
+−3.00, and the diﬀerence of the best-ﬁt χ2 is given by
+χ2
+νNeffΛCDM,min−χ2
+DH,min = −0.216. Therefore, there
+is a negative support for the νNeﬀΛCDM model, even
+though this extended model ﬁts the adopted dataset as
+nearly well as the νDHΛCDM.
+V. CONCLUSION AND DISCUSSION
+In this paper, we updated the cosmological constraints
+on the sum of neutrino masses Σ mν using the most up-
+to-date observational data. Two more realistic mass hi-
+erarchies of massive neutrinos, namely, the normal mass
+hierarchy and the inverted mass hierarchy, are employed
+in addition to the degenerate mass hierarchy. In the
+νΛCDM, for the DH, we obtained an improved upper
+limit Σmν < 0.129eV at 95% CL. Taking into account
+the squared mass diﬀerences between three massive neu-
+trinos, we obtained the 95% CL upper bound to be
+Σmν < 0.159eV for the NH, while to be Σ mν < 0.189eV
+for the IH. Based on the Bayesian evidence, the adopted
+dataset can not distinguish the two mass orderings. In
+addition, we found that the priors in Σ mν can signiﬁ-
+cantly impact the cosmological constraints on Σmν, given
+the adopted data combination. Future cosmological ob-
+servations of higher precision are needed to get more deci-
+sive conclusions. For example, BAO [38, 52], CMB [53–
+56], and galaxy shear surveys [57, 58] might reach the
+sensitivity to measure the neutrino masses and to deter-
+mine the mass hierarchy in the future.
+Since the extended cosmology model can have degen-
+eracy with the neutrino mass, we extended our studies
+to include the generic dark energy, the spatial curva-
+ture, and the extra relativistic degrees of freedom, re-
+spectively, by assuming the degenerate mass hierarchy.
+Compared with theνDHΛCDM model, we found negative
+supports for these extended cosmological models based
+
+--- Page 6 ---
+6
+on Bayesian model selection, due to the introduction of
+an additional independent parameter in each model.
+We compared the results of this work with the exist-
+ing ones. Comparing with our existing works [22, 28],
+which used the same data sets except the eBOSS DR14,
+we found that the eBOSS DR14 brings about at most a
+few percent corrections to the neutrino mass constraints.
+However, it is challenging to compare this work with oth-
+ers, since they usually used diﬀerent combinations of cos-
+mological data or even diﬀerent models. For example,
+adding the CMB lensing to the data combination can
+worsen the constraints on the neutrino masses [5]. When
+the CMB lensing was discarded for the νDHΛCDM, the
+95% CL upper limit on Σ mν even became 0 .10eV, as
+found by this work. It is much tighter than that in (1),
+and has reached the minimal mass expected in the IH
+scenario. For a second example, adding a prior on the
+reionization optical depth to the data combination could
+tighten the constraints on the neutrino masses, see for
+example Refs. [16, 27, 32, 59]. In addition, the degener-
+acy between the hot dark matter model and the massive
+neutrinos has been considered in Ref. [30], while the im-
+pacts of dynamical dark energy model on weighing mas-
+sive neutrinos have been studied in Refs. [28, 31, 34, 36].
+We have speciﬁed comparisons between the results of this
+work with several existing ones in last two sections.
+Acknowledgments
+We appreciate the uses of Dr. Ning Wu’s HPC facility,
+and of the HPC Cluster of SKLTP/ITP-CAS. We thank
+Dr. Will Handley for his useful suggestions on the Poly-
+Chord, and Dr. Ke Wang for helpful discussions. SW is
+supported by a grant from the Research Grant Council
+of the Hong Kong Special Administrative Region, China
+(Project No. 14301214). DMX is supported by the Na-
+tional Natural Science Foundation of China (Grant No.
+11505018) and the Chongqing Science and Technology
+Plan Project (Grant No. Cstc2015jvyj40031).
+[1] C. Patrignani et al. [Particle Data Group], “Review of
+Particle Physics,” Chin. Phys. C 40, no. 10, 100001
+(2016).
+[2] V. N. Aseev et al. [Troitsk Collaboration], Phys. Rev. D
+84, 112003 (2011) [arXiv:1108.5034 [hep-ex]].
+[3] J. Lesgourgues and S. Pastor, Phys. Rept. 429, 307
+(2006) [astro-ph/0603494].
+[4] Z. Hou et al. , Astrophys. J. 782, 74 (2014)
+[arXiv:1212.6267 [astro-ph.CO]].
+[5] P. A. R. Ade et al. [Planck Collaboration], Astron. Astro-
+phys. 594, A13 (2016) [arXiv:1502.01589 [astro-ph.CO]].
+[6] W. Hu, D. J. Eisenstein and M. Tegmark, Phys. Rev.
+Lett. 80, 5255 (1998) [astro-ph/9712057].
+[7] W. Hu and S. Dodelson, Ann. Rev. Astron. Astrophys.
+40, 171 (2002) [astro-ph/0110414].
+[8] E. Komatsu et al. [WMAP Collaboration], Astrophys. J.
+Suppl. 180, 330 (2009) [arXiv:0803.0547 [astro-ph]].
+[9] B. A. Reid, L. Verde, R. Jimenez and O. Mena, JCAP
+1001, 003 (2010) [arXiv:0910.0008 [astro-ph.CO]].
+[10] S. A. Thomas, F. B. Abdalla and O. Lahav, Phys.
+Rev. Lett. 105, 031301 (2010) [arXiv:0911.5291 [astro-
+ph.CO]].
+[11] R. Jimenez, T. Kitching, C. Pena-Garay and L. Verde,
+JCAP 1005, 035 (2010) [arXiv:1003.5918 [astro-ph.CO]].
+[12] M. E. C. Swanson, W. J. Percival and O. Lahav, Mon.
+Not. Roy. Astron. Soc.409, 1100 (2010) [arXiv:1006.2825
+[astro-ph.CO]].
+[13] S. Riemer-Sorensen, D. Parkinson and T. M. Davis,
+Phys. Rev. D 89, 103505 (2014) [arXiv:1306.4153 [astro-
+ph.CO]].
+[14] G. Rossi, C. Y` eche, N. Palanque-Delabrouille and J. Les-
+gourgues, Phys. Rev. D 92, no. 6, 063505 (2015)
+[arXiv:1412.6763 [astro-ph.CO]].
+[15] N. Palanque-Delabrouille et al. , JCAP 1511, no. 11, 011
+(2015) [arXiv:1506.05976 [astro-ph.CO]].
+[16] E. Di Valentino, E. Giusarma, O. Mena, A. Melchiorri
+and J. Silk, Phys. Rev. D 93, no. 8, 083527 (2016)
+[arXiv:1511.00975 [astro-ph.CO]].
+[17] A. J. Cuesta, V. Niro and L. Verde, Phys. Dark Univ.
+13, 77 (2016) [arXiv:1511.05983 [astro-ph.CO]].
+[18] L. Xu and Q. G. Huang, Sci. China Phys. Mech. As-
+tron. 61, no. 3, 039521 (2018) [arXiv:1611.05178 [astro-
+ph.CO]].
+[19] F. Capozzi, E. Di Valentino, E. Lisi, A. Marrone, A. Mel-
+chiorri and A. Palazzo, Phys. Rev. D 95, no. 9, 096014
+(2017) [arXiv:1703.04471 [hep-ph]].
+[20] S. Hannestad and T. Schwetz, JCAP 1611, no. 11, 035
+(2016) [arXiv:1606.04691 [astro-ph.CO]].
+[21] A. Caldwell, A. Merle, O. Schulz and M. Totzauer, Phys.
+Rev. D 96, no. 7, 073001 (2017) [arXiv:1705.01945 [hep-
+ph]].
+[22] Q. G. Huang, K. Wang and S. Wang, Eur. Phys. J. C 76,
+no. 9, 489 (2016) [arXiv:1512.05899 [astro-ph.CO]].
+[23] F. Beutler et al. , Mon. Not. Roy. Astron. Soc. 416, 3017
+(2011) [arXiv:1106.3366 [astro-ph.CO]].
+[24] A. J. Ross, L. Samushia, C. Howlett, W. J. Percival,
+A. Burden and M. Manera, Mon. Not. Roy. Astron. Soc.
+449, no. 1, 835 (2015) [arXiv:1409.3242 [astro-ph.CO]].
+[25] H. Gil-Marn et al., Mon. Not. Roy. Astron. Soc. 460, no.
+4, 4210 (2016) [arXiv:1509.06373 [astro-ph.CO]].
+[26] E. Giusarma, M. Gerbino, O. Mena, S. Vagnozzi, S. Ho
+and K. Freese, Phys. Rev. D 94, no. 8, 083522 (2016)
+[arXiv:1605.04320 [astro-ph.CO]].
+[27] S. Vagnozzi, E. Giusarma, O. Mena, K. Freese,
+M. Gerbino, S. Ho and M. Lattanzi, Phys. Rev. D 96,
+no. 12, 123503 (2017) [arXiv:1701.08172 [astro-ph.CO]].
+[28] S. Wang, Y. F. Wang, D. M. Xia and X. Zhang, Phys.
+Rev. D 94, no. 8, 083519 (2016) [arXiv:1608.00672 [astro-
+ph.CO]].
+[29] E. K. Li, H. Zhang, M. Du, Z. H. Zhou and L. Xu,
+
+--- Page 7 ---
+7
+arXiv:1703.01554 [astro-ph.CO].
+[30] E. Di Valentino, E. Giusarma, M. Lattanzi, O. Mena,
+A. Melchiorri and J. Silk, Phys. Lett. B 752, 182 (2016)
+[arXiv:1507.08665 [astro-ph.CO]].
+[31] X. Zhang, Phys. Rev. D 93, no. 8, 083011 (2016)
+[arXiv:1511.02651 [astro-ph.CO]].
+[32] R. Allison, P. Caucal, E. Calabrese, J. Dunkley and
+T. Louis, Phys. Rev. D 92, no. 12, 123535 (2015)
+[arXiv:1509.07471 [astro-ph.CO]].
+[33] M. Gerbino, M. Lattanzi and A. Melchiorri, Phys. Rev.
+D 93, no. 3, 033001 (2016) [arXiv:1507.08614 [hep-ph]].
+[34] M. M. Zhao, Y. H. Li, J. F. Zhang and X. Zhang,
+Mon. Not. Roy. Astron. Soc. 469, 1713 (2017)
+[arXiv:1608.01219 [astro-ph.CO]].
+[35] M. Gerbino, K. Freese, S. Vagnozzi, M. Lattanzi,
+O. Mena, E. Giusarma and S. Ho, Phys. Rev. D 95, no.
+4, 043512 (2017) [arXiv:1610.08830 [astro-ph.CO]].
+[36] W. Yang, R. C. Nunes, S. Pan and D. F. Mota, Phys. Rev.
+D 95, no. 10, 103522 (2017) [arXiv:1703.02556 [astro-
+ph.CO]].
+[37] M. Ata et al. , Mon. Not. Roy. Astron. Soc. 473, no. 4,
+4773 (2018) [arXiv:1705.06373 [astro-ph.CO]].
+[38] G. B. Zhao et al. , Mon. Not. Roy. Astron. Soc. 457, no.
+3, 2377 (2016) [arXiv:1510.08216 [astro-ph.CO]].
+[39] A. Lewis and A. Challinor, Phys. Rept. 429, 1 (2006)
+[astro-ph/0601594].
+[40] M. Betoule et al. [SDSS Collaboration], Astron. Astro-
+phys. 568, A22 (2014) [arXiv:1401.4064 [astro-ph.CO]].
+[41] A. G. Riess et al. , Astrophys. J. 826, no. 1, 56 (2016)
+[arXiv:1604.01424 [astro-ph.CO]].
+[42] C. Heymans et al., Mon. Not. Roy. Astron. Soc. 427, 146
+(2012) [arXiv:1210.0032 [astro-ph.CO]].
+[43] T. Erben et al. , Mon. Not. Roy. Astron. Soc. 433, 2545
+(2013) [arXiv:1210.8156 [astro-ph.CO]].
+[44] L. Samushia et al., Mon. Not. Roy. Astron. Soc. 439, no.
+4, 3504 (2014) [arXiv:1312.4899 [astro-ph.CO]].
+[45] P. A. R. Ade et al. [Planck Collaboration], Astron. Astro-
+phys. 571, A20 (2014) [arXiv:1303.5080 [astro-ph.CO]].
+[46] A. Lewis and S. Bridle, Phys. Rev. D 66, 103511 (2002)
+[astro-ph/0205436].
+[47] W. J. Handley, M. P. Hobson and A. N. Lasenby,
+Mon. Not. Roy. Astron. Soc. 450, no. 1, L61 (2015)
+[arXiv:1502.01856 [astro-ph.CO]].
+[48] W. J. Handley, M. P. Hobson and A. N. Lasenby,
+Mon. Not. Roy. Astron. Soc. 453, no. 4, 4384 (2015)
+[arXiv:1506.00171 [astro-ph.IM]].
+[49] R. E. Kass, and A. E. Raftery. Journal of the American
+Statistical Association 90(430), 773-795 (1995).
+[50] K. N. Abazajian et al. [Topical Conveners: K.N. Abaza-
+jian, J.E. Carlstrom, A.T. Lee Collaboration], Astropart.
+Phys. 63, 66 (2015) [arXiv:1309.5383 [astro-ph.CO]].
+[51] Y. Chen, B. Ratra, M. Biesiada, S. Li and Z. H. Zhu,
+Astrophys. J. 829, no. 2, 61 (2016) [arXiv:1603.07115
+[astro-ph.CO]].
+[52] A. Font-Ribera, P. McDonald, N. Mostek, B. A. Reid,
+H. J. Seo and A. Slosar, JCAP 1405, 023 (2014)
+[arXiv:1308.4164 [astro-ph.CO]].
+[53] E. Calabrese et al. , JCAP 1408, 010 (2014)
+[arXiv:1406.4794 [astro-ph.CO]].
+[54] B. A. Benson et al. [SPT-3G Collaboration], Proc.
+SPIE Int. Soc. Opt. Eng. 9153, 91531P (2014)
+[arXiv:1407.2973 [astro-ph.IM]].
+[55] T. Matsumura et al. , J. Low. Temp. Phys. 176, 733
+(2014) [arXiv:1311.2847 [astro-ph.IM]].
+[56] A. Kogut et al., JCAP 1107, 025 (2011) [arXiv:1105.2044
+[astro-ph.CO]].
+[57] P. A. Abell et al. [LSST Science and LSST Project Col-
+laborations], arXiv:0912.0201 [astro-ph.IM].
+[58] R. Laureijs et al. [EUCLID Collaboration],
+arXiv:1110.3193 [astro-ph.CO].
+[59] A. Liu, J. R. Pritchard, R. Allison, A. R. Parsons, U. Sel-
+jak and B. D. Sherwin, Phys. Rev. D 93, no. 4, 043013
+(2016) [arXiv:1509.08463 [astro-ph.CO]].
