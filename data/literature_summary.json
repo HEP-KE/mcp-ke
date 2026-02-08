@@ -1,0 +1,119 @@
+{
+  "task_summary": "eBOSS P(k) analysis with LCDM, wCDM, and LCDM+massive neutrinos comparison, followed by MCMC posterior analysis",
+  "observational_data": {
+    "file": "/data/a/cpac/nramachandra/Projects/AmSC/mcp-ke/data/DR14_pm3d_19kbins.txt",
+    "survey": "eBOSS DR14",
+    "description": "3D power spectrum measurement with 19 k-bins",
+    "effective_redshift": 1.48,
+    "reference_arxiv": "2210.17044"
+  },
+  "planck_2018_priors": {
+    "reference_arxiv": "1807.06209",
+    "base_LCDM_parameters": {
+      "Omega_c_h2": {
+        "mean": 0.12,
+        "sigma": 0.001
+      },
+      "Omega_b_h2": {
+        "mean": 0.0224,
+        "sigma": 0.0001
+      },
+      "n_s": {
+        "mean": 0.965,
+        "sigma": 0.004
+      },
+      "tau": {
+        "mean": 0.054,
+        "sigma": 0.007
+      },
+      "H0_km_s_Mpc": {
+        "mean": 67.4,
+        "sigma": 0.5
+      },
+      "Omega_m": {
+        "mean": 0.315,
+        "sigma": 0.007
+      },
+      "sigma8": {
+        "mean": 0.811,
+        "sigma": 0.006
+      },
+      "100theta_star": {
+        "mean": 1.0411,
+        "sigma": 0.0003
+      }
+    },
+    "neutrino_constraints": {
+      "sum_m_nu_eV": {
+        "upper_limit_95pct": 0.12
+      },
+      "N_eff": {
+        "mean": 2.99,
+        "sigma": 0.17,
+        "note": "Planck+BAO combined"
+      }
+    }
+  },
+  "mcmc_parameters": {
+    "sampled_params": [
+      "sigma8",
+      "sum_m_nu",
+      "N_eff"
+    ],
+    "suggested_priors": {
+      "sigma8": {
+        "type": "Gaussian",
+        "mean": 0.811,
+        "sigma": 0.006,
+        "bounds": [
+          0.6,
+          1.0
+        ]
+      },
+      "sum_m_nu_eV": {
+        "type": "uniform",
+        "min": 0.0,
+        "max": 0.5,
+        "note": "upper limit from Planck is 0.12 eV at 95%"
+      },
+      "N_eff": {
+        "type": "Gaussian",
+        "mean": 2.99,
+        "sigma": 0.17,
+        "bounds": [
+          2.0,
+          4.0
+        ]
+      }
+    }
+  },
+  "models_to_compare": {
+    "LCDM": {
+      "description": "Standard 6-parameter LCDM with fixed neutrino mass (0.06 eV) and N_eff=3.046",
+      "w": -1.0,
+      "sum_m_nu_eV": 0.06,
+      "N_eff": 3.046
+    },
+    "wCDM": {
+      "description": "Dark energy with free equation of state w",
+      "w_range": [
+        -2.0,
+        0.0
+      ],
+      "sum_m_nu_eV": 0.06,
+      "N_eff": 3.046
+    },
+    "LCDM_massive_nu": {
+      "description": "LCDM with free neutrino mass and N_eff",
+      "w": -1.0,
+      "sum_m_nu_eV_range": [
+        0.0,
+        0.5
+      ],
+      "N_eff_range": [
+        2.0,
+        4.0
+      ]
+    }
+  }
+}

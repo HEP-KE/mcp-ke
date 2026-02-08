@@ -68,10 +68,16 @@ def run_mcmc_cosmology(
     if isinstance(param_bounds, str):
         param_bounds = json.loads(param_bounds.replace("'", '"'))
 
-    # Convert numpy arrays if needed
-    k_obs = np.array(k_obs, dtype=float)
-    Pk_obs = np.array(Pk_obs, dtype=float)
-    Pk_obs_err = np.array(Pk_obs_err, dtype=float)
+    # Convert numpy arrays if needed (handle JSON strings and nested lists)
+    if isinstance(k_obs, str):
+        k_obs = json.loads(k_obs.replace("'", '"'))
+    if isinstance(Pk_obs, str):
+        Pk_obs = json.loads(Pk_obs.replace("'", '"'))
+    if isinstance(Pk_obs_err, str):
+        Pk_obs_err = json.loads(Pk_obs_err.replace("'", '"'))
+    k_obs = np.asarray(k_obs, dtype=float).flatten()
+    Pk_obs = np.asarray(Pk_obs, dtype=float).flatten()
+    Pk_obs_err = np.asarray(Pk_obs_err, dtype=float).flatten()
 
     # Get base parameters
     if base_params is None:
@@ -470,8 +476,10 @@ def compute_best_fit_power_spectrum(
     for name, value in zip(param_names, best_fit):
         class_params[name] = value
 
-    # Convert k_values
-    k_values = np.array(k_values, dtype=float)
+    # Convert k_values (handle JSON strings and nested lists)
+    if isinstance(k_values, str):
+        k_values = json.loads(k_values.replace("'", '"'))
+    k_values = np.asarray(k_values, dtype=float).flatten()
 
     # Compute power spectrum
     try:
