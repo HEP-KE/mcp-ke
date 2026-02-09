@@ -1,4 +1,23 @@
 from smolagents import tool
+import numpy as np
+import json
+
+
+def _to_array(val):
+    """Convert various input formats to a flat numpy float64 array."""
+    if val is None:
+        return None
+    if isinstance(val, str):
+        val = json.loads(val.replace("'", '"'))
+    return np.asarray(val, dtype=float).flatten()
+
+
+def _parse_model_results(model_results):
+    """Parse model_results dict, converting values to numpy arrays."""
+    if isinstance(model_results, str):
+        model_results = json.loads(model_results.replace("'", '"'))
+    return {k: _to_array(v) for k, v in model_results.items()}
+
 
 @tool
 def plot_power_spectra(k_theory: object, model_results: dict, k_obs: object, Pk_obs: object, Pk_obs_err: object, save_path: str = None) -> str:
@@ -35,6 +54,7 @@ def plot_power_spectra(k_theory: object, model_results: dict, k_obs: object, Pk_
     Returns:
         str: Absolute path to saved plot PNG file
     """
+    import matplotlib.pyplot as plt
     from mcp_utils import get_output_path
 
     if save_path is not None:
@@ -47,8 +67,17 @@ def plot_power_spectra(k_theory: object, model_results: dict, k_obs: object, Pk_
         # Default filename
         final_path = get_output_path('power_spectra_comparison.png')
 
+    # Normalize all array inputs
+    k_theory = _to_array(k_theory)
+    model_results = _parse_model_results(model_results)
+    k_obs = _to_array(k_obs)
+    Pk_obs = _to_array(Pk_obs)
+    Pk_obs_err = _to_array(Pk_obs_err)
+
     from codes.viz import plot_power_spectra as plot_pk
-    return plot_pk(k_theory, model_results, k_obs, Pk_obs, Pk_obs_err, final_path)
+    fig = plot_pk(k_theory, model_results, k_obs, Pk_obs, Pk_obs_err, final_path)
+    plt.close(fig)
+    return f"Plot saved to: {final_path}"
 
 @tool
 def plot_suppression_ratios(k_values: object, suppression_ratios: dict, reference_model: str = 'ΛCDM', save_path: str = None) -> str:
@@ -83,6 +112,7 @@ def plot_suppression_ratios(k_values: object, suppression_ratios: dict, referenc
     Returns:
         str: Absolute path to saved plot PNG file
     """
+    import matplotlib.pyplot as plt
     from mcp_utils import get_output_path
 
     if save_path is not None:
@@ -95,5 +125,11 @@ def plot_suppression_ratios(k_values: object, suppression_ratios: dict, referenc
         # Default filename
         final_path = get_output_path('suppression_ratios.png')
 
+    # Normalize array inputs
+    k_values = _to_array(k_values)
+    suppression_ratios = _parse_model_results(suppression_ratios)
+
     from codes.viz import plot_suppression_ratios as plot_suppression
-    return plot_suppression(k_values, suppression_ratios, reference_model, final_path)
+    fig = plot_suppression(k_values, suppression_ratios, reference_model, final_path)
+    plt.close(fig)
+    return f"Plot saved to: {final_path}"

@@ -1,0 +1,180 @@
+{
+  "task_summary": "Literature review for eBOSS P(k) analysis with LCDM, wCDM, and LCDM+massive neutrinos models, including MCMC posterior analysis",
+  "planck_2018_base_LCDM_parameters": {
+    "arxiv_id": "1807.06209",
+    "Omega_c_h2": {
+      "value": 0.12,
+      "sigma": 0.001,
+      "confidence": "68%"
+    },
+    "Omega_b_h2": {
+      "value": 0.0224,
+      "sigma": 0.0001,
+      "confidence": "68%"
+    },
+    "n_s": {
+      "value": 0.965,
+      "sigma": 0.004,
+      "confidence": "68%"
+    },
+    "tau": {
+      "value": 0.054,
+      "sigma": 0.007,
+      "confidence": "68%"
+    },
+    "H0_km_s_Mpc": {
+      "value": 67.4,
+      "sigma": 0.5,
+      "confidence": "68%"
+    },
+    "Omega_m": {
+      "value": 0.315,
+      "sigma": 0.007,
+      "confidence": "68%"
+    },
+    "sigma8": {
+      "value": 0.811,
+      "sigma": 0.006,
+      "confidence": "68%"
+    },
+    "100_theta_star": {
+      "value": 1.0411,
+      "sigma": 0.0003,
+      "confidence": "68%"
+    },
+    "ln_10_10_As": {
+      "value": 3.044,
+      "sigma": 0.014,
+      "confidence": "68%"
+    }
+  },
+  "planck_2018_neutrino_constraints": {
+    "arxiv_id": "1807.06209",
+    "sum_m_nu_upper_limit_eV": {
+      "TT_lowE": {
+        "value": 0.54,
+        "confidence": "95%"
+      },
+      "TT_TE_EE_lowE": {
+        "value": 0.26,
+        "confidence": "95%"
+      },
+      "TT_TE_EE_lowE_lensing": {
+        "value": 0.24,
+        "confidence": "95%"
+      },
+      "TT_TE_EE_lowE_lensing_BAO": {
+        "value": 0.12,
+        "confidence": "95%"
+      }
+    },
+    "N_eff": {
+      "TT_lowE": {
+        "value": 3.0,
+        "sigma_plus": 0.57,
+        "sigma_minus": 0.53,
+        "confidence": "95%"
+      },
+      "TT_TE_EE_lowE": {
+        "value": 2.92,
+        "sigma_plus": 0.36,
+        "sigma_minus": 0.37,
+        "confidence": "95%"
+      },
+      "TT_TE_EE_lowE_lensing_BAO": {
+        "value": 2.99,
+        "sigma": 0.17,
+        "confidence": "68%"
+      }
+    },
+    "standard_model_N_eff": 3.046
+  },
+  "MCMC_prior_recommendations": {
+    "description": "Recommended Planck-informed priors for sigma8, sum_m_nu, N_eff MCMC",
+    "sigma8": {
+      "type": "Gaussian",
+      "mean": 0.811,
+      "std": 0.006,
+      "wide_prior_range": [
+        0.6,
+        1.0
+      ],
+      "note": "Planck 2018 TT,TE,EE+lowE+lensing"
+    },
+    "sum_m_nu_eV": {
+      "type": "uniform with lower bound",
+      "min": 0.0,
+      "max": 1.0,
+      "planck_upper_limit_95pct": 0.12,
+      "normal_hierarchy_minimum": 0.06,
+      "inverted_hierarchy_minimum": 0.1,
+      "note": "Use flat prior [0, 1] eV or [0.06, 1] eV for NH"
+    },
+    "N_eff": {
+      "type": "Gaussian or uniform",
+      "mean": 3.046,
+      "std": 0.17,
+      "wide_prior_range": [
+        2.0,
+        5.0
+      ],
+      "note": "Standard Model prediction is 3.046"
+    }
+  },
+  "wCDM_parameters": {
+    "arxiv_id": "1807.06209",
+    "w0": {
+      "value": -1.028,
+      "sigma": 0.031,
+      "note": "Planck+BAO+SNe, wa=0"
+    },
+    "note": "For wCDM comparison, use w = -0.9 or -1.1 to show deviation from LCDM"
+  },
+  "eBOSS_DR14_context": {
+    "arxiv_ids": [
+      "1707.00588",
+      "2210.17044",
+      "1801.03077"
+    ],
+    "effective_redshift": 1.48,
+    "quasar_sample_size": 147000,
+    "redshift_range": [
+      0.8,
+      2.2
+    ],
+    "data_file": "/data/a/cpac/nramachandra/Projects/AmSC/mcp-ke/data/DR14_pm3d_19kbins.txt",
+    "note": "DR14 quasar P(k) measurement from eBOSS"
+  },
+  "neutrino_mass_effect_on_Pk": {
+    "arxiv_ids": [
+      "1109.4416",
+      "1006.0689"
+    ],
+    "suppression_formula": "Delta P/P ~ -8 * f_nu where f_nu = Omega_nu/Omega_m",
+    "k_range_most_affected": "k > 0.01 h/Mpc (above free-streaming scale)",
+    "typical_suppression_at_k_1": "several percent for sum_m_nu ~ 0.1 eV",
+    "HALOFIT_note": "Use extended HALOFIT for nonlinear regime corrections with massive neutrinos"
+  },
+  "key_references": [
+    {
+      "arxiv_id": "1807.06209",
+      "title": "Planck 2018 results. VI. Cosmological parameters"
+    },
+    {
+      "arxiv_id": "1707.00588",
+      "title": "Constraints on sum of neutrino masses using eBOSS DR14"
+    },
+    {
+      "arxiv_id": "2210.17044",
+      "title": "Cosmological constraints from power spectrum of eBOSS quasars"
+    },
+    {
+      "arxiv_id": "1109.4416",
+      "title": "Massive Neutrinos and the Non-linear Matter Power Spectrum"
+    },
+    {
+      "arxiv_id": "1006.0689",
+      "title": "The effect of massive neutrinos on the matter power spectrum"
+    }
+  ]
+}

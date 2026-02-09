@@ -370,16 +370,21 @@ def create_corner_plot(samples, param_names, param_labels=None, param_ranges=Non
                 ranges_dict[labels[idx]] = param_ranges[p]
 
     # Create MCSamples object
-    mc_samples = MCSamples(
-        samples=samples,
-        names=param_names,
-        labels=labels,
-        settings={
-            'mult_bias_correction_order': 0.5,
-            'smooth_scale_2D': 2.0 * smooth_scale,
-            'smooth_scale_1D': 2.0 * smooth_scale
-        }
-    )
+    # Redirect stdout to stderr during GetDist calls: GetDist prints messages
+    # like "Removed no burn in" to stdout, which corrupts MCP's JSON-RPC
+    # stdio protocol.
+    import io, contextlib
+    with contextlib.redirect_stdout(io.StringIO()):
+        mc_samples = MCSamples(
+            samples=samples,
+            names=param_names,
+            labels=labels,
+            settings={
+                'mult_bias_correction_order': 0.5,
+                'smooth_scale_2D': 2.0 * smooth_scale,
+                'smooth_scale_1D': 2.0 * smooth_scale
+            }
+        )
 
     # Create corner plot
     g = plots.get_subplot_plotter(subplot_size=2.5)
@@ -391,12 +396,13 @@ def create_corner_plot(samples, param_names, param_labels=None, param_ranges=Non
     g.settings.solid_contour_palefactor = 0.6
     g.settings.num_plot_contours = 2
 
-    g.triangle_plot(
-        mc_samples,
-        param_names,
-        filled=True,
-        param_limits=ranges_dict if ranges_dict else {}
-    )
+    with contextlib.redirect_stdout(io.StringIO()):
+        g.triangle_plot(
+            mc_samples,
+            param_names,
+            filled=True,
+            param_limits=ranges_dict if ranges_dict else {}
+        )
 
     if title:
         g.fig.suptitle(title, fontsize=10, y=0.999)

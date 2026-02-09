@@ -1,0 +1,125 @@
+{
+  "task_summary": "Literature research for eBOSS P(k) analysis with LCDM, wCDM, and LCDM+massive neutrinos models, plus MCMC posterior analysis",
+  "observational_data": {
+    "file": "/data/a/cpac/nramachandra/Projects/AmSC/mcp-ke/data/DR14_pm3d_19kbins.txt",
+    "survey": "eBOSS DR14 quasar sample",
+    "description": "Power spectrum P(k) measurement from SDSS-IV eBOSS Data Release 14",
+    "reference_paper": "Gil-Marin et al. 2018, arXiv:1801.02689",
+    "effective_redshift": 1.52,
+    "num_quasars": 148659,
+    "redshift_range": [
+      0.8,
+      2.2
+    ],
+    "sky_footprint_deg2": 2112.9,
+    "key_measurement": "fsigma8(z_eff=1.52) = 0.420 +/- 0.076"
+  },
+  "models_to_compare": {
+    "LCDM": {
+      "description": "Standard Lambda-CDM with 6 parameters",
+      "reference": "Planck 2018, arXiv:1807.06209",
+      "fiducial_parameters": {
+        "Omega_c_h2": {
+          "value": 0.12,
+          "error": 0.001
+        },
+        "Omega_b_h2": {
+          "value": 0.0224,
+          "error": 0.0001
+        },
+        "h": {
+          "value": 0.674,
+          "error": 0.005
+        },
+        "n_s": {
+          "value": 0.965,
+          "error": 0.004
+        },
+        "sigma8": {
+          "value": 0.811,
+          "error": 0.006
+        },
+        "tau": {
+          "value": 0.054,
+          "error": 0.007
+        },
+        "Omega_m": {
+          "value": 0.315,
+          "error": 0.007
+        }
+      }
+    },
+    "wCDM": {
+      "description": "Dark energy with constant equation of state w",
+      "key_parameter": "w (equation of state, w=-1 recovers LCDM)",
+      "suggested_fiducial": {
+        "w": -0.9,
+        "other_params": "same as LCDM"
+      }
+    },
+    "LCDM_massive_neutrinos": {
+      "description": "LCDM extended with massive neutrinos",
+      "reference": "Planck 2018 + BAO, arXiv:1807.06209",
+      "key_parameters_for_MCMC": {
+        "sigma8": {
+          "planck_value": 0.811,
+          "planck_error": 0.006,
+          "prior_type": "Gaussian",
+          "prior_mean": 0.811,
+          "prior_sigma": 0.006,
+          "search_range": [
+            0.6,
+            1.0
+          ]
+        },
+        "sum_mnu_eV": {
+          "planck_upper_limit_95pct": 0.12,
+          "prior_type": "uniform",
+          "prior_range": [
+            0.0,
+            0.6
+          ],
+          "note": "Planck+BAO gives sum_mnu < 0.12 eV at 95% CL"
+        },
+        "N_eff": {
+          "planck_value": 2.99,
+          "planck_error": 0.17,
+          "standard_value": 3.046,
+          "prior_type": "Gaussian",
+          "prior_mean": 3.046,
+          "prior_sigma": 0.17,
+          "search_range": [
+            2.0,
+            4.0
+          ]
+        }
+      }
+    }
+  },
+  "mcmc_recommendations": {
+    "small_run_settings": {
+      "n_walkers": 32,
+      "n_steps": 500,
+      "burn_in": 100,
+      "n_params": 3,
+      "params": [
+        "sigma8",
+        "sum_mnu",
+        "N_eff"
+      ]
+    },
+    "planck_priors": {
+      "sigma8": "Gaussian(0.811, 0.006)",
+      "sum_mnu": "Uniform(0.0, 0.6) or Uniform(0.06, 0.6)",
+      "N_eff": "Gaussian(3.046, 0.17)"
+    }
+  },
+  "key_references": {
+    "planck_2018_params": "1807.06209",
+    "eboss_dr14_pk_gilmarin": "1801.02689",
+    "eboss_dr14_pk_zhao": "1801.03043",
+    "eboss_quasar_eft": "2210.17044",
+    "massive_neutrinos_pk": "1109.4416",
+    "neutrinos_pk_effect": "1006.0689"
+  }
+}
