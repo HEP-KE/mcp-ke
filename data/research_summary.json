@@ -1,0 +1,207 @@
+{
+  "task_overview": "Compare eBOSS DR14 P(k) observations with LCDM, wCDM, and LCDM+massive neutrinos models, then run MCMC posterior analysis on neutrino model parameters.",
+  "observational_data": {
+    "file_path": "/data/a/cpac/nramachandra/Projects/AmSC/mcp-ke/data/DR14_pm3d_19kbins.txt",
+    "survey": "eBOSS DR14",
+    "description": "Matter power spectrum P(k) measurements from SDSS-IV eBOSS Data Release 14",
+    "reference_arxiv": "1801.03077",
+    "expected_columns": "Likely k [h/Mpc], P(k) [Mpc/h]^3, and errors. Inspect file header to confirm.",
+    "redshift_range": "Effective redshift around z~1.5 for quasar sample"
+  },
+  "planck_2018_base_LCDM_parameters": {
+    "reference_arxiv": "1807.06209",
+    "H0": {
+      "value": 67.4,
+      "error": 0.5,
+      "unit": "km/s/Mpc"
+    },
+    "Omega_m": {
+      "value": 0.315,
+      "error": 0.007
+    },
+    "Omega_b_h2": {
+      "value": 0.0224,
+      "error": 0.0001
+    },
+    "Omega_c_h2": {
+      "value": 0.12,
+      "error": 0.001
+    },
+    "sigma8": {
+      "value": 0.811,
+      "error": 0.006
+    },
+    "n_s": {
+      "value": 0.965,
+      "error": 0.004
+    },
+    "tau": {
+      "value": 0.054,
+      "error": 0.007
+    },
+    "N_eff": {
+      "value": 2.99,
+      "error": 0.17,
+      "SM_prediction": 3.046
+    },
+    "sum_m_nu_upper_95": {
+      "value": 0.12,
+      "unit": "eV"
+    },
+    "w0": {
+      "value": -1.03,
+      "error": 0.03,
+      "note": "Planck+BAO+SNe combined"
+    }
+  },
+  "model_specifications": {
+    "LCDM": {
+      "description": "Standard Lambda-CDM with massless neutrinos (or minimal 0.06 eV)",
+      "parameters_to_use": {
+        "h": 0.674,
+        "Omega_b": 0.0493,
+        "Omega_cdm": 0.264,
+        "Omega_m": 0.315,
+        "sigma8": 0.811,
+        "n_s": 0.965,
+        "m_nu": 0.06,
+        "N_eff": 3.046
+      },
+      "notes": "Use as fiducial/reference model. Omega_b = 0.0224/0.674^2 \u2248 0.0493"
+    },
+    "wCDM": {
+      "description": "Dark energy with constant equation of state w \u2260 -1",
+      "parameters_to_use": {
+        "h": 0.674,
+        "Omega_b": 0.0493,
+        "Omega_cdm": 0.264,
+        "Omega_m": 0.315,
+        "sigma8": 0.811,
+        "n_s": 0.965,
+        "w0": -0.9,
+        "m_nu": 0.06,
+        "N_eff": 3.046
+      },
+      "notes": "w0=-0.9 chosen to show visible deviation from LCDM. Planck+BAO+SNe finds w0=-1.03\u00b10.03."
+    },
+    "LCDM_massive_neutrinos": {
+      "description": "LCDM with massive neutrinos as free parameters",
+      "parameters_to_use": {
+        "h": 0.674,
+        "Omega_b": 0.0493,
+        "Omega_cdm": 0.264,
+        "Omega_m": 0.315,
+        "sigma8": 0.811,
+        "n_s": 0.965,
+        "m_nu": 0.15,
+        "N_eff": 3.046
+      },
+      "notes": "m_nu=0.15 eV chosen to show visible suppression vs LCDM. Planck upper limit is 0.12 eV at 95%."
+    }
+  },
+  "MCMC_configuration": {
+    "model": "LCDM + massive neutrinos",
+    "free_parameters": {
+      "sigma8": {
+        "prior_center": 0.811,
+        "prior_width": 0.006,
+        "prior_type": "Gaussian"
+      },
+      "Omega_m": {
+        "prior_center": 0.315,
+        "prior_width": 0.007,
+        "prior_type": "Gaussian"
+      },
+      "sum_m_nu": {
+        "prior_center": 0.06,
+        "prior_width": 0.06,
+        "prior_type": "Gaussian",
+        "unit": "eV",
+        "bounds": [
+          0.0,
+          0.5
+        ]
+      },
+      "N_eff": {
+        "prior_center": 3.046,
+        "prior_width": 0.17,
+        "prior_type": "Gaussian",
+        "bounds": [
+          1.0,
+          5.0
+        ]
+      }
+    },
+    "fixed_parameters": {
+      "h": 0.674,
+      "Omega_b_h2": 0.0224,
+      "n_s": 0.965,
+      "tau": 0.054
+    },
+    "likelihood": "Gaussian chi-squared using observed P(k) with measurement errors",
+    "sampler": "emcee or similar MCMC",
+    "recommended_settings": {
+      "n_walkers": 32,
+      "n_steps": 5000,
+      "burn_in": 1000
+    },
+    "boltzmann_code": "CLASS or CAMB for computing theoretical P(k)"
+  },
+  "physics_notes": {
+    "neutrino_suppression": {
+      "description": "Massive neutrinos suppress the matter power spectrum on small scales (high k) due to free-streaming",
+      "approximate_formula": "Delta P/P \u2248 -8 * f_nu, where f_nu = Omega_nu/Omega_m",
+      "scale_dependence": "Suppression becomes significant for k > k_fs where k_fs ~ 0.018 * Omega_m^(1/2) * (m_nu/1eV)^(1/2) h/Mpc",
+      "reference_arxiv": [
+        "1109.4416",
+        "1006.0689"
+      ]
+    },
+    "wCDM_effect": {
+      "description": "w > -1 leads to less acceleration, different growth history, modifying P(k) amplitude and shape",
+      "effect": "Changes the growth factor D(a) and hence overall normalization and mild shape change in P(k)"
+    }
+  },
+  "plotting_requirements": {
+    "plot1": {
+      "title": "P(k) Comparison: eBOSS DR14 vs Models",
+      "x_axis": "k [h/Mpc]",
+      "y_axis": "P(k) [(Mpc/h)^3]",
+      "curves": [
+        "eBOSS data with error bars",
+        "LCDM",
+        "wCDM (w=-0.9)",
+        "LCDM + massive neutrinos (\u03a3m\u03bd=0.15 eV)"
+      ],
+      "scale": "log-log"
+    },
+    "plot2": {
+      "title": "P(k) Ratio with LCDM",
+      "x_axis": "k [h/Mpc]",
+      "y_axis": "P(k)/P_LCDM(k)",
+      "curves": [
+        "wCDM / LCDM",
+        "LCDM+mnu / LCDM",
+        "eBOSS / LCDM"
+      ],
+      "note": "Horizontal line at 1.0 for reference"
+    },
+    "plot3": {
+      "title": "Posterior Distribution (GetDist triangle plot)",
+      "parameters": [
+        "sigma8",
+        "Omega_m",
+        "sum_m_nu",
+        "N_eff"
+      ],
+      "type": "Corner/triangle plot with 1D and 2D marginals"
+    }
+  },
+  "key_references": {
+    "planck_2018_params": "1807.06209",
+    "eBOSS_DR14_BAO": "1801.03077",
+    "neutrino_Pk_Bird2012": "1109.4416",
+    "neutrino_Pk_Agarwal2011": "1006.0689",
+    "CLASS_code": "1104.2934"
+  }
+}
