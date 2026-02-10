@@ -8,14 +8,15 @@ and analyzing posterior distributions for cosmological models.
 from smolagents import tool
 from typing import List, Dict, Optional
 import json
+from mcp_utils.session import get_session
 
 
 @tool
 def run_mcmc_cosmology(
     param_bounds: object,
-    k_obs: object,
-    Pk_obs: object,
-    Pk_obs_err: object,
+    k_obs: str,
+    Pk_obs: str,
+    Pk_obs_err: str,
     base_params: dict = None,
     nwalkers: int = 32,
     nburn: int = 100,
@@ -58,9 +59,12 @@ def run_mcmc_cosmology(
                 [{'name': 'sigma8', 'min': 0.7, 'max': 0.9},
                  {'name': 'Omega_m', 'min': 0.2, 'max': 0.4}]
 
-        k_obs: Numpy array of observed k values in h/Mpc
-        Pk_obs: Numpy array of observed P(k) values in (Mpc/h)^3
-        Pk_obs_err: Numpy array of P(k) uncertainties in (Mpc/h)^3
+        k_obs: dataset_name from load_observational_data(), referencing numpy array
+            of observed k values in h/Mpc
+        Pk_obs: dataset_name from load_observational_data(), referencing numpy array
+            of observed P(k) values in (Mpc/h)^3
+        Pk_obs_err: dataset_name from load_observational_data(), referencing numpy array
+            of P(k) uncertainties in (Mpc/h)^3
         base_params: Base CLASS parameters dict. If None, uses Planck 2018 LCDM values.
             Parameters in param_bounds will override these during sampling.
         nwalkers: Number of MCMC walkers (default: 32, recommended: 2-4x number of params)
@@ -89,16 +93,11 @@ def run_mcmc_cosmology(
     if isinstance(param_bounds, str):
         param_bounds = json.loads(param_bounds.replace("'", '"'))
 
-    # Convert numpy arrays if needed (handle JSON strings and nested lists)
-    if isinstance(k_obs, str):
-        k_obs = json.loads(k_obs.replace("'", '"'))
-    if isinstance(Pk_obs, str):
-        Pk_obs = json.loads(Pk_obs.replace("'", '"'))
-    if isinstance(Pk_obs_err, str):
-        Pk_obs_err = json.loads(Pk_obs_err.replace("'", '"'))
-    k_obs = np.asarray(k_obs, dtype=float).flatten()
-    Pk_obs = np.asarray(Pk_obs, dtype=float).flatten()
-    Pk_obs_err = np.asarray(Pk_obs_err, dtype=float).flatten()
+    # Get observational data from session
+    session = get_session()
+    k_obs = session.get_dataset(k_obs)
+    Pk_obs = session.get_dataset(Pk_obs)
+    Pk_obs_err = session.get_dataset(Pk_obs_err)
 
     # Get base parameters
     if base_params is None:
@@ -461,10 +460,10 @@ def analyze_mcmc_samples(
 @tool
 def compute_best_fit_power_spectrum(
     samples_csv: str,
-    k_values: object,
+    k_values: str,
     base_params: dict = None,
     use_median: bool = True
-) -> object:
+) -> str:
     """
     Compute power spectrum using best-fit parameters from MCMC samples.
 
@@ -473,12 +472,14 @@ def compute_best_fit_power_spectrum(
 
     Args:
         samples_csv: Path to CSV file with MCMC samples
-        k_values: Numpy array of k values in h/Mpc for P(k) computation
+        k_values: dataset_name from create_theory_k_grid(), referencing numpy array
+            of k values in h/Mpc for P(k) computation
         base_params: Base CLASS parameters dict. If None, uses Planck 2018 LCDM values.
         use_median: If True, use median; if False, use mean (default: True)
 
     Returns:
-        Numpy array of P(k) values in (Mpc/h)^3, or error string if computation fails
+        JSON with dataset_name referencing numpy array of P(k) values in (Mpc/h)^3.
+        Use dataset_name in subsequent tool calls.
     """
     from codes.mcmc import load_mcmc_samples
     from codes.analysis import compute_power_spectrum
@@ -511,14 +512,14 @@ def compute_best_fit_power_spectrum(
     param_dict = {name: value for name, value in zip(param_names, best_fit)}
     class_params = map_params_to_class(param_dict, base_params)
 
-    # Convert k_values (handle JSON strings and nested lists)
-    if isinstance(k_values, str):
-        k_values = json.loads(k_values.replace("'", '"'))
-    k_values = np.asarray(k_values, dtype=float).flatten()
+    # Get k_values from session
+    session = get_session()
+    k_data = session.get_dataset(k_values)
 
     # Compute power spectrum
     try:
-        Pk = compute_power_spectrum(class_params, k_values)
-        return Pk
+        Pk = compute_power_spectrum(class_params, k_data)
+        dataset_name, info = session.store_derived(Pk, k_values, "best_fit_power_spectrum")
+        return json.dumps({"dataset_name": dataset_name, "row_count": info.row_count}, indent=2)
     except Exception as e:
         return f"Error computing power spectrum: {str(e)}"
