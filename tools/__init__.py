@@ -13,6 +13,10 @@ from .mcmc_tools import (
     analyze_mcmc_samples,
     compute_best_fit_power_spectrum,
 )
+from .session_tools import (
+    list_datasets, describe_dataset, delete_dataset, clear_session,
+    preview_dataset, compute_statistics, compute_histogram, compute_percentiles
+)
 
 __all__ = [
     "load_observational_data",
@@ -35,4 +39,12 @@ __all__ = [
     "create_mcmc_trace_plot",
     "analyze_mcmc_samples",
     "compute_best_fit_power_spectrum",
+    "list_datasets",
+    "describe_dataset",
+    "delete_dataset",
+    "clear_session",
+    "preview_dataset",
+    "compute_statistics",
+    "compute_histogram",
+    "compute_percentiles",
 ]
