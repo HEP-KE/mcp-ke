@@ -17,11 +17,6 @@ def load_observational_data(filepath):
     Returns:
         Tuple of (k, P(k), error) arrays or (None, None, None) if loading fails
     """
-    try:
-        # Get the full input path (handles input/ directory lookup)
-        full_path = get_input_path(filepath)
-
-        k, Pk, σPk = np.loadtxt(full_path).T
-        return k, Pk, σPk
-    except Exception:
-        return None, None, None
+    full_path = get_input_path(filepath)
+    k, Pk, σPk = np.loadtxt(full_path).T
+    return k, Pk, σPk
