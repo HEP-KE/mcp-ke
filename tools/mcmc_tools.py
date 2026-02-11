@@ -47,9 +47,10 @@ def run_mcmc_cosmology(
 
             Supported derived aliases (automatically mapped to CLASS inputs):
             - 'Omega_m': Total matter density. Mapped via Omega_cdm = Omega_m - Omega_b.
-            - 'sum_mnu': Total neutrino mass in eV. Sets m_ncdm, T_ncdm, N_ur, N_ncdm.
-            - 'N_ncdm_val' / 'N_eff': Effective number of relativistic species.
-              Sets N_ur = value - N_ncdm.
+            - 'sum_mnu' or 'sum_nu_masses': Total neutrino mass in eV. Sets m_ncdm,
+              T_ncdm, N_ur, N_ncdm.
+            - 'N_ncdm_val' / 'N_eff' / 'N_species': Effective number of relativistic
+              species. Sets N_ur = value - N_ncdm.
             - 'sigma8': Amplitude of matter fluctuations. Removes A_s so CLASS
               uses its shooting method.
 
@@ -121,7 +122,8 @@ def run_mcmc_cosmology(
             return (
                 f"Error: Unknown parameter '{pb['name']}'. "
                 f"Must be a CLASS input parameter or a supported derived alias.\n"
-                f"Supported derived aliases: Omega_m, sum_mnu, N_ncdm_val, N_eff, sigma8\n"
+                f"Supported derived aliases: Omega_m, sum_mnu/sum_nu_masses, "
+                f"N_ncdm_val/N_eff/N_species, sigma8\n"
                 f"Known CLASS parameters (subset): h, Omega_b, Omega_cdm, A_s, n_s, "
                 f"N_ur, N_ncdm, m_ncdm, w0_fld, wa_fld, sigma8, ..."
             )

@@ -182,6 +182,20 @@ class TestParameterMapping:
         assert 'A_s' not in result
         assert 'ln10^{10}A_s' not in result
 
+    def test_sum_nu_masses_alias(self):
+        """sum_nu_masses is an alias for sum_mnu."""
+        result_alias = map_params_to_class({'sum_nu_masses': 0.15}, self.base_params)
+        result_canonical = map_params_to_class({'sum_mnu': 0.15}, self.base_params)
+        assert result_alias['m_ncdm'] == result_canonical['m_ncdm']
+        assert result_alias['N_ncdm'] == result_canonical['N_ncdm']
+        assert result_alias['N_ur'] == result_canonical['N_ur']
+
+    def test_n_species_alias(self):
+        """N_species is an alias for N_eff/N_ncdm_val."""
+        result_alias = map_params_to_class({'N_species': 3.5}, self.base_params)
+        result_canonical = map_params_to_class({'N_eff': 3.5}, self.base_params)
+        assert abs(result_alias['N_ur'] - result_canonical['N_ur']) < 1e-10
+
     def test_unknown_param_raises(self):
         """Unknown param name raises ValueError."""
         param_dict = {'nonexistent_param': 1.0}

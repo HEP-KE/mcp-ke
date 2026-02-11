@@ -98,14 +98,14 @@ def compute_suppression_ratios(model_results, k_values, reference_model='ΛCDM')
     """
     if reference_model not in model_results:
         return {}
-    
-    P_ref = model_results[reference_model]
+
+    P_ref = np.asarray(model_results[reference_model], dtype=float)
     suppression = {}
-    
+
     for model_name, Pk in model_results.items():
         if model_name != reference_model:
-            suppression[model_name] = Pk / P_ref
-    
+            suppression[model_name] = np.asarray(Pk, dtype=float) / P_ref
+
     return suppression
 
 
