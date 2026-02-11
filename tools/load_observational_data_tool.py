@@ -3,6 +3,41 @@ import numpy as np
 from smolagents import tool
 from mcp_utils.session import get_session
 
+EBOSS_FILE = "DR14_pm3d_19kbins.txt"
+
+
+@tool
+def load_eboss_data() -> str:
+    """
+    Load eBOSS DR14 Lyman-alpha forest power spectrum data.
+
+    Loads the bundled eBOSS DR14 observational P(k) data with 19 k-bins.
+    No arguments needed - data is included with the package.
+
+    Returns:
+        JSON with dataset_names for the loaded data:
+            - k_obs: wavenumber values in h/Mpc (19 bins, 0.02-0.35 h/Mpc)
+            - Pk_obs: power spectrum values in (Mpc/h)^3
+            - Pk_obs_err: error/uncertainty values in (Mpc/h)^3
+        Use these dataset_names in subsequent tool calls.
+    """
+    from codes.data import load_observational_data as load_obs_data
+    session = get_session()
+    k, Pk, err = load_obs_data(EBOSS_FILE)
+
+    k_name, k_info = session.load_dataset(k, path=EBOSS_FILE, name="eboss_k")
+    Pk_name, _ = session.load_dataset(Pk, path=EBOSS_FILE, name="eboss_Pk")
+    err_name, _ = session.load_dataset(err, path=EBOSS_FILE, name="eboss_err")
+
+    return json.dumps({
+        "k_obs": k_name,
+        "Pk_obs": Pk_name,
+        "Pk_obs_err": err_name,
+        "row_count": k_info.row_count,
+        "source": "eBOSS DR14 Lyman-alpha forest"
+    }, indent=2)
+
+
 @tool
 def create_theory_k_grid() -> str:
     """
