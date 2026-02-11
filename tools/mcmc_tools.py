@@ -33,12 +33,30 @@ def run_mcmc_cosmology(
 
     Args:
         param_bounds: List of parameter bound dictionaries, each with keys:
-            - 'name' (str): Parameter name (must match CLASS parameter names like
-              'h', 'Omega_cdm', 'Omega_b', 'A_s', 'n_s', etc.)
+            - 'name' (str): Parameter name — must be a CLASS input parameter
+              (e.g. 'h', 'Omega_cdm', 'Omega_b', 'A_s', 'n_s') OR a supported
+              derived alias (see below).
             - 'min' (float): Minimum allowed value
             - 'max' (float): Maximum allowed value
+            - 'prior_center' (float, optional): Center of Gaussian prior (only
+              used when prior_type='gaussian'). Defaults to midpoint of range.
+            - 'prior_sigma' (float, optional): Width of Gaussian prior (only
+              used when prior_type='gaussian'). Defaults to range/4.
             Example: [{'name': 'h', 'min': 0.6, 'max': 0.8},
                       {'name': 'Omega_cdm', 'min': 0.10, 'max': 0.14}]
+
+            Supported derived aliases (automatically mapped to CLASS inputs):
+            - 'Omega_m': Total matter density. Mapped via Omega_cdm = Omega_m - Omega_b.
+            - 'sum_mnu': Total neutrino mass in eV. Sets m_ncdm, T_ncdm, N_ur, N_ncdm.
+            - 'N_ncdm_val' / 'N_eff': Effective number of relativistic species.
+              Sets N_ur = value - N_ncdm.
+            - 'sigma8': Amplitude of matter fluctuations. Removes A_s so CLASS
+              uses its shooting method.
+
+            Example with derived params:
+                [{'name': 'sigma8', 'min': 0.7, 'max': 0.9},
+                 {'name': 'Omega_m', 'min': 0.2, 'max': 0.4}]
+
         k_obs: Numpy array of observed k values in h/Mpc
         Pk_obs: Numpy array of observed P(k) values in (Mpc/h)^3
         Pk_obs_err: Numpy array of P(k) uncertainties in (Mpc/h)^3
@@ -47,7 +65,9 @@ def run_mcmc_cosmology(
         nwalkers: Number of MCMC walkers (default: 32, recommended: 2-4x number of params)
         nburn: Number of burn-in steps to discard (default: 100)
         nrun: Number of production run steps (default: 500)
-        prior_type: Prior distribution type - 'uniform' or 'gaussian' (default: 'uniform')
+        prior_type: Prior distribution type - 'uniform' or 'gaussian' (default: 'uniform').
+            When 'gaussian', supports optional 'prior_center' and 'prior_sigma' keys
+            in each param_bounds dict.
         save_samples: Whether to save samples to CSV file (default: True)
         output_filename: Output CSV filename for samples (default: auto-generated)
 
@@ -92,6 +112,19 @@ def run_mcmc_cosmology(
             return f"Error: Each param_bound must have 'name', 'min', 'max' keys. Got: {pb}"
         if pb['min'] >= pb['max']:
             return f"Error: Parameter '{pb['name']}' has min >= max: {pb['min']} >= {pb['max']}"
+
+    # Validate parameter names against known CLASS params and derived aliases
+    from codes.mcmc import KNOWN_CLASS_PARAMS, DERIVED_PARAM_NAMES
+    all_valid = KNOWN_CLASS_PARAMS | DERIVED_PARAM_NAMES
+    for pb in param_bounds:
+        if pb['name'] not in all_valid:
+            return (
+                f"Error: Unknown parameter '{pb['name']}'. "
+                f"Must be a CLASS input parameter or a supported derived alias.\n"
+                f"Supported derived aliases: Omega_m, sum_mnu, N_ncdm_val, N_eff, sigma8\n"
+                f"Known CLASS parameters (subset): h, Omega_b, Omega_cdm, A_s, n_s, "
+                f"N_ur, N_ncdm, m_ncdm, w0_fld, wa_fld, sigma8, ..."
+            )
 
     param_names = [pb['name'] for pb in param_bounds]
     ndim = len(param_bounds)
@@ -471,10 +504,10 @@ def compute_best_fit_power_spectrum(
     if base_params is None:
         base_params = get_base_params()
 
-    # Build CLASS parameters
-    class_params = base_params.copy()
-    for name, value in zip(param_names, best_fit):
-        class_params[name] = value
+    # Build CLASS parameters using the same mapping as MCMC sampling
+    from codes.mcmc import map_params_to_class
+    param_dict = {name: value for name, value in zip(param_names, best_fit)}
+    class_params = map_params_to_class(param_dict, base_params)
 
     # Convert k_values (handle JSON strings and nested lists)
     if isinstance(k_values, str):

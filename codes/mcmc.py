@@ -13,6 +13,84 @@ import random
 from .analysis import compute_power_spectrum
 
 
+# Known CLASS input parameters (covers all models in cosmology_models.py)
+KNOWN_CLASS_PARAMS = {
+    'h', 'H0', 'omega_b', 'Omega_b', 'omega_cdm', 'Omega_cdm',
+    'A_s', 'ln10^{10}A_s', 'sigma8', 'n_s', 'alpha_s', 'tau_reio',
+    'N_ur', 'N_ncdm', 'm_ncdm', 'T_ncdm', 'Omega_ncdm',
+    'Omega_k', 'Omega_Lambda', 'Omega_fld', 'w0_fld', 'wa_fld',
+    'f_idm', 'N_idr', 'a_idm_dr', 'nindex_idm_dr', 'idr_nature',
+    'alpha_idm_dr', 'output', 'P_k_max_h/Mpc', 'z_pk',
+    '_w0_approx',   # internal key used by wCDM model
+}
+
+# Derived parameters that can be mapped to CLASS parameters
+DERIVED_PARAM_NAMES = {'Omega_m', 'sum_mnu', 'N_ncdm_val', 'N_eff'}
+
+
+def map_params_to_class(param_dict, base_params):
+    """
+    Map sampled parameter names to valid CLASS input parameters.
+
+    Handles direct CLASS parameters (pass-through) and derived aliases
+    (Omega_m, sum_mnu, N_ncdm_val/N_eff, sigma8) by converting them
+    to the corresponding CLASS inputs.
+
+    Args:
+        param_dict: Dict of {param_name: value} from the sampler
+        base_params: Base CLASS parameters dict (used to look up h, N_ncdm, etc.)
+
+    Returns:
+        dict: Updated copy of base_params with mapped parameters applied
+
+    Raises:
+        ValueError: If a parameter name is neither a known CLASS param nor
+                    a supported derived alias
+    """
+    class_params = base_params.copy()
+
+    for name, value in param_dict.items():
+        if name in KNOWN_CLASS_PARAMS:
+            # Direct CLASS parameter — pass through
+            class_params[name] = value
+            # sigma8: remove A_s so CLASS uses its shooting method
+            if name == 'sigma8':
+                class_params.pop('A_s', None)
+                class_params.pop('ln10^{10}A_s', None)
+
+        elif name == 'Omega_m':
+            # Derive Omega_cdm from Omega_m: Omega_cdm = Omega_m - Omega_b
+            h = class_params.get('h', base_params.get('h', 0.67556))
+            Omega_b = class_params.get('Omega_b', base_params.get('Omega_b', 0.022032))
+            class_params['Omega_cdm'] = value - Omega_b
+
+        elif name == 'sum_mnu':
+            # Total neutrino mass in eV → set m_ncdm, T_ncdm, N_ur, N_ncdm
+            N_ncdm = int(class_params.get('N_ncdm', base_params.get('N_ncdm', 1)))
+            m_per_species = value / N_ncdm
+            class_params['N_ncdm'] = N_ncdm
+            class_params['m_ncdm'] = ','.join([str(m_per_species)] * N_ncdm)
+            T_val = '0.71611'
+            class_params['T_ncdm'] = ','.join([T_val] * N_ncdm) if N_ncdm > 1 else float(T_val)
+            class_params['N_ur'] = 3.044 - N_ncdm
+
+        elif name in ('N_ncdm_val', 'N_eff'):
+            # Continuous effective number of relativistic species
+            N_ncdm = int(class_params.get('N_ncdm', base_params.get('N_ncdm', 0)))
+            class_params['N_ur'] = value - N_ncdm
+
+        else:
+            valid = sorted(KNOWN_CLASS_PARAMS | DERIVED_PARAM_NAMES)
+            raise ValueError(
+                f"Unknown parameter '{name}'. Must be a CLASS input parameter "
+                f"or a supported derived alias.\n"
+                f"Supported derived aliases: Omega_m, sum_mnu, N_ncdm_val, N_eff, sigma8\n"
+                f"Known CLASS parameters: {valid}"
+            )
+
+    return class_params
+
+
 def ln_prior_uniform(theta, param_bounds):
     """
     Compute log prior probability with uniform priors within bounds.
@@ -49,9 +127,9 @@ def ln_prior_gaussian(theta, param_bounds):
         if not (min_val < val < max_val):
             return -np.inf
 
-        # Gaussian prior centered in the range
-        mu = 0.5 * (max_val + min_val)
-        sigma = (max_val - min_val) / 4.0  # 2-sigma covers the range
+        # Gaussian prior: honor user-supplied center/sigma, else default
+        mu = bounds.get('prior_center', 0.5 * (max_val + min_val))
+        sigma = bounds.get('prior_sigma', (max_val - min_val) / 4.0)
         log_prob += -0.5 * ((val - mu) / sigma) ** 2
 
     return log_prob
@@ -84,8 +162,7 @@ def log_likelihood_power_spectrum(theta, param_bounds, base_params, k_obs, Pk_ob
     if model_func is not None:
         class_params = model_func(base_params.copy(), param_dict)
     else:
-        class_params = base_params.copy()
-        class_params.update(param_dict)
+        class_params = map_params_to_class(param_dict, base_params)
 
     # Compute theoretical P(k)
     try:

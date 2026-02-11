@@ -18,6 +18,9 @@ from codes.mcmc import (
     save_mcmc_samples,
     load_mcmc_samples,
     format_mcmc_summary,
+    map_params_to_class,
+    KNOWN_CLASS_PARAMS,
+    DERIVED_PARAM_NAMES,
 )
 
 
@@ -72,6 +75,127 @@ class TestPriorFunctions:
 
         lp = ln_prior_gaussian(theta, param_bounds)
         assert lp == -np.inf, "Gaussian prior should return -inf outside bounds"
+
+    def test_gaussian_prior_with_custom_center(self):
+        """Test Gaussian prior uses prior_center/prior_sigma when provided."""
+        param_bounds = [
+            {'name': 'h', 'min': 0.5, 'max': 0.9,
+             'prior_center': 0.674, 'prior_sigma': 0.005},
+        ]
+        # At the custom center the prior should peak
+        lp_center = ln_prior_gaussian([0.674], param_bounds)
+        lp_off = ln_prior_gaussian([0.7], param_bounds)  # midpoint = 0.7, but not the custom center
+
+        assert np.isfinite(lp_center)
+        assert lp_center > lp_off, (
+            "Gaussian prior should peak at prior_center (0.674), not midpoint (0.7)"
+        )
+        # The peak should be 0 (log of max Gaussian)
+        assert abs(lp_center) < 1e-12, "Log prior at center should be ~0"
+
+    def test_gaussian_prior_defaults_without_center(self):
+        """Test Gaussian prior defaults to midpoint when prior_center is absent."""
+        param_bounds = [
+            {'name': 'h', 'min': 0.6, 'max': 0.8},
+        ]
+        midpoint = 0.7
+        lp_mid = ln_prior_gaussian([midpoint], param_bounds)
+        lp_off = ln_prior_gaussian([0.65], param_bounds)
+
+        assert lp_mid > lp_off, "Without prior_center, prior should peak at midpoint"
+        assert abs(lp_mid) < 1e-12, "Log prior at midpoint should be ~0"
+
+
+class TestParameterMapping:
+    """Test map_params_to_class function."""
+
+    def setup_method(self):
+        """Set up base params for tests."""
+        self.base_params = {
+            'output': 'mPk',
+            'P_k_max_h/Mpc': 20.0,
+            'z_pk': 0.0,
+            'h': 0.67556,
+            'Omega_b': 0.022032,
+            'Omega_cdm': 0.12038,
+            'A_s': 2.215e-9,
+            'n_s': 0.9619,
+        }
+
+    def test_direct_class_params(self):
+        """Valid CLASS names pass through unchanged."""
+        param_dict = {'h': 0.70, 'Omega_cdm': 0.13}
+        result = map_params_to_class(param_dict, self.base_params)
+        assert result['h'] == 0.70
+        assert result['Omega_cdm'] == 0.13
+        # Other base params should still be present
+        assert result['n_s'] == 0.9619
+
+    def test_omega_m_mapping(self):
+        """Omega_m maps to correct Omega_cdm."""
+        Omega_m = 0.3
+        param_dict = {'Omega_m': Omega_m}
+        result = map_params_to_class(param_dict, self.base_params)
+        expected_Omega_cdm = Omega_m - self.base_params['Omega_b']
+        assert abs(result['Omega_cdm'] - expected_Omega_cdm) < 1e-10
+
+    def test_sum_mnu_mapping(self):
+        """sum_mnu maps to m_ncdm, T_ncdm, N_ur, N_ncdm."""
+        param_dict = {'sum_mnu': 0.15}
+        result = map_params_to_class(param_dict, self.base_params)
+        assert result['N_ncdm'] == 1
+        assert result['m_ncdm'] == '0.15'  # 0.15/1 species
+        assert result['N_ur'] == 3.044 - 1
+        assert 'T_ncdm' in result
+
+    def test_sum_mnu_mapping_multiple_species(self):
+        """sum_mnu with N_ncdm=3 splits mass among species."""
+        base = self.base_params.copy()
+        base['N_ncdm'] = 3
+        param_dict = {'sum_mnu': 0.12}
+        result = map_params_to_class(param_dict, base)
+        assert result['N_ncdm'] == 3
+        # mass per species = 0.12/3 = 0.04
+        assert result['m_ncdm'] == '0.04,0.04,0.04'
+        assert result['N_ur'] == 3.044 - 3
+
+    def test_n_eff_mapping(self):
+        """N_ncdm_val/N_eff maps to adjusted N_ur."""
+        param_dict = {'N_eff': 3.5}
+        result = map_params_to_class(param_dict, self.base_params)
+        # N_ncdm defaults to 0 (not in base_params), so N_ur = 3.5 - 0
+        assert abs(result['N_ur'] - 3.5) < 1e-10
+
+    def test_n_eff_mapping_with_ncdm(self):
+        """N_ncdm_val with existing N_ncdm adjusts N_ur correctly."""
+        base = self.base_params.copy()
+        base['N_ncdm'] = 1
+        param_dict = {'N_ncdm_val': 3.044}
+        result = map_params_to_class(param_dict, base)
+        assert abs(result['N_ur'] - (3.044 - 1)) < 1e-10
+
+    def test_sigma8_mapping(self):
+        """sigma8 removes A_s and sets sigma8 key."""
+        param_dict = {'sigma8': 0.811}
+        result = map_params_to_class(param_dict, self.base_params)
+        assert result['sigma8'] == 0.811
+        assert 'A_s' not in result
+        assert 'ln10^{10}A_s' not in result
+
+    def test_unknown_param_raises(self):
+        """Unknown param name raises ValueError."""
+        param_dict = {'nonexistent_param': 1.0}
+        with pytest.raises(ValueError, match="Unknown parameter 'nonexistent_param'"):
+            map_params_to_class(param_dict, self.base_params)
+
+    def test_mixed_class_and_derived(self):
+        """Mix of direct CLASS + derived params works correctly."""
+        param_dict = {'h': 0.70, 'Omega_m': 0.31, 'sigma8': 0.82}
+        result = map_params_to_class(param_dict, self.base_params)
+        assert result['h'] == 0.70
+        assert abs(result['Omega_cdm'] - (0.31 - self.base_params['Omega_b'])) < 1e-10
+        assert result['sigma8'] == 0.82
+        assert 'A_s' not in result
 
 
 class TestWalkerInitialization:
