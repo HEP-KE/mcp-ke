@@ -36,7 +36,11 @@ def compute_power_spectrum(params: dict, k_values: str) -> str:
     k_data = session.get_dataset(k_values)
     result = compute_pk(params, k_data)
     dataset_name, info = session.store_derived(result, k_values, "power_spectrum")
-    return json.dumps({"dataset_name": dataset_name, "row_count": info.row_count}, indent=2)
+    return json.dumps({
+        "dataset_name": dataset_name,
+        "row_count": info.row_count,
+        "note": "Stored in session. Use dataset_name in other tools directly."
+    }, indent=2)
 
 @tool
 def compute_all_models(k_values: str, models: dict = None) -> str:
@@ -69,7 +73,11 @@ def compute_all_models(k_values: str, models: dict = None) -> str:
     k_data = session.get_dataset(k_values)
     result = compute_all(k_data, models)
     dataset_name, info = session.store_derived(result, k_values, "all_models")
-    return json.dumps({"dataset_name": dataset_name, "models": list(result.keys())}, indent=2)
+    return json.dumps({
+        "dataset_name": dataset_name,
+        "models": list(result.keys()),
+        "note": "Stored in session. Use dataset_name in other tools directly."
+    }, indent=2)
 
 @tool
 def compute_suppression_ratios(model_results: str, k_values: str, reference_model: str = 'ΛCDM') -> str:
@@ -103,4 +111,8 @@ def compute_suppression_ratios(model_results: str, k_values: str, reference_mode
     k_data = session.get_dataset(k_values)
     result = compute_suppression(model_data, k_data, reference_model)
     dataset_name, info = session.store_derived(result, model_results, "suppression_ratios")
-    return json.dumps({"dataset_name": dataset_name, "models": list(result.keys())}, indent=2)
+    return json.dumps({
+        "dataset_name": dataset_name,
+        "models": list(result.keys()),
+        "note": "Stored in session. Use dataset_name in other tools directly."
+    }, indent=2)

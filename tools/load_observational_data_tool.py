@@ -34,7 +34,8 @@ def load_eboss_data() -> str:
         "Pk_obs": Pk_name,
         "Pk_obs_err": err_name,
         "row_count": k_info.row_count,
-        "source": "eBOSS DR14 Lyman-alpha forest"
+        "source": "eBOSS DR14 Lyman-alpha forest",
+        "note": "Data loaded into session. Use dataset names directly in other tools - no need to save_array or reload."
     }, indent=2)
 
 
