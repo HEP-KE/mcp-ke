@@ -92,7 +92,10 @@ class Session:
                     break
 
     def _get_metadata(self, data: Any) -> tuple[int, list[str]]:
-        if isinstance(data, np.ndarray):
+        # Check for pandas DataFrame first (has .columns attribute)
+        if hasattr(data, 'columns') and hasattr(data, 'values'):
+            return len(data), list(data.columns)
+        elif isinstance(data, np.ndarray):
             return len(data), [f"col_{i}" for i in range(data.shape[1] if data.ndim > 1 else 1)]
         elif isinstance(data, dict):
             return len(data), list(data.keys())

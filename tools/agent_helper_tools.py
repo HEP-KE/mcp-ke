@@ -37,7 +37,7 @@ def list_agent_files() -> list:
     return abs_paths
 
 
-@tool
+# @tool  # Disabled for MCP - agents misuse by passing dataset names instead of data
 def save_array(array: object, filename: str) -> str:
     """
     Save a numpy array to the out/ directory for sharing between agents.
@@ -65,7 +65,7 @@ def save_array(array: object, filename: str) -> str:
     return filepath
 
 
-@tool
+# @tool  # Disabled for MCP - agents misuse by passing dataset names instead of data
 def load_array(filename: str) -> object:
     """
     Load a numpy array from the out/ directory.
@@ -96,7 +96,7 @@ def load_array(filename: str) -> object:
     return array
 
 
-@tool
+# @tool  # Disabled for MCP - agents misuse by passing dataset names instead of data
 def save_dict(data: dict, filename: str) -> str:
     """
     Save a dictionary to the out/ directory (arrays saved as separate .npy files).
@@ -138,7 +138,7 @@ def save_dict(data: dict, filename: str) -> str:
     return metadata_path
 
 
-@tool
+# @tool  # Disabled for MCP - agents misuse by passing dataset names instead of data
 def load_dict(filename: str) -> dict:
     """
     Load a dictionary from the out/ directory (reconstructs arrays from .npy files).

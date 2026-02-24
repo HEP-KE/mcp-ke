@@ -63,6 +63,27 @@ def get_input_path(filename):
     )
 
 
+def get_input_dir():
+    """Get the input directory path, checking multiple locations."""
+    # First, try input/ directory in cwd
+    input_dir = os.path.join(os.getcwd(), 'input')
+    if os.path.isdir(input_dir):
+        return input_dir
+
+    # Fallback: check package's data/ directory
+    pkg_data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+    if os.path.isdir(pkg_data_dir):
+        return pkg_data_dir
+
+    # Fallback: check installed data-files location
+    import sys
+    installed_data_dir = os.path.join(sys.prefix, 'mcp_ke_data')
+    if os.path.isdir(installed_data_dir):
+        return installed_data_dir
+
+    return input_dir  # Return default even if doesn't exist
+
+
 def get_output_dir():
     return os.environ.get('MCP_OUTPUT_DIR') or os.path.join(os.getcwd(), 'mcp_ke_output')
 

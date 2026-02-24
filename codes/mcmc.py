@@ -25,7 +25,7 @@ KNOWN_CLASS_PARAMS = {
 }
 
 # Derived parameters that can be mapped to CLASS parameters
-DERIVED_PARAM_NAMES = {'Omega_m', 'sum_mnu', 'sum_nu_masses', 'N_ncdm_val', 'N_eff', 'N_species'}
+DERIVED_PARAM_NAMES = {'Omega_m', 'sum_mnu', 'sum_mnu_eV', 'sum_nu_masses', 'N_ncdm_val', 'N_eff', 'N_species'}
 
 
 def map_params_to_class(param_dict, base_params):
@@ -64,7 +64,7 @@ def map_params_to_class(param_dict, base_params):
             Omega_b = class_params.get('Omega_b', base_params.get('Omega_b', 0.022032))
             class_params['Omega_cdm'] = value - Omega_b
 
-        elif name in ('sum_mnu', 'sum_nu_masses'):
+        elif name in ('sum_mnu', 'sum_mnu_eV', 'sum_nu_masses'):
             # Total neutrino mass in eV → set m_ncdm, T_ncdm, N_ur, N_ncdm
             N_ncdm = int(class_params.get('N_ncdm', base_params.get('N_ncdm', 1)))
             m_per_species = value / N_ncdm
@@ -84,7 +84,7 @@ def map_params_to_class(param_dict, base_params):
             raise ValueError(
                 f"Unknown parameter '{name}'. Must be a CLASS input parameter "
                 f"or a supported derived alias.\n"
-                f"Supported derived aliases: Omega_m, sum_mnu (or sum_nu_masses), "
+                f"Supported derived aliases: Omega_m, sum_mnu (or sum_mnu_eV, sum_nu_masses), "
                 f"N_ncdm_val/N_eff (or N_species), sigma8\n"
                 f"Known CLASS parameters: {valid}"
             )

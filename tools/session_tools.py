@@ -236,20 +236,42 @@ def compute_histogram(name: str, bins: int = 50, key: str = None) -> dict:
 
 
 @tool
-def compute_percentiles(name: str, percentiles: list = None, key: str = None) -> dict:
+def compute_percentiles(name: str, percentiles: str = None, key: str = None) -> dict:
     """
     Compute percentiles for a dataset.
 
     Args:
         name: Name of the dataset
-        percentiles: List of percentiles to compute (default: [5, 16, 50, 84, 95])
+        percentiles: Comma-separated percentile values to compute, each must be
+            a number between 0 and 100. Example: "5,16,50,84,95" (default if None)
         key: For dict datasets, which key to use (required for dicts)
 
     Returns:
         Dictionary mapping percentile values to data values
     """
+    # Parse and validate percentiles string
     if percentiles is None:
-        percentiles = [5, 16, 50, 84, 95]
+        percentiles_list = [5, 16, 50, 84, 95]
+    else:
+        percentiles_list = []
+        raw_values = percentiles.split(',')
+        for i, val in enumerate(raw_values):
+            val = val.strip()
+            try:
+                p = float(val)
+            except ValueError:
+                return {
+                    "error": f"Invalid percentile at position {i+1}: '{val}' is not a number.",
+                    "hint": "Each percentile must be a number between 0 and 100. Example: '5,16,50,84,95'",
+                    "received": percentiles
+                }
+            if p < 0 or p > 100:
+                return {
+                    "error": f"Invalid percentile at position {i+1}: {p} is out of range.",
+                    "hint": "Each percentile must be between 0 and 100.",
+                    "received": percentiles
+                }
+            percentiles_list.append(p)
 
     session = get_session()
     data = session.get_dataset(name)
@@ -274,11 +296,11 @@ def compute_percentiles(name: str, percentiles: list = None, key: str = None) ->
             "error": "Percentiles not available for this type",
         }
 
-    values = np.percentile(arr, percentiles)
+    values = np.percentile(arr, percentiles_list)
 
     return {
         "name": name,
         "key": key,
-        "percentiles": {int(p): float(v) for p, v in zip(percentiles, values)},
+        "percentiles": {p: float(v) for p, v in zip(percentiles_list, values)},
         "count": len(arr),
     }
