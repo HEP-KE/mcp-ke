@@ -255,8 +255,8 @@ def generic_architecture():
 def mu2e_architecture():
     """
     Mu2e Run-1 architecture with simplified 3-color scheme:
-    - Blue: KE (MCP Client, Knowledge-Base-MCP)
-    - Green: Phase-1 Deliverables (Analysis-MCP, Mu2e Data)
+    - Blue: HEP-KE products (MCP Client, Analysis-MCP Server, Knowledge-Base-MCP Server)
+    - Green: Phase-1 Deliverables (Domain Tools, Agent Tools, Documentation, HPC/Mu2e Resources)
     - Red: Genesis Infrastructure
     """
     dot = Digraph('Mu2e_Architecture')
@@ -264,7 +264,7 @@ def mu2e_architecture():
              fontsize='20',
              fontname='Helvetica-Bold',
              labelloc='t',
-             label='MCP Tool Server Pattern: Mu2e Run-1',
+             label='KE: Agentic Framework Example',
              bgcolor='#FAFAFA',
              pad='0.1',
              nodesep='0.2',
@@ -308,7 +308,7 @@ def mu2e_architecture():
     legend_label = '''<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="4">
         <TR><TD COLSPAN="1"><B>Components</B></TD></TR>
         <TR><TD BGCOLOR="#1976D2"><FONT COLOR="white" POINT-SIZE="12">HEP-KE products</FONT></TD></TR>
-        <TR><TD BGCOLOR="#43A047"><FONT COLOR="white" POINT-SIZE="12">Phase-1 GM deliverables</FONT></TD></TR>
+        <TR><TD BGCOLOR="#43A047"><FONT COLOR="white" POINT-SIZE="12">Phase-1 deliverables</FONT></TD></TR>
         <TR><TD BGCOLOR="#EF5350"><FONT COLOR="white" POINT-SIZE="12">Genesis Infrastructure</FONT></TD></TR>
     </TABLE>>'''
 
@@ -344,25 +344,25 @@ def mu2e_architecture():
                    penwidth='0')
 
     # ===========================================
-    # PHASE-1: Analysis-MCP Server (Green)
+    # HEP-KE: Analysis-MCP Server (Blue cluster with green tools inside)
     # ===========================================
     with dot.subgraph(name='cluster_analysis') as s:
         s.attr(label='Analysis-MCP Server',
                style='rounded,filled',
-               fillcolor=P1_CLUSTER_BG,
-               color=P1_CLUSTER_BORDER,
+               fillcolor=KE_CLUSTER_BG,
+               color=KE_CLUSTER_BORDER,
                penwidth='2',
                fontsize='16',
                fontname='Helvetica-Bold')
         s.node('analysis_server', 'MCP Server\n\nAuto-discovery\nTool execution\nstdio communication',
                shape='box',
                style='rounded,filled',
-               fillcolor=P1_NODE_BG,
-               fontcolor=P1_TEXT,
+               fillcolor=KE_NODE_BG,
+               fontcolor=KE_TEXT,
                fontsize='14',
                penwidth='0')
 
-        # Domain Tools
+        # Domain Tools (Green - Phase-1)
         with s.subgraph(name='cluster_domain') as d:
             d.attr(label='Domain Tools',
                    style='rounded,filled',
@@ -371,28 +371,21 @@ def mu2e_architecture():
                    penwidth='1.5',
                    fontsize='14',
                    fontname='Helvetica-Bold')
-            d.node('conditions', 'Beam & Magnet\nConditions',
+            d.node('analysis_fw', 'Analysis\nFramework',
                    shape='box',
                    style='rounded,filled',
                    fillcolor=P1_NODE_BG_LIGHT,
                    fontcolor=P1_TEXT_DARK,
                    fontsize='13',
                    penwidth='0')
-            d.node('signal_bg', 'Signal & Background\nOptimization',
+            d.node('beam_sim', 'Beam and Detector\nSimulation',
                    shape='box',
                    style='rounded,filled',
                    fillcolor=P1_NODE_BG_LIGHT,
                    fontcolor=P1_TEXT_DARK,
                    fontsize='13',
                    penwidth='0')
-            d.node('sensitivity', 'Sensitivity\nAnalysis',
-                   shape='box',
-                   style='rounded,filled',
-                   fillcolor=P1_NODE_BG_LIGHT,
-                   fontcolor=P1_TEXT_DARK,
-                   fontsize='13',
-                   penwidth='0')
-            d.node('pileup', 'Pile-up\nMinimization',
+            d.node('data_loading', 'Data Loading\nand Bookkeeping',
                    shape='box',
                    style='rounded,filled',
                    fillcolor=P1_NODE_BG_LIGHT,
@@ -460,25 +453,18 @@ def mu2e_architecture():
                      penwidth='1.5',
                      fontsize='14',
                      fontname='Helvetica-Bold')
-            kbt.node('kb_search', 'Search & Retrieval',
-                     shape='box',
-                     style='rounded,filled',
-                     fillcolor=KE_NODE_BG_LIGHT,
-                     fontcolor=KE_TEXT_DARK,
-                     fontsize='13',
-                     penwidth='0')
-            kbt.node('kb_docs', 'Prior Run Results',
-                     shape='box',
-                     style='rounded,filled',
-                     fillcolor=KE_NODE_BG_LIGHT,
-                     fontcolor=KE_TEXT_DARK,
-                     fontsize='13',
-                     penwidth='0')
             kbt.node('kb_embed', 'Embeddings',
                      shape='box',
                      style='rounded,filled',
                      fillcolor=KE_NODE_BG_LIGHT,
                      fontcolor=KE_TEXT_DARK,
+                     fontsize='13',
+                     penwidth='0')
+            kbt.node('kb_docs', 'Documentation',
+                     shape='box',
+                     style='rounded,filled',
+                     fillcolor=P1_NODE_BG_LIGHT,
+                     fontcolor=P1_TEXT_DARK,
                      fontsize='13',
                      penwidth='0')
             kbt.node('kb_summary', 'Summarization',
@@ -490,10 +476,10 @@ def mu2e_architecture():
                      penwidth='0')
 
     # ===========================================
-    # PHASE-1: Mu2e Domain Data (Green)
+    # PHASE-1: HPC/Mu2e Resources (Green)
     # ===========================================
     with dot.subgraph(name='cluster_mu2e_data') as md:
-        md.attr(label='Mu2e Data',
+        md.attr(label='HPC/Mu2e\nResources',
                 style='dashed,rounded',
                 color=P1_CLUSTER_BORDER,
                 fillcolor=P1_CLUSTER_BG,
@@ -507,7 +493,7 @@ def mu2e_architecture():
                 fontcolor=P1_TEXT_DARK,
                 fontsize='13',
                 penwidth='0')
-        md.node('accel', 'Accelerator\nTiming Data',
+        md.node('fermi_data', 'Fermi Data\nHandling',
                 shape='ellipse',
                 style='filled',
                 fillcolor=P1_NODE_BG_LIGHT,
@@ -558,24 +544,22 @@ def mu2e_architecture():
              penwidth='3',
              arrowhead='vee')
 
-    # Analysis server to tools
-    dot.edge('analysis_server', 'conditions', color=P1_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
-    dot.edge('analysis_server', 'signal_bg', color=P1_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
-    dot.edge('analysis_server', 'sensitivity', color=P1_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
-    dot.edge('analysis_server', 'pileup', color=P1_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
+    # Analysis server to tools (green edges for Phase-1 tools)
+    dot.edge('analysis_server', 'analysis_fw', color=P1_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
+    dot.edge('analysis_server', 'beam_sim', color=P1_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
+    dot.edge('analysis_server', 'data_loading', color=P1_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
     dot.edge('analysis_server', 'viz_cat', color=P1_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
     dot.edge('analysis_server', 'agent1', color=P1_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
     dot.edge('analysis_server', 'agent_more', style='dashed', color=P1_CLUSTER_BORDER, penwidth='1.5', arrowhead='vee')
 
     # KB server to tools
-    dot.edge('kb_server', 'kb_search', color=KE_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
-    dot.edge('kb_server', 'kb_docs', color=KE_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
     dot.edge('kb_server', 'kb_embed', color=KE_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
+    dot.edge('kb_server', 'kb_docs', color=KE_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
     dot.edge('kb_server', 'kb_summary', color=KE_CLUSTER_BORDER, penwidth='2', arrowhead='vee')
 
     # Mu2e data dependencies (Phase-1 color)
-    dot.edge('conditions', 'accel', style='dashed', label='read', fontsize='11', color=P1_CLUSTER_BORDER, penwidth='1', arrowhead='open')
-    dot.edge('signal_bg', 'sims', style='dashed', label='invoke', fontsize='11', color=P1_CLUSTER_BORDER, penwidth='1', arrowhead='open')
+    dot.edge('beam_sim', 'sims', style='dashed', fontsize='11', color=P1_CLUSTER_BORDER, penwidth='1', arrowhead='open')
+    dot.edge('data_loading', 'fermi_data', style='dashed', fontsize='11', color=P1_CLUSTER_BORDER, penwidth='1', arrowhead='open')
 
     # Genesis infrastructure dependencies (Red color)
     dot.edge('agent1', 'llm_apis', style='dashed', label='require', fontsize='11', color=GEN_CLUSTER_BORDER, penwidth='1', arrowhead='open')
