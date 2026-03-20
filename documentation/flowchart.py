@@ -1,5 +1,256 @@
 from graphviz import Digraph
 
+def generic_architecture():
+    """
+    Generic physics architecture with two MCP servers:
+    - Analysis-MCP for computation tools
+    - Knowledge-Base-MCP for document retrieval
+    Connects to Genesis Infrastructure for LLM APIs.
+    """
+    dot = Digraph('Generic_Architecture')
+    dot.attr(rankdir='LR',
+             fontsize='20',
+             fontname='Helvetica-Bold',
+             labelloc='t',
+             label='MCP Tool Server Pattern: Multi-Server Architecture',
+             bgcolor='#FAFAFA',
+             pad='0.1',
+             nodesep='0.2',
+             ranksep='0.3',
+             dpi='300')
+
+    # Set default node attributes
+    dot.node_attr.update(fontname='Helvetica', fontsize='14')
+    dot.edge_attr.update(fontname='Helvetica', fontsize='12')
+
+    # MCP Client Layer
+    with dot.subgraph(name='cluster_client') as c:
+        c.attr(label='MCP Client Layer',
+               style='rounded,filled',
+               fillcolor='#E8F4FD',
+               color='#1976D2',
+               penwidth='2',
+               fontsize='16',
+               fontname='Helvetica-Bold')
+        c.node('client', 'MCP Client\n\n(Any AI system or\napplication)',
+               shape='box',
+               style='rounded,filled',
+               fillcolor='#5E92F3',
+               fontcolor='white',
+               fontsize='14',
+               penwidth='0')
+
+    # Analysis-MCP Server
+    with dot.subgraph(name='cluster_analysis') as s:
+        s.attr(label='Analysis-MCP Server',
+               style='rounded,filled',
+               fillcolor='#F1F8E9',
+               color='#689F38',
+               penwidth='2',
+               fontsize='16',
+               fontname='Helvetica-Bold')
+        s.node('analysis_server', 'MCP Server\n\nAuto-discovery\nTool execution\nstdio communication',
+               shape='box',
+               style='rounded,filled',
+               fillcolor='#81C784',
+               fontcolor='#1B5E20',
+               fontsize='14',
+               penwidth='0')
+
+        # Domain Tools
+        with s.subgraph(name='cluster_domain') as d:
+            d.attr(label='Domain Tools',
+                   style='rounded,filled',
+                   fillcolor='#FFF3E0',
+                   color='#F57C00',
+                   penwidth='1.5',
+                   fontsize='14',
+                   fontname='Helvetica-Bold')
+            d.node('data_cat', 'Data Loading',
+                   shape='box',
+                   style='rounded,filled',
+                   fillcolor='#FFB74D',
+                   fontcolor='#424242',
+                   fontsize='13',
+                   penwidth='0')
+            d.node('model_cat', 'Model Parameters',
+                   shape='box',
+                   style='rounded,filled',
+                   fillcolor='#FFB74D',
+                   fontcolor='#424242',
+                   fontsize='13',
+                   penwidth='0')
+            d.node('analysis_cat', 'Analysis & Computation',
+                   shape='box',
+                   style='rounded,filled',
+                   fillcolor='#FFB74D',
+                   fontcolor='#424242',
+                   fontsize='13',
+                   penwidth='0')
+            d.node('viz_cat', 'Visualization',
+                   shape='box',
+                   style='rounded,filled',
+                   fillcolor='#FFB74D',
+                   fontcolor='#424242',
+                   fontsize='13',
+                   penwidth='0')
+            d.node('util_cat', 'Utilities',
+                   shape='box',
+                   style='rounded,filled',
+                   fillcolor='#FFB74D',
+                   fontcolor='#424242',
+                   fontsize='13',
+                   penwidth='0')
+
+        # Agent Tools
+        with s.subgraph(name='cluster_agent') as a:
+            a.attr(label='Agent Tools',
+                   style='rounded,filled',
+                   fillcolor='#F3E5F5',
+                   color='#7B1FA2',
+                   penwidth='1.5',
+                   fontsize='14',
+                   fontname='Helvetica-Bold')
+            a.node('agent1', 'arxiv_agent',
+                   shape='box',
+                   style='rounded,filled',
+                   fillcolor='#AB47BC',
+                   fontcolor='white',
+                   fontsize='13',
+                   penwidth='0')
+            a.node('agent_more', '...other agents',
+                   shape='box',
+                   style='rounded,dashed,filled',
+                   fillcolor='#E1BEE7',
+                   fontcolor='#4A148C',
+                   fontsize='13',
+                   penwidth='1.5',
+                   color='#7B1FA2')
+
+    # Knowledge-Base-MCP Server
+    with dot.subgraph(name='cluster_kb') as kb:
+        kb.attr(label='Knowledge-Base-MCP Server',
+                style='rounded,filled',
+                fillcolor='#E8F5E9',
+                color='#4CAF50',
+                penwidth='2',
+                fontsize='16',
+                fontname='Helvetica-Bold')
+        kb.node('kb_server', 'MCP Server\n\nDocument retrieval\nSemantic search\nstdio communication',
+                shape='box',
+                style='rounded,filled',
+                fillcolor='#66BB6A',
+                fontcolor='#1B5E20',
+                fontsize='14',
+                penwidth='0')
+
+        # KB Tools
+        with kb.subgraph(name='cluster_kb_tools') as kbt:
+            kbt.attr(label='Knowledge Tools',
+                     style='rounded,filled',
+                     fillcolor='#E3F2FD',
+                     color='#1976D2',
+                     penwidth='1.5',
+                     fontsize='14',
+                     fontname='Helvetica-Bold')
+            kbt.node('kb_search', 'Search & Retrieval',
+                     shape='box',
+                     style='rounded,filled',
+                     fillcolor='#64B5F6',
+                     fontcolor='#0D47A1',
+                     fontsize='13',
+                     penwidth='0')
+            kbt.node('kb_docs', 'Document Storage',
+                     shape='box',
+                     style='rounded,filled',
+                     fillcolor='#64B5F6',
+                     fontcolor='#0D47A1',
+                     fontsize='13',
+                     penwidth='0')
+            kbt.node('kb_embed', 'Embeddings',
+                     shape='box',
+                     style='rounded,filled',
+                     fillcolor='#64B5F6',
+                     fontcolor='#0D47A1',
+                     fontsize='13',
+                     penwidth='0')
+            kbt.node('kb_summary', 'Summarization',
+                     shape='box',
+                     style='rounded,filled',
+                     fillcolor='#64B5F6',
+                     fontcolor='#0D47A1',
+                     fontsize='13',
+                     penwidth='0')
+
+    # Genesis Infrastructure
+    with dot.subgraph(name='cluster_genesis') as g:
+        g.attr(label='Genesis Infrastructure',
+               style='dashed,rounded',
+               color='#D32F2F',
+               penwidth='1.5',
+               fontsize='14',
+               fontname='Helvetica')
+        g.node('llm_apis', 'AmSC LLM APIs',
+               shape='ellipse',
+               style='filled',
+               fillcolor='#FFCDD2',
+               fontcolor='#B71C1C',
+               fontsize='13',
+               penwidth='0')
+        g.node('data_apis', 'Data APIs\n(arXiv, etc.)',
+               shape='ellipse',
+               style='filled',
+               fillcolor='#FFCDD2',
+               fontcolor='#B71C1C',
+               fontsize='13',
+               penwidth='0')
+        g.node('compute', 'Compute Libraries',
+               shape='ellipse',
+               style='filled',
+               fillcolor='#FFCDD2',
+               fontcolor='#B71C1C',
+               fontsize='13',
+               penwidth='0')
+
+    # Main connections - Client to servers
+    dot.edge('client', 'analysis_server',
+             label='MCP\nProtocol',
+             fontsize='12',
+             color='#1565C0',
+             penwidth='3',
+             arrowhead='vee')
+    dot.edge('client', 'kb_server',
+             label='MCP\nProtocol',
+             fontsize='12',
+             color='#1565C0',
+             penwidth='3',
+             arrowhead='vee')
+
+    # Analysis server to tools
+    dot.edge('analysis_server', 'data_cat', color='#558B2F', penwidth='2', arrowhead='vee')
+    dot.edge('analysis_server', 'model_cat', color='#558B2F', penwidth='2', arrowhead='vee')
+    dot.edge('analysis_server', 'analysis_cat', color='#558B2F', penwidth='2', arrowhead='vee')
+    dot.edge('analysis_server', 'viz_cat', color='#558B2F', penwidth='2', arrowhead='vee')
+    dot.edge('analysis_server', 'util_cat', color='#558B2F', penwidth='2', arrowhead='vee')
+    dot.edge('analysis_server', 'agent1', color='#6A1B9A', penwidth='2', arrowhead='vee')
+    dot.edge('analysis_server', 'agent_more', style='dashed', color='#6A1B9A', penwidth='1.5', arrowhead='vee')
+
+    # KB server to tools
+    dot.edge('kb_server', 'kb_search', color='#1565C0', penwidth='2', arrowhead='vee')
+    dot.edge('kb_server', 'kb_docs', color='#1565C0', penwidth='2', arrowhead='vee')
+    dot.edge('kb_server', 'kb_embed', color='#1565C0', penwidth='2', arrowhead='vee')
+    dot.edge('kb_server', 'kb_summary', color='#1565C0', penwidth='2', arrowhead='vee')
+
+    # External dependencies
+    dot.edge('agent1', 'llm_apis', style='dashed', label='require', fontsize='11', color='#C62828', penwidth='1', arrowhead='open')
+    dot.edge('agent1', 'data_apis', style='dashed', fontsize='11', color='#C62828', penwidth='1', arrowhead='open')
+    dot.edge('analysis_cat', 'compute', style='dashed', label='use', fontsize='11', color='#C62828', penwidth='1', arrowhead='open')
+    dot.edge('kb_embed', 'llm_apis', style='dashed', label='require', fontsize='11', color='#C62828', penwidth='1', arrowhead='open')
+    dot.edge('kb_summary', 'llm_apis', style='dashed', fontsize='11', color='#C62828', penwidth='1', arrowhead='open')
+
+    return dot
+
+
 def abstract_architecture():
     """
     High-level abstract architecture - generic and extensible view.
@@ -587,6 +838,10 @@ def power_spectrum_agent_internals():
 
 if __name__ == '__main__':
     print("Generating professional flowcharts with improved text size and spacing...")
+
+    d_generic = generic_architecture()
+    d_generic.render('generic_architecture', format='png', cleanup=True)
+    print("✓ Generated generic_architecture.png")
 
     d0 = abstract_architecture()
     d0.render('abstract_architecture', format='png', cleanup=True)
