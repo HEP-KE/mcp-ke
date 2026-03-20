@@ -1,252 +1,5 @@
 from graphviz import Digraph
 
-def mu2e_architecture():
-    """
-    Mu2e Run-1 proposal architecture showing AI-assisted experiment design
-    and optimization with agentic workflows, HPC simulations, and data analysis.
-    """
-    dot = Digraph('Mu2e_Architecture')
-    dot.attr(rankdir='TB',
-             fontsize='20',
-             fontname='Helvetica-Bold',
-             labelloc='t',
-             label='AI-Assisted Experiment Design & Optimization\nMu2e Run-1 (FY28)',
-             bgcolor='#FAFAFA',
-             pad='0.2',
-             nodesep='0.25',
-             ranksep='0.4',
-             dpi='300')
-
-    # Set default node attributes
-    dot.node_attr.update(fontname='Helvetica', fontsize='13')
-    dot.edge_attr.update(fontname='Helvetica', fontsize='11')
-
-    # =========== TOP: External Conditions Layer ===========
-    with dot.subgraph(name='cluster_conditions') as cond:
-        cond.attr(label='External Conditions (Dynamic)',
-                  style='rounded,filled',
-                  fillcolor='#FFF3E0',
-                  color='#E65100',
-                  penwidth='2',
-                  fontsize='15',
-                  fontname='Helvetica-Bold')
-        cond.node('magnet', 'Magnet\nAvailability',
-                  shape='box',
-                  style='rounded,filled',
-                  fillcolor='#FFE0B2',
-                  fontcolor='#E65100',
-                  fontsize='12',
-                  penwidth='0')
-        cond.node('beam', 'Beam\nConditions',
-                  shape='box',
-                  style='rounded,filled',
-                  fillcolor='#FFE0B2',
-                  fontcolor='#E65100',
-                  fontsize='12',
-                  penwidth='0')
-        cond.node('accel', 'Accelerator\nTiming',
-                  shape='box',
-                  style='rounded,filled',
-                  fillcolor='#FFE0B2',
-                  fontcolor='#E65100',
-                  fontsize='12',
-                  penwidth='0')
-
-    # =========== Proposal Contribution Layer ===========
-    with dot.subgraph(name='cluster_proposal') as prop:
-        prop.attr(label='Phase I Proposal Contribution (6+3 months)',
-                  style='rounded,filled',
-                  fillcolor='#E8F5E9',
-                  color='#2E7D32',
-                  penwidth='3',
-                  fontsize='15',
-                  fontname='Helvetica-Bold')
-
-        # Agentic Workflows
-        with prop.subgraph(name='cluster_agentic') as ag:
-            ag.attr(label='Agentic Workflows',
-                    style='rounded,filled',
-                    fillcolor='#C8E6C9',
-                    color='#388E3C',
-                    penwidth='2',
-                    fontsize='14',
-                    fontname='Helvetica-Bold')
-            ag.node('orchestrator', 'Orchestration\nAgent',
-                    shape='box',
-                    style='rounded,filled',
-                    fillcolor='#81C784',
-                    fontcolor='#1B5E20',
-                    fontsize='12',
-                    penwidth='0')
-            ag.node('opt_agent', 'Optimization\nAgent',
-                    shape='box',
-                    style='rounded,filled',
-                    fillcolor='#81C784',
-                    fontcolor='#1B5E20',
-                    fontsize='12',
-                    penwidth='0')
-            ag.node('analysis_agent', 'Analysis\nAgent',
-                    shape='box',
-                    style='rounded,filled',
-                    fillcolor='#81C784',
-                    fontcolor='#1B5E20',
-                    fontsize='12',
-                    penwidth='0')
-
-        # MCP Servers
-        with prop.subgraph(name='cluster_mcp_servers') as mcp:
-            mcp.attr(label='MCP Tool Servers',
-                     style='rounded,filled',
-                     fillcolor='#E3F2FD',
-                     color='#1565C0',
-                     penwidth='2',
-                     fontsize='14',
-                     fontname='Helvetica-Bold')
-
-            # Analysis-MCP
-            mcp.node('analysis_mcp', 'Analysis-MCP\n\nSimulation tools\nParameter sweeps\nVisualization',
-                     shape='box',
-                     style='rounded,filled',
-                     fillcolor='#64B5F6',
-                     fontcolor='#0D47A1',
-                     fontsize='11',
-                     penwidth='0')
-
-            # Knowledge-Base-MCP
-            mcp.node('kb_mcp', 'Knowledge-Base-MCP\n\nDocument retrieval\nPrior results\nExpert knowledge',
-                     shape='box',
-                     style='rounded,filled',
-                     fillcolor='#64B5F6',
-                     fontcolor='#0D47A1',
-                     fontsize='11',
-                     penwidth='0')
-
-        # Optimization Objectives
-        with prop.subgraph(name='cluster_objectives') as obj:
-            obj.attr(label='Optimization Objectives',
-                     style='rounded,filled',
-                     fillcolor='#F3E5F5',
-                     color='#7B1FA2',
-                     penwidth='2',
-                     fontsize='14',
-                     fontname='Helvetica-Bold')
-            obj.node('signal_opt', 'Signal\nOptimization',
-                     shape='box',
-                     style='rounded,filled',
-                     fillcolor='#CE93D8',
-                     fontcolor='#4A148C',
-                     fontsize='12',
-                     penwidth='0')
-            obj.node('bg_min', 'Background\nMinimization\n(pile-up)',
-                     shape='box',
-                     style='rounded,filled',
-                     fillcolor='#CE93D8',
-                     fontcolor='#4A148C',
-                     fontsize='12',
-                     penwidth='0')
-            obj.node('sensitivity', 'Sensitivity\nMaximization',
-                     shape='box',
-                     style='rounded,filled',
-                     fillcolor='#CE93D8',
-                     fontcolor='#4A148C',
-                     fontsize='12',
-                     penwidth='0')
-
-    # =========== HPC & Data Layer ===========
-    with dot.subgraph(name='cluster_hpc') as hpc:
-        hpc.attr(label='HPC Infrastructure & Data',
-                 style='rounded,filled',
-                 fillcolor='#ECEFF1',
-                 color='#455A64',
-                 penwidth='2',
-                 fontsize='15',
-                 fontname='Helvetica-Bold')
-        hpc.node('simulations', 'HPC-Based\nSimulations',
-                 shape='box',
-                 style='rounded,filled',
-                 fillcolor='#B0BEC5',
-                 fontcolor='#263238',
-                 fontsize='12',
-                 penwidth='0')
-        hpc.node('petabyte', 'Petabyte-Scale\nDatasets',
-                 shape='cylinder',
-                 style='filled',
-                 fillcolor='#B0BEC5',
-                 fontcolor='#263238',
-                 fontsize='12',
-                 penwidth='0')
-        hpc.node('data_analysis', 'Well-Defined\nData Analysis',
-                 shape='box',
-                 style='rounded,filled',
-                 fillcolor='#B0BEC5',
-                 fontcolor='#263238',
-                 fontsize='12',
-                 penwidth='0')
-
-    # =========== Genesis Infrastructure ===========
-    with dot.subgraph(name='cluster_genesis') as gen:
-        gen.attr(label='Genesis Infrastructure',
-                 style='dashed,rounded',
-                 color='#D32F2F',
-                 penwidth='1.5',
-                 fontsize='14',
-                 fontname='Helvetica')
-        gen.node('amsc_llm', 'AmSC LLM APIs',
-                 shape='ellipse',
-                 style='filled',
-                 fillcolor='#FFCDD2',
-                 fontcolor='#B71C1C',
-                 fontsize='12',
-                 penwidth='0')
-
-    # =========== Output ===========
-    dot.node('output', 'Quantifiable Baseline\nImprovements\n(Achievable Sensitivity)',
-             shape='box',
-             style='rounded,filled',
-             fillcolor='#FDD835',
-             fontcolor='#424242',
-             fontsize='14',
-             penwidth='2',
-             color='#F9A825')
-
-    # =========== EDGES ===========
-
-    # External conditions feed into orchestrator
-    dot.edge('magnet', 'orchestrator', style='dashed', color='#E65100', penwidth='1.5', arrowhead='vee', label='adapt')
-    dot.edge('beam', 'orchestrator', style='dashed', color='#E65100', penwidth='1.5', arrowhead='vee')
-    dot.edge('accel', 'orchestrator', style='dashed', color='#E65100', penwidth='1.5', arrowhead='vee')
-
-    # Orchestrator coordinates agents
-    dot.edge('orchestrator', 'opt_agent', color='#2E7D32', penwidth='2', arrowhead='vee')
-    dot.edge('orchestrator', 'analysis_agent', color='#2E7D32', penwidth='2', arrowhead='vee')
-
-    # Agents use MCP servers
-    dot.edge('opt_agent', 'analysis_mcp', color='#1565C0', penwidth='2', arrowhead='vee', label='tools')
-    dot.edge('analysis_agent', 'analysis_mcp', color='#1565C0', penwidth='2', arrowhead='vee')
-    dot.edge('opt_agent', 'kb_mcp', color='#1565C0', penwidth='2', arrowhead='vee')
-    dot.edge('analysis_agent', 'kb_mcp', color='#1565C0', penwidth='2', arrowhead='vee')
-
-    # MCP to objectives
-    dot.edge('analysis_mcp', 'signal_opt', color='#7B1FA2', penwidth='2', arrowhead='vee')
-    dot.edge('analysis_mcp', 'bg_min', color='#7B1FA2', penwidth='2', arrowhead='vee')
-    dot.edge('signal_opt', 'sensitivity', color='#7B1FA2', penwidth='2', arrowhead='vee')
-    dot.edge('bg_min', 'sensitivity', color='#7B1FA2', penwidth='2', arrowhead='vee')
-
-    # HPC connections
-    dot.edge('analysis_mcp', 'simulations', style='dashed', color='#455A64', penwidth='1.5', arrowhead='vee', label='invoke')
-    dot.edge('simulations', 'petabyte', color='#455A64', penwidth='2', arrowhead='vee')
-    dot.edge('petabyte', 'data_analysis', color='#455A64', penwidth='2', arrowhead='vee')
-    dot.edge('data_analysis', 'analysis_agent', style='dashed', color='#455A64', penwidth='1.5', arrowhead='vee', label='results')
-
-    # Genesis infrastructure
-    dot.edge('kb_mcp', 'amsc_llm', style='dashed', color='#C62828', penwidth='1', arrowhead='open', label='embed/summarize')
-    dot.edge('orchestrator', 'amsc_llm', style='dashed', color='#C62828', penwidth='1', arrowhead='open', label='reasoning')
-
-    # Final output
-    dot.edge('sensitivity', 'output', color='#F9A825', penwidth='3', arrowhead='vee')
-
-    return dot
-
 
 def generic_architecture():
     """
@@ -505,7 +258,7 @@ def abstract_architecture():
     Shows MCP-KE as a tool server pattern without specific implementation details.
     """
     dot = Digraph('Abstract_Architecture')
-    dot.attr(rankdir='LR', 
+    dot.attr(rankdir='LR',
              fontsize='20',
              fontname='Helvetica-Bold',
              labelloc='t',
@@ -515,7 +268,7 @@ def abstract_architecture():
              nodesep='0.2',
              ranksep='0.3',
              dpi='300')
-    
+
     # Set default node attributes
     dot.node_attr.update(fontname='Helvetica', fontsize='14')
     dot.edge_attr.update(fontname='Helvetica', fontsize='12')
@@ -532,7 +285,7 @@ def abstract_architecture():
         c.node('client', 'MCP Client\n\n(Any AI system or\napplication)',
                shape='box',
                style='rounded,filled',
-               fillcolor='#5E92F3',  # Lighter blue
+               fillcolor='#5E92F3',
                fontcolor='white',
                fontsize='14',
                penwidth='0')
@@ -549,8 +302,8 @@ def abstract_architecture():
         s.node('server', 'MCP Server\n\nAuto-discovery\nTool execution\nstdio communication',
                shape='box',
                style='rounded,filled',
-               fillcolor='#81C784',  # Lighter green
-               fontcolor='#1B5E20',  # Dark green text
+               fillcolor='#81C784',
+               fontcolor='#1B5E20',
                fontsize='14',
                penwidth='0')
 
@@ -611,14 +364,14 @@ def abstract_architecture():
             a.node('agent1', 'power_spectrum_agent',
                    shape='box',
                    style='rounded,filled',
-                   fillcolor='#AB47BC',  # Lighter purple
+                   fillcolor='#AB47BC',
                    fontcolor='white',
                    fontsize='13',
                    penwidth='0')
             a.node('agent2', 'arxiv_agent',
                    shape='box',
                    style='rounded,filled',
-                   fillcolor='#AB47BC',  # Lighter purple
+                   fillcolor='#AB47BC',
                    fontcolor='white',
                    fontsize='13',
                    penwidth='0')
@@ -726,7 +479,7 @@ def mcp_overview():
              nodesep='0.15',
              ranksep='0.25',
              dpi='300')
-    
+
     # Set default node attributes
     dot.node_attr.update(fontname='Helvetica', fontsize='13')
     dot.edge_attr.update(fontname='Helvetica', fontsize='12')
@@ -743,7 +496,7 @@ def mcp_overview():
         c.node('claude', 'Custom Agent\nor Claude Desktop',
                shape='box',
                style='rounded,filled',
-               fillcolor='#5E92F3',  # Lighter blue for better contrast
+               fillcolor='#5E92F3',
                fontcolor='white',
                fontsize='14',
                penwidth='0')
@@ -760,8 +513,8 @@ def mcp_overview():
         s.node('server', 'mcp_server.py\n\n• Auto-discover @tool functions\n• Build MCP Tool schemas\n• Handle tool execution\n• stdio communication',
                shape='box',
                style='rounded,filled',
-               fillcolor='#81C784',  # Lighter green for better contrast
-               fontcolor='#1B5E20',  # Dark green text instead of white
+               fillcolor='#81C784',
+               fontcolor='#1B5E20',
                penwidth='0',
                fontsize='13')
 
@@ -822,14 +575,14 @@ def mcp_overview():
             a.node('a1', 'power_spectrum_agent\n\n4-agent orchestration:\n• orchestrator\n• data_agent\n• modeling_agent\n• viz_agent',
                    shape='box',
                    style='rounded,filled',
-                   fillcolor='#AB47BC',  # Lighter purple
+                   fillcolor='#AB47BC',
                    fontcolor='white',
                    penwidth='0',
                    fontsize='12')
             a.node('a2', 'arxiv_agent\n\nSingle agent with tools:\n• search_arxiv\n• download_full_arxiv_paper\n• read_text_file',
                    shape='box',
                    style='rounded,filled',
-                   fillcolor='#AB47BC',  # Lighter purple
+                   fillcolor='#AB47BC',
                    fontcolor='white',
                    penwidth='0',
                    fontsize='12')
@@ -894,7 +647,7 @@ def mcp_overview():
              color='#0D47A1',
              penwidth='2.5',
              arrowhead='vee')
-    
+
     # Server to tools
     dot.edge('server', 't1', color='#2E7D32', penwidth='2', arrowhead='vee')
     dot.edge('server', 't2', color='#2E7D32', penwidth='2', arrowhead='vee')
@@ -936,7 +689,7 @@ def power_spectrum_agent_internals():
              nodesep='0.2',
              ranksep='0.3',
              dpi='300')
-    
+
     # Set default node attributes
     dot.node_attr.update(fontname='Helvetica', fontsize='14')
     dot.edge_attr.update(fontname='Helvetica', fontsize='12')
@@ -945,7 +698,7 @@ def power_spectrum_agent_internals():
     dot.node('client', 'MCP Client',
              shape='box',
              style='rounded,filled',
-             fillcolor='#5E92F3',  # Lighter blue
+             fillcolor='#5E92F3',
              fontcolor='white',
              penwidth='0',
              fontsize='16')
@@ -954,7 +707,7 @@ def power_spectrum_agent_internals():
     dot.node('agent_tool', 'Agent Tool\n(e.g., power_spectrum_agent)',
              shape='box',
              style='rounded,filled',
-             fillcolor='#AB47BC',  # Lighter purple
+             fillcolor='#AB47BC',
              fontcolor='white',
              penwidth='0',
              fontsize='14')
@@ -963,7 +716,7 @@ def power_spectrum_agent_internals():
     dot.node('orchestrator', 'Orchestrator Agent\n\nCoordinates sub-agents\nManages dataflow',
              shape='box',
              style='rounded,filled',
-             fillcolor='#FF8A65',  # Lighter orange
+             fillcolor='#FF8A65',
              fontcolor='white',
              penwidth='0',
              fontsize='14')
@@ -972,21 +725,21 @@ def power_spectrum_agent_internals():
     dot.node('agent1', 'Sub-Agent 1\n\nData Loading',
              shape='box',
              style='rounded,filled',
-             fillcolor='#4DB6AC',  # Lighter teal
+             fillcolor='#4DB6AC',
              fontcolor='white',
              penwidth='0',
              fontsize='13')
     dot.node('agent2', 'Sub-Agent 2\n\nProcessing',
              shape='box',
              style='rounded,filled',
-             fillcolor='#64B5F6',  # Lighter blue
+             fillcolor='#64B5F6',
              fontcolor='white',
              penwidth='0',
              fontsize='13')
     dot.node('agent3', 'Sub-Agent 3\n\nVisualization',
              shape='box',
              style='rounded,filled',
-             fillcolor='#F06292',  # Lighter pink
+             fillcolor='#F06292',
              fontcolor='white',
              penwidth='0',
              fontsize='13')
@@ -1085,26 +838,22 @@ def power_spectrum_agent_internals():
 
 
 if __name__ == '__main__':
-    print("Generating professional flowcharts with improved text size and spacing...")
-
-    d_mu2e = mu2e_architecture()
-    d_mu2e.render('mu2e_architecture', format='png', cleanup=True)
-    print("✓ Generated mu2e_architecture.png")
+    print("Generating professional flowcharts...")
 
     d_generic = generic_architecture()
     d_generic.render('generic_architecture', format='png', cleanup=True)
-    print("✓ Generated generic_architecture.png")
+    print("Generated generic_architecture.png")
 
     d0 = abstract_architecture()
     d0.render('abstract_architecture', format='png', cleanup=True)
-    print("✓ Generated abstract_architecture.png")
+    print("Generated abstract_architecture.png")
 
     d1 = mcp_overview()
     d1.render('mcp_ke_overview', format='png', cleanup=True)
-    print("✓ Generated mcp_ke_overview.png")
+    print("Generated mcp_ke_overview.png")
 
     d2 = power_spectrum_agent_internals()
     d2.render('power_spectrum_agent', format='png', cleanup=True)
-    print("✓ Generated power_spectrum_agent.png")
+    print("Generated power_spectrum_agent.png")
 
     print("\nAll flowcharts generated successfully!")
