@@ -26,14 +26,14 @@ def generic_architecture():
 
     # MCP Client Layer
     with dot.subgraph(name='cluster_client') as c:
-        c.attr(label='MCP Client Layer',
+        c.attr(label='Client Layer',
                style='rounded,filled',
                fillcolor='#E8F4FD',
                color='#1976D2',
                penwidth='2',
                fontsize='16',
                fontname='Helvetica-Bold')
-        c.node('client', 'MCP Client\n\n(Any AI system or\napplication)',
+        c.node('client', 'HEP-KE MultiAgent\n\n(Any compatible \nClient)',
                shape='box',
                style='rounded,filled',
                fillcolor='#5E92F3',
@@ -328,14 +328,14 @@ def mu2e_architecture():
                   fontsize='14')
 
         with left.subgraph(name='cluster_client') as c:
-            c.attr(label='MCP Client Layer',
+            c.attr(label='Client Layer',
                    style='rounded,filled',
                    fillcolor=KE_CLUSTER_BG,
                    color=KE_CLUSTER_BORDER,
                    penwidth='2',
                    fontsize='16',
                    fontname='Helvetica-Bold')
-            c.node('client', 'MCP Client\n\n(Any AI system or\napplication)',
+            c.node('client', 'HEP-KE MultiAgent\n\n(Any compatible \nClient)',
                    shape='box',
                    style='rounded,filled',
                    fillcolor=KE_NODE_BG,
@@ -643,14 +643,14 @@ def cosmology_architecture():
                   fontsize='14')
 
         with left.subgraph(name='cluster_client') as c:
-            c.attr(label='MCP Client Layer',
+            c.attr(label='Client Layer',
                    style='rounded,filled',
                    fillcolor=KE_CLUSTER_BG,
                    color=KE_CLUSTER_BORDER,
                    penwidth='2',
                    fontsize='16',
                    fontname='Helvetica-Bold')
-            c.node('client', 'MCP Client\n\n(Any AI system or\napplication)',
+            c.node('client', 'HEP-KE MultiAgent\n\n(Any compatible \nClient)',
                    shape='box',
                    style='rounded,filled',
                    fillcolor=KE_NODE_BG,
