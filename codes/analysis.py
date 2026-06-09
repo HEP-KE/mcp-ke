@@ -38,7 +38,8 @@ def compute_power_spectrum(params, k_values):
         cosmo = Class()
         cosmo.set(params_clean)
         cosmo.compute()
-        Pk = np.array([cosmo.pk(ki, 0.0) for ki in k_values])
+        z_pk = float(params_clean.get('z_pk', 0.0))
+        Pk = np.array([cosmo.pk(ki, z_pk) for ki in k_values])
         cosmo.struct_cleanup()
         cosmo.empty()
 

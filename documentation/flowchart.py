@@ -252,6 +252,141 @@ def generic_architecture():
     return dot
 
 
+def multi_mcp_architecture():
+    """
+    Multi-server architecture showing one client connecting to multiple
+    domain-specific MCP servers, plus the Genesis Infrastructure layer.
+    Servers shown without inner tool boxes - emphasizes the extensible
+    pattern of one client with many MCP servers.
+    """
+    dot = Digraph('Multi_MCP_Architecture')
+    dot.attr(rankdir='LR',
+             fontsize='20',
+             fontname='Helvetica-Bold',
+             labelloc='t',
+             label='MCP Tool Server Pattern: One Client, Many Servers',
+             bgcolor='#FAFAFA',
+             pad='0.1',
+             nodesep='0.25',
+             ranksep='0.6',
+             dpi='300')
+
+    # Set default node attributes
+    dot.node_attr.update(fontname='Helvetica', fontsize='14')
+    dot.edge_attr.update(fontname='Helvetica', fontsize='12')
+
+    # MCP Client Layer
+    with dot.subgraph(name='cluster_client') as c:
+        c.attr(label='Client Layer',
+               style='rounded,filled',
+               fillcolor='#E8F4FD',
+               color='#1976D2',
+               penwidth='2',
+               fontsize='16',
+               fontname='Helvetica-Bold')
+        c.node('client', 'HEP-KE MultiAgent\n\n(Any compatible\nClient)',
+               shape='box',
+               style='rounded,filled',
+               fillcolor='#5E92F3',
+               fontcolor='white',
+               fontsize='14',
+               penwidth='0')
+
+    # Four MCP servers - simple boxes, no inner tools
+    server_style = dict(
+        shape='box',
+        style='rounded,filled',
+        fillcolor='#81C784',
+        fontcolor='#1B5E20',
+        fontsize='14',
+        penwidth='0',
+        width='2.4',
+        height='0.9',
+    )
+
+    with dot.subgraph(name='cluster_servers') as srv:
+        srv.attr(label='MCP Servers',
+                 style='rounded,filled',
+                 fillcolor='#F1F8E9',
+                 color='#689F38',
+                 penwidth='2',
+                 fontsize='16',
+                 fontname='Helvetica-Bold')
+        srv.node('lyalpha_server', 'LyAlpha-MCP\nStatistics Server', **server_style)
+        srv.node('kb_server', 'Knowledge Base\nMCP Server', **server_style)
+        srv.node('microlensing_server', 'Microlensing\nMCP Server', **server_style)
+        srv.node('other_server', 'Other\nMCP Server',
+                 shape='box',
+                 style='rounded,dashed,filled',
+                 fillcolor='#C8E6C9',
+                 fontcolor='#1B5E20',
+                 fontsize='14',
+                 penwidth='1.5',
+                 color='#689F38',
+                 width='2.4',
+                 height='0.9')
+
+    # Genesis Infrastructure
+    with dot.subgraph(name='cluster_genesis') as g:
+        g.attr(label='Genesis Infrastructure',
+               style='dashed,rounded',
+               color='#D32F2F',
+               penwidth='1.5',
+               fontsize='14',
+               fontname='Helvetica')
+        g.node('llm_apis', 'AmSC LLM APIs',
+               shape='ellipse',
+               style='filled',
+               fillcolor='#FFCDD2',
+               fontcolor='#B71C1C',
+               fontsize='13',
+               penwidth='0')
+        g.node('data_apis', 'Data APIs\n(arXiv, etc.)',
+               shape='ellipse',
+               style='filled',
+               fillcolor='#FFCDD2',
+               fontcolor='#B71C1C',
+               fontsize='13',
+               penwidth='0')
+        g.node('compute', 'Compute Libraries',
+               shape='ellipse',
+               style='filled',
+               fillcolor='#FFCDD2',
+               fontcolor='#B71C1C',
+               fontsize='13',
+               penwidth='0')
+
+    # Client to each server via MCP Protocol
+    for target in ('lyalpha_server', 'kb_server', 'microlensing_server'):
+        dot.edge('client', target,
+                 label='MCP\nProtocol',
+                 fontsize='12',
+                 color='#1565C0',
+                 penwidth='3',
+                 arrowhead='vee')
+    dot.edge('client', 'other_server',
+             label='MCP\nProtocol',
+             fontsize='12',
+             color='#1565C0',
+             penwidth='2',
+             style='dashed',
+             arrowhead='vee')
+
+    # Servers depend on Genesis Infrastructure (one representative edge per server)
+    dot.edge('lyalpha_server', 'compute', style='dashed', label='require',
+             fontsize='11', color='#C62828', penwidth='1', arrowhead='open')
+    dot.edge('kb_server', 'llm_apis', style='dashed', label='require',
+             fontsize='11', color='#C62828', penwidth='1', arrowhead='open')
+    dot.edge('kb_server', 'data_apis', style='dashed',
+             fontsize='11', color='#C62828', penwidth='1', arrowhead='open')
+    dot.edge('microlensing_server', 'compute', style='dashed',
+             fontsize='11', color='#C62828', penwidth='1', arrowhead='open')
+    dot.edge('other_server', 'llm_apis', style='dashed',
+             fontsize='11', color='#C62828', penwidth='1', arrowhead='open')
+
+    return dot
+
+
 def abstract_architecture():
     """
     High-level abstract architecture - generic and extensible view.
@@ -843,6 +978,10 @@ if __name__ == '__main__':
     d_generic = generic_architecture()
     d_generic.render('generic_architecture', format='png', cleanup=True)
     print("Generated generic_architecture.png")
+
+    d_multi = multi_mcp_architecture()
+    d_multi.render('multi_mcp_architecture', format='png', cleanup=True)
+    print("Generated multi_mcp_architecture.png")
 
     d0 = abstract_architecture()
     d0.render('abstract_architecture', format='png', cleanup=True)

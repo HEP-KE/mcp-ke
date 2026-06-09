@@ -93,6 +93,11 @@ def compute_power_spectrum(
         params['wa_fld'] = 0.0  # Constant w
 
     result = compute_pk(params, k_data)
+    if isinstance(result, str):
+        return json.dumps({
+            "status": "error",
+            "error": result,
+        }, indent=2)
     dataset_name, info = session.store_derived(result, k_values, "power_spectrum")
     return json.dumps({
         "status": "success",
